@@ -1,0 +1,124 @@
+---
+import '../styles/global.css';
+import ThemeToggle from '../components/ThemeToggle.vue';
+
+interface Props {
+  title: string;
+  description?: string;
+  active?: 'home' | 'docs';
+}
+
+const { title, description = '登録不要・無料・無制限の郵便番号データセット', active } = Astro.props;
+const navLink = (href: string, label: string, key?: string) => ({ href, label, key });
+const links = [
+  navLink('/#playground', 'Playground', 'playground'),
+  navLink('/#code', 'SDK', 'sdk'),
+  navLink('/docs', 'Docs', 'docs'),
+  navLink('https://github.com/jpzip', 'GitHub'),
+];
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline>
+      // FOUC 防止: テーマを paint 前に反映
+      (() => {
+        const saved = localStorage.getItem('jpzip-theme');
+        const preferred = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = saved || preferred;
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="airmail-strip"></div>
+    <nav class="site">
+      <a class="logo" href="/">
+        <span class="logo-mark">郵</span>
+        <span class="logo-name">jpzip</span>
+      </a>
+      <span class="ver-pill">v1.0 · 2026-05</span>
+      <div class="nav-links">
+        {
+          links.map((l) => (
+            <a
+              href={l.href}
+              class={active && l.key === active ? 'active' : ''}
+              target={l.href.startsWith('http') ? '_blank' : undefined}
+              rel={l.href.startsWith('http') ? 'noopener' : undefined}
+            >
+              {l.label}
+            </a>
+          ))
+        }
+        <ThemeToggle client:load />
+        <a class="nav-cta" href="/#playground">試す →</a>
+      </div>
+    </nav>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site">
+      <div class="wrap">
+        <div class="foot">
+          <div>
+            <a class="logo" href="/" style="margin-bottom: 12px;">
+              <span class="logo-mark" style="width:36px;height:36px;font-size:18px;">郵</span>
+              <span class="logo-name" style="font-size:18px;">jpzip</span>
+            </a>
+            <p style="max-width: 280px; margin-top: 12px; line-height: 1.7;">
+              個人開発者・OSS のための、登録不要の郵便番号データセット。日本郵便の公式 API
+              を使えない場面の補完選択肢として。
+            </p>
+          </div>
+          <div class="foot-col">
+            <h4>DATA</h4>
+            <ul>
+              <li><a href="https://jpzip.nadai.dev/meta.json">/meta.json</a></li>
+              <li><a href="https://jpzip.nadai.dev/g/0.json">/g/&#123;1&#125;.json</a></li>
+              <li><a href="https://jpzip.nadai.dev/p/231.json">/p/&#123;3&#125;.json</a></li>
+              <li><a href="/docs">Spec v1.0</a></li>
+            </ul>
+          </div>
+          <div class="foot-col">
+            <h4>SDK</h4>
+            <ul>
+              <li><a href="https://github.com/jpzip/js">TypeScript</a></li>
+              <li><a href="https://github.com/jpzip/go">Go</a></li>
+              <li><a href="/docs#sdk">使い方</a></li>
+            </ul>
+          </div>
+          <div class="foot-col">
+            <h4>LINKS</h4>
+            <ul>
+              <li><a href="https://github.com/jpzip">GitHub Org</a></li>
+              <li><a href="https://github.com/jpzip/spec">Spec repo</a></li>
+              <li>
+                <a href="https://www.post.japanpost.jp/service/search/zipcode/download/" target="_blank" rel="noopener"
+                  >日本郵便</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="foot-bottom">
+          <span>© 2026 nadai · MIT</span>
+          <span>data source: 日本郵便 KEN_ALL.csv (Public Domain)</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

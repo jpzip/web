@@ -1,0 +1,212 @@
+---
+import Base from '../layouts/Base.astro';
+import Playground from '../components/Playground.vue';
+import CodeBlock from '../components/CodeBlock.vue';
+
+// メタ統計は build 時に jpzip.nadai.dev/meta.json から取り、失敗したらデフォルト。
+type Meta = {
+  version: string;
+  total_zipcodes: number;
+  prefix_count: number;
+};
+let meta: Meta = {
+  version: '2026-05',
+  total_zipcodes: 120677,
+  prefix_count: 948,
+};
+try {
+  const res = await fetch('https://jpzip.nadai.dev/meta.json');
+  if (res.ok) {
+    const m = (await res.json()) as Meta;
+    if (m && typeof m.total_zipcodes === 'number') meta = m;
+  }
+} catch {
+  // ビルドホストからネットが通らない環境ではフォールバック
+}
+
+const fmt = (n: number) => n.toLocaleString('en-US');
+const features = [
+  {
+    icon: '¥',
+    title: '永続的に無料',
+    desc: 'Cloudflare Pages の無料枠のみで成立。約 1,000 ファイル × 25 MiB 未満、課金軸そのものが存在しない構造。',
+  },
+  {
+    icon: '⌖',
+    title: 'オフライン対応',
+    desc: 'preload({ scope: "all" }) で全件を SDK にキャッシュ。以降はネットワーク不要で動作。',
+    html: true,
+  },
+  {
+    icon: 'A',
+    title: '登録・認証なし',
+    desc: 'API キー不要。CORS は全オリジン許可。ブラウザから直接 fetch して使えます。',
+  },
+  {
+    icon: '↻',
+    title: '月次自動更新',
+    desc: '毎月 1 日と 15 日に GitHub Actions が日本郵便の最新データを取り込み、CDN へデプロイ。',
+  },
+  {
+    icon: 'ローマ',
+    title: '漢字・カナ・ローマ字',
+    desc: 'KEN_ALL と KEN_ALL_ROME を結合済み。city_code (総務省コード) も付与。',
+  },
+  {
+    icon: '⚖',
+    title: 'MIT & Public Domain',
+    desc: 'SDK は MIT。データは元データが Public Domain 相当のため、商用利用も再配布も自由。',
+  },
+];
+---
+
+<Base title="jpzip — 登録不要・無料・無制限の郵便番号データセット" active="home">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <div class="badge-row">
+            <span class="badge red">● 永続無料</span>
+            <span class="badge">登録不要</span>
+            <span class="badge blue">オフライン対応</span>
+            <span class="badge">MIT</span>
+          </div>
+          <h1 class="hero-title">
+            日本の郵便番号、<br />
+            <span class="accent">CDN から</span>
+            <span class="underline">配るデータセット。</span>
+          </h1>
+          <p class="hero-sub">
+            登録不要・無料・無制限で使える、個人開発者と OSS のための郵便番号データセット。<br />
+            Cloudflare Pages から配信される <strong>{fmt(meta.total_zipcodes)}</strong> 件の正規化済みデータを、各言語の
+            SDK でオフラインまで持っていける。
+          </p>
+          <div class="hero-cta-row">
+            <a class="btn-primary" href="#playground">いますぐ試す →</a>
+            <a class="btn-ghost" href="https://github.com/jpzip" target="_blank" rel="noopener">↗ GitHub で見る</a>
+          </div>
+          <div class="install-strip">
+            <span class="label">install</span>
+            <div class="install-code">
+              <span class="prompt">$</span>
+              <span>npm i jpzip</span>
+              <button onclick="navigator.clipboard?.writeText('npm i jpzip')">copy</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="stamp-wrap">
+          <div class="stamp-card">
+            <div class="stamp-card-inner">
+              <span class="stamp-corner">NIPPON JPZIP</span>
+              <div class="stamp-amount">¥0<small>FOREVER</small></div>
+              <div class="stamp-title">郵便番号<br />データセット<br />{meta.version} 版</div>
+              <dl class="stamp-meta">
+                <dt>件数</dt><dd>{fmt(meta.total_zipcodes)}</dd>
+                <dt>prefix</dt><dd>{fmt(meta.prefix_count)}</dd>
+                <dt>形式</dt><dd>JSON · gzip / br</dd>
+                <dt>更新</dt><dd>月 2 回 · 自動</dd>
+                <dt>license</dt><dd>MIT + Public Domain</dd>
+              </dl>
+            </div>
+          </div>
+          <div class="postmark">
+            <div class="postmark-inner">
+              <small>● JPZIP ●</small>
+              <strong>v1.0</strong>
+              <small>{meta.version}·01</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLAYGROUND -->
+  <section class="section" id="playground">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">PLAYGROUND</div>
+          <h2 class="section-title">7 桁、入れてみる。</h2>
+        </div>
+        <p class="section-desc">
+          ブラウザから直接 jpzip.nadai.dev を叩きます。CORS
+          が通れば本物のデータ、通らなければデモ用フォールバックが返ります。
+        </p>
+      </div>
+      <Playground client:visible />
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-strip">
+    <div class="stat">
+      <div class="stat-num">{fmt(meta.total_zipcodes)}<span class="unit">件</span></div>
+      <div class="stat-label">Total Zipcodes</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">{fmt(meta.prefix_count)}<span class="unit">個</span></div>
+      <div class="stat-label">3桁 Prefix</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">10<span class="unit">files</span></div>
+      <div class="stat-label">1-digit groups</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">¥0<span class="unit">/月</span></div>
+      <div class="stat-label">課金軸ゼロ</div>
+    </div>
+  </section>
+
+  <!-- CODE -->
+  <section class="section code-section" id="code">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">SDK</div>
+          <h2 class="section-title">3 行で読める SDK。</h2>
+        </div>
+        <p class="section-desc">プロトコル仕様が安定しているので、SDK 本体は数十行。各言語で同じシグネチャを揃えています。</p>
+      </div>
+      <CodeBlock client:visible />
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">特徴</div>
+          <h2 class="section-title">構造的に、無料。</h2>
+        </div>
+        <p class="section-desc">Worker・R2・KV を一切使わない設計。アクセスが何億あっても課金軸が存在しません。</p>
+      </div>
+
+      <div class="features-grid">
+        {
+          features.map((f, i) => (
+            <article class="feat-card">
+              <span class="feat-num">{String(i + 1).padStart(2, '0')}</span>
+              <div class="feat-icon">{f.icon}</div>
+              <h3 class="feat-title">{f.title}</h3>
+              {f.html ? (
+                <p class="feat-desc">
+                  <code
+                    class="mono"
+                    style="font-size:12px;background:var(--cream);padding:1px 4px;border-radius:3px"
+                  >{`preload({ scope: "all" })`}</code>{' '}
+                  で全件を SDK にキャッシュ。以降はネットワーク不要で動作。
+                </p>
+              ) : (
+                <p class="feat-desc">{f.desc}</p>
+              )}
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>

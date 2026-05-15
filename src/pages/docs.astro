@@ -1,0 +1,232 @@
+---
+import Base from '../layouts/Base.astro';
+
+const sections = [
+  {
+    id: 'overview',
+    label: '概要',
+    sub: [
+      { id: 'install', label: 'インストール' },
+      { id: 'quickstart', label: '60 秒クイックスタート' },
+    ],
+  },
+  {
+    id: 'endpoints',
+    label: 'エンドポイント',
+    sub: [
+      { id: 'meta', label: '/meta.json' },
+      { id: 'group', label: '/g/{prefix1}.json' },
+      { id: 'prefix', label: '/p/{prefix3}.json' },
+    ],
+  },
+  {
+    id: 'schema',
+    label: 'スキーマ',
+    sub: [
+      { id: 'zipcode-entry', label: 'ZipcodeEntry' },
+      { id: 'meta-schema', label: 'Meta' },
+    ],
+  },
+  { id: 'sdk', label: 'SDK', sub: [{ id: 'js', label: 'JavaScript' }, { id: 'go', label: 'Go' }] },
+  { id: 'cache', label: 'キャッシュ戦略' },
+  { id: 'license', label: 'ライセンス' },
+];
+---
+
+<Base title="jpzip — Docs" description="jpzip プロトコル仕様 v1.0 と SDK の使い方" active="docs">
+  <div class="wrap">
+    <div class="docs-layout">
+      <aside class="docs-toc">
+        <h5>Contents</h5>
+        <ul>
+          {
+            sections.map((s) => (
+              <li>
+                <a href={`#${s.id}`}>{s.label}</a>
+                {s.sub && (
+                  <ul>
+                    {s.sub.map((sub) => (
+                      <li>
+                        <a href={`#${sub.id}`}>{sub.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))
+          }
+        </ul>
+      </aside>
+
+      <article class="docs-body">
+        <header style="margin-bottom: 32px;">
+          <div class="section-kicker">DOCS · spec v1.0</div>
+          <h1 style="font: 900 48px/1.1 'Noto Serif JP', serif; margin: 0 0 14px; color: var(--ink);">
+            jpzip プロトコル
+          </h1>
+          <p style="font-size: 17px; color: var(--ink-soft); margin: 0; line-height: 1.8;">
+            CDN とクライアント (SDK) 間の契約。この仕様を実装すれば任意の言語/環境で SDK を作れます。
+          </p>
+        </header>
+
+        <div class="docs-callout">
+          <strong>配信元 ·</strong> <code>https://jpzip.nadai.dev</code> ·
+          <strong>形式 ·</strong> JSON (UTF-8, gzip/brotli 透過) · <strong>認証 ·</strong> なし ·
+          <strong>CORS ·</strong> <code>*</code>
+        </div>
+
+        <h2 id="overview">概要</h2>
+        <p>
+          jpzip は静的 JSON ファイル群を Cloudflare Pages 配下で配信します。クライアント (SDK) は HTTPS GET でファイルを取得し、必要なエントリを抽出します。
+        </p>
+        <table>
+          <thead>
+            <tr><th>項目</th><th>値</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>更新頻度</td><td>月 2 回 (1 日 / 15 日 JST 03:00)</td></tr>
+            <tr><td>spec_version</td><td><code>1.0</code></td></tr>
+            <tr><td>Cache-Control</td><td><code>public, max-age=86400</code></td></tr>
+            <tr><td>データ件数</td><td>約 12 万件 (毎月変動)</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="install">インストール</h3>
+        <pre><code><span class="c"># npm</span>
+npm i jpzip
+
+<span class="c"># Go</span>
+go get github.com/jpzip/go</code></pre>
+
+        <h3 id="quickstart">60 秒クイックスタート</h3>
+        <p>SDK 経由なら最小 3 行。エンドポイントを直接叩きたい場合は <code>fetch</code> 1 回で済みます。</p>
+        <pre><code><span class="k">import</span> {'{'} lookup {'}'} <span class="k">from</span> <span class="s">"jpzip"</span>;
+
+<span class="k">const</span> e = <span class="k">await</span> <span class="f">lookup</span>(<span class="s">"2310831"</span>);
+console.log(e.prefecture, e.city, e.towns[0].town);
+<span class="c">// 神奈川県 横浜市中区 矢口台</span></code></pre>
+
+        <h2 id="endpoints">エンドポイント</h2>
+        <p>4 種類のレスポンスを返します。zipcode の前方一致でグループ化された辞書なので、必要な粒度を選択できます。</p>
+        <table>
+          <thead>
+            <tr><th>パス</th><th>内容</th><th>サイズ目安</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>/meta.json</code></td><td>バージョン & 統計</td><td>~10 KB</td></tr>
+            <tr><td><code>/g/&#123;1&#125;.json</code></td><td>1 桁プレフィックスの全エントリ</td><td>3〜4 MB</td></tr>
+            <tr><td><code>/p/&#123;3&#125;.json</code></td><td>3 桁プレフィックスの全エントリ</td><td>~10 KB</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="meta">/meta.json</h3>
+        <p>SDK は起動時に取得してバージョンを確認することが推奨されます。</p>
+        <pre><code>{'{'}
+  <span class="s">"version"</span>: <span class="s">"2026-05"</span>,
+  <span class="s">"generated_at"</span>: <span class="s">"2026-05-15T17:39:46Z"</span>,
+  <span class="s">"spec_version"</span>: <span class="s">"1.0"</span>,
+  <span class="s">"total_zipcodes"</span>: <span class="n">120677</span>,
+  <span class="s">"prefix_count"</span>: <span class="n">948</span>,
+  <span class="s">"by_pref"</span>: {'{'} <span class="s">"01"</span>: <span class="n">7974</span>, ... {'}'},
+  <span class="s">"data_source"</span>: <span class="s">"https://..."</span>,
+  <span class="s">"endpoints"</span>: {'{'} <span class="s">"group"</span>: ..., <span class="s">"prefix"</span>: ... {'}'}
+{'}'}</code></pre>
+
+        <h3 id="group">/g/&#123;prefix1&#125;.json</h3>
+        <p>1 桁プレフィックスでまとめた辞書。<code>{'{prefix1}'}</code> は <code>0</code>–<code>9</code> の 1 文字。SDK が全件 preload する際にも使われます。</p>
+
+        <h3 id="prefix">/p/&#123;prefix3&#125;.json</h3>
+        <p>
+          3 桁プレフィックスでまとめた辞書。<code>/p/&#123;zipcode[:3]&#125;.json</code> を取れば該当 zipcode の辞書が手に入り、転送量も最小です。
+          実在しない prefix は <code>404</code>（SDK は「該当なし」として扱う）。
+        </p>
+        <pre><code>curl https://jpzip.nadai.dev/p/231.json \
+  | jq <span class="s">'."2310831"'</span></code></pre>
+
+        <h2 id="schema">スキーマ</h2>
+        <p>すべての辞書ファイルは <code>zipcode</code> をキーとするフラットな辞書です。値は <code>ZipcodeEntry</code> 型。</p>
+
+        <h3 id="zipcode-entry">ZipcodeEntry</h3>
+        <pre><code>{'{'}
+  <span class="s">"prefecture"</span>:      <span class="s">"神奈川県"</span>,
+  <span class="s">"prefecture_kana"</span>: <span class="s">"カナガワケン"</span>,
+  <span class="s">"prefecture_roma"</span>: <span class="s">"Kanagawa"</span>,
+  <span class="s">"prefecture_code"</span>: <span class="s">"14"</span>,
+  <span class="s">"city"</span>:            <span class="s">"横浜市中区"</span>,
+  <span class="s">"city_kana"</span>:       <span class="s">"ヨコハマシナカク"</span>,
+  <span class="s">"city_roma"</span>:       <span class="s">"Yokohama Shi Naka Ku"</span>,
+  <span class="s">"city_code"</span>:       <span class="s">"14104"</span>,
+  <span class="s">"towns"</span>: [
+    {'{'} <span class="s">"town"</span>: <span class="s">"矢口台"</span>, <span class="s">"kana"</span>: <span class="s">"ヤグチダイ"</span>, <span class="s">"roma"</span>: <span class="s">"Yaguchidai"</span> {'}'}
+  ]
+{'}'}</code></pre>
+        <table>
+          <thead>
+            <tr><th>フィールド</th><th>型</th><th>備考</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>prefecture_code</code></td><td>string (2桁)</td><td>JIS X 0401</td></tr>
+            <tr><td><code>city_code</code></td><td>string (5桁)</td><td>総務省地方公共団体コード</td></tr>
+            <tr><td><code>towns</code></td><td>array</td><td>同一 zipcode に複数町域あり (例: 京都の通り名)</td></tr>
+            <tr><td><code>towns[].note</code></td><td>string?</td><td>「以下に掲載がない場合」等の特記</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="meta-schema">Meta スキーマ</h3>
+        <p>JSON Schema は <a href="https://github.com/jpzip/spec/blob/main/schema/v1/meta.json" target="_blank" rel="noopener">jpzip/spec</a> 配下にあります。</p>
+
+        <h2 id="sdk">SDK</h2>
+        <p>各言語の SDK が提供する関数は共通です。</p>
+        <table>
+          <thead>
+            <tr><th>関数</th><th>説明</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>lookup(zip)</code></td><td>単一 zipcode を引く。不一致は <code>null</code></td></tr>
+            <tr><td><code>lookupGroup(prefix)</code></td><td>1〜3 桁 prefix 配下を返す</td></tr>
+            <tr><td><code>lookupAll()</code></td><td>全件辞書。内部で <code>/g/0..9</code> を並列 fetch</td></tr>
+            <tr><td><code>preload(scope)</code></td><td>事前ロードしてオフライン動作</td></tr>
+            <tr><td><code>getMeta()</code></td><td>バージョン情報の取得</td></tr>
+          </tbody>
+        </table>
+
+        <h3 id="js">JavaScript / TypeScript</h3>
+        <pre><code><span class="k">import</span> {'{'} JpzipClient {'}'} <span class="k">from</span> <span class="s">"jpzip"</span>;
+
+<span class="k">const</span> client = <span class="k">new</span> <span class="f">JpzipClient</span>();
+<span class="k">const</span> e = <span class="k">await</span> client.<span class="f">lookup</span>(<span class="s">"1500001"</span>);
+
+<span class="c">// 全件 preload (g/0-9 を並列 fetch)</span>
+<span class="k">await</span> client.<span class="f">preload</span>({'{'} scope: <span class="s">"all"</span> {'}'});</code></pre>
+
+        <h3 id="go">Go</h3>
+        <pre><code><span class="k">import</span> <span class="s">"github.com/jpzip/go"</span>
+
+c := jpzip.<span class="f">New</span>()
+e, err := c.<span class="f">Lookup</span>(ctx, <span class="s">"1500001"</span>)
+<span class="c">// → e.Prefecture, e.City, e.Towns[0].Town</span></code></pre>
+
+        <h2 id="cache">キャッシュ戦略</h2>
+        <p>SDK は 3 層キャッシュを区別して管理します。</p>
+        <table>
+          <thead>
+            <tr><th>層</th><th>目的</th><th>デフォルト</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>L1: メモリ LRU</td><td>同一プロセス内の重複 fetch 抑制</td><td>常時 ON</td></tr>
+            <tr><td>L2: 永続キャッシュ</td><td>preload / 起動高速化</td><td>OFF (ユーザー有効化)</td></tr>
+            <tr><td>L3: HTTP / fetch</td><td>ブラウザ・OS レベル</td><td><code>Cache-Control</code> 準拠</td></tr>
+          </tbody>
+        </table>
+        <p>月次のデータ更新は <code>/meta.json</code> の <code>version</code> 変化で検知し、L1/L2 を自動 invalidate します。</p>
+
+        <h2 id="license">ライセンス</h2>
+        <ul>
+          <li>仕様書 / SDK / ETL: <strong>MIT</strong></li>
+          <li>配信データ: <strong>Public Domain 相当</strong> (元データは日本郵便)</li>
+        </ul>
+        <p>商用利用・再配布・改変、いずれも自由です。</p>
+      </article>
+    </div>
+  </div>
+</Base>
