@@ -1337,3 +1337,407 @@ footer.site {
     animation: none !important;
   }
 }
+
+/* ============ blog hero ============ */
+.hero.blog-hero h1.hero-title {
+  line-height: 1.18;
+  padding-bottom: 0.08em;
+}
+.hero.blog-hero h1.hero-title .grad {
+  padding-bottom: 0.08em;
+}
+
+/* ============ blog ============ */
+.blog-section {
+  padding: 56px 0 96px;
+}
+.blog-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 20px;
+}
+.blog-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.blog-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in oklab, var(--orange) 35%, var(--rule));
+  box-shadow: 0 8px 24px -12px color-mix(in oklab, var(--orange) 22%, transparent);
+}
+.blog-card-link {
+  display: block;
+  padding: 28px 32px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.blog-card-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.blog-card-id {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12px;
+  padding: 2px 8px;
+  background: var(--surface-2);
+  border-radius: 6px;
+  color: var(--ink-soft);
+}
+.blog-card-series {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--violet) 12%, transparent);
+  color: var(--violet);
+  font-weight: 500;
+  font-size: 12px;
+}
+[data-theme='dark'] .blog-card-series {
+  background: color-mix(in oklab, var(--violet) 22%, transparent);
+  color: #cdb8ff;
+}
+.blog-card-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 26px;
+  line-height: 1.4;
+  margin: 0 0 10px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.blog-card-desc {
+  color: var(--ink-soft);
+  margin: 0;
+  line-height: 1.75;
+}
+.blog-card-tags {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.blog-tag {
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+/* ============ blog post ============ */
+.post-wrap {
+  padding: 48px 0 96px;
+}
+.post-header {
+  max-width: 760px;
+  margin: 0 auto 40px;
+}
+.post-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+.post-back {
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-weight: 500;
+}
+.post-back:hover {
+  color: var(--ink);
+}
+.post-id {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12px;
+  padding: 2px 8px;
+  background: var(--surface-2);
+  border-radius: 6px;
+  color: var(--ink-soft);
+}
+.post-series {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--violet) 12%, transparent);
+  color: var(--violet);
+  font-weight: 500;
+  font-size: 12px;
+}
+[data-theme='dark'] .post-series {
+  background: color-mix(in oklab, var(--violet) 22%, transparent);
+  color: #cdb8ff;
+}
+.post-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(28px, 4.2vw, 44px);
+  line-height: 1.3;
+  margin: 0 0 20px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.post-body {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.post-body blockquote {
+  border-left: 3px solid color-mix(in oklab, var(--orange) 55%, var(--rule));
+  background: color-mix(in oklab, var(--orange) 7%, transparent);
+  margin: 28px 0;
+  padding: 18px 22px;
+  border-radius: 0 12px 12px 0;
+  color: var(--ink-soft);
+}
+.post-body blockquote p {
+  margin: 0;
+}
+.post-body blockquote p + p {
+  margin-top: 8px;
+}
+.post-body h2 {
+  margin-top: 56px;
+}
+.post-body h2:first-child {
+  margin-top: 0;
+}
+.post-body a {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+[data-theme='dark'] .post-body a {
+  color: #7aa8ff;
+}
+.post-body a:hover {
+  text-decoration-thickness: 2px;
+}
+.post-body ul,
+.post-body ol {
+  padding-left: 22px;
+  line-height: 1.85;
+  color: var(--ink-soft);
+}
+.post-body ul li::marker {
+  color: var(--orange);
+}
+.post-body hr {
+  border: 0;
+  border-top: 1px dashed var(--rule);
+  margin: 48px 0;
+}
+.post-syndications,
+.post-author {
+  max-width: 760px;
+  margin: 48px auto 0;
+  padding: 22px 26px;
+  background: var(--surface-2);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+}
+.post-syndications h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.post-syndications p {
+  margin: 0 0 12px;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+.post-syndications ul {
+  margin: 0;
+  padding-left: 20px;
+}
+.post-syndications a {
+  color: var(--blue);
+  text-decoration: none;
+  font-weight: 500;
+}
+.post-syndications a:hover {
+  text-decoration: underline;
+}
+.post-author-name {
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.post-author-name a {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in oklab, var(--ink) 25%, transparent);
+}
+.post-author-name a:hover {
+  border-bottom-color: var(--orange);
+}
+.post-author-bio {
+  margin: 8px 0 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.post-pager {
+  max-width: 760px;
+  margin: 48px auto 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.post-pager-link {
+  display: block;
+  padding: 18px 22px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.post-pager-link:hover {
+  border-color: color-mix(in oklab, var(--orange) 40%, var(--rule));
+  transform: translateY(-2px);
+}
+.post-pager-link.next {
+  text-align: right;
+}
+.post-pager-label {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.post-pager-title {
+  display: block;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.post-reading {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.post-toc {
+  max-width: 760px;
+  margin: 0 auto 48px;
+  padding: 20px 26px;
+  background: var(--surface-2);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+}
+.post-toc-title {
+  margin: 0 0 12px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  font-weight: 600;
+}
+.post-toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1.85;
+}
+.post-toc li.post-toc-d3 {
+  padding-left: 18px;
+  color: var(--ink-soft);
+}
+.post-toc a {
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+.post-toc a:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
+/* 見出しアンカー (autolink-headings の <a class="heading-anchor">) */
+.post-body :is(h2, h3, h4) {
+  scroll-margin-top: 80px;
+  position: relative;
+}
+.post-body .heading-anchor {
+  position: absolute;
+  left: -24px;
+  top: 0.05em;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 400;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.post-body :is(h2, h3, h4):hover .heading-anchor,
+.post-body .heading-anchor:focus {
+  opacity: 1;
+}
+
+.post-faq {
+  max-width: 760px;
+  margin: 56px auto 0;
+  padding: 24px 26px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+}
+.post-faq h2 {
+  margin: 0 0 16px;
+  font-size: 20px;
+  font-family: 'Noto Serif JP', serif;
+}
+.post-faq dl {
+  margin: 0;
+}
+.post-faq dt {
+  font-weight: 600;
+  color: var(--ink);
+  margin-top: 18px;
+}
+.post-faq dt:first-child {
+  margin-top: 0;
+}
+.post-faq dd {
+  margin: 6px 0 0;
+  color: var(--ink-soft);
+  line-height: 1.85;
+}
+
+@media (max-width: 720px) {
+  .blog-card-link {
+    padding: 22px 22px;
+  }
+  .blog-card-title {
+    font-size: 22px;
+  }
+  .post-pager {
+    grid-template-columns: 1fr;
+  }
+  .post-pager-link.next {
+    text-align: left;
+  }
+  .post-body .heading-anchor {
+    display: none;
+  }
+}

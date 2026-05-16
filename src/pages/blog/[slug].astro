@@ -1,0 +1,217 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import type { GetStaticPaths } from 'astro';
+import {
+  articleSection,
+  faqLd,
+  howToLd,
+  personLd,
+  readingTime,
+  resolveImage,
+  tocHeadings,
+  wordCount,
+} from '../../lib/blog';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const posts = await getCollection('blog-ja', ({ data }) => data.status === 'published');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+};
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+
+const author = await getEntry(post.data.author);
+
+const siteUrl = 'https://jpzip.nadai.dev';
+const canonical = `${siteUrl}/blog/${post.id}/`;
+
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+
+// シリーズ前後のリンクを組み立てる + 全体数を算出
+let seriesPosts: Array<{ id: string; data: typeof post.data }> = [];
+if (post.data.series) {
+  const all = await getCollection('blog-ja', ({ data }) => data.status === 'published');
+  seriesPosts = all
+    .filter((p) => p.data.series?.name === post.data.series!.name)
+    .sort((a, b) => (a.data.series?.part ?? 0) - (b.data.series?.part ?? 0));
+}
+const seriesTotal = seriesPosts.length;
+const prev = seriesPosts.find((p) => (p.data.series?.part ?? 0) === (post.data.series?.part ?? 0) - 1);
+const next = seriesPosts.find((p) => (p.data.series?.part ?? 0) === (post.data.series?.part ?? 0) + 1);
+
+const body = post.body ?? '';
+const readMin = readingTime(body, 'ja');
+const words = wordCount(body);
+const section = articleSection(post.data.series, post.data.tags);
+const imageUrl = resolveImage(siteUrl, post.data.ogImage);
+const toc = tocHeadings(headings);
+
+const blogPostingLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  url: canonical,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  image: imageUrl,
+  datePublished: post.data.publishedAt.toISOString(),
+  dateModified: (post.data.updatedAt ?? post.data.publishedAt).toISOString(),
+  inLanguage: 'ja',
+  wordCount: words,
+  timeRequired: `PT${readMin}M`,
+  articleSection: section,
+  author: { ...personLd(author?.data), url: author?.data.url },
+  publisher: { ...personLd(author?.data), url: author?.data.url },
+  keywords: post.data.tags.join(', '),
+  isPartOf: post.data.series
+    ? { '@type': 'CreativeWorkSeries', name: post.data.series.name, position: post.data.series.part }
+    : undefined,
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'jpzip', item: siteUrl },
+    { '@type': 'ListItem', position: 2, name: 'Blog', item: `${siteUrl}/blog/` },
+    { '@type': 'ListItem', position: 3, name: post.data.title, item: canonical },
+  ],
+};
+
+const faqJson = faqLd(post.data.faq);
+const howToJson = howToLd(post.data.howTo, 'ja');
+
+const syndicationLabel: Record<string, string> = {
+  qiita: 'Qiita',
+  devto: 'DEV',
+  zenn: 'Zenn',
+  medium: 'Medium',
+  hashnode: 'Hashnode',
+  note: 'note',
+  hatena: 'はてなブログ',
+};
+---
+
+<Base
+  title={`${post.data.title} — jpzip Blog`}
+  description={post.data.description}
+  active="blog"
+  ogType="article"
+  ogImage={post.data.ogImage}
+>
+  <Fragment slot="head">
+    <meta property="article:published_time" content={post.data.publishedAt.toISOString()} />
+    {post.data.updatedAt && (
+      <meta property="article:modified_time" content={post.data.updatedAt.toISOString()} />
+    )}
+    {author && <meta property="article:author" content={author.data.name} />}
+    {section && <meta property="article:section" content={section} />}
+    {post.data.tags.map((t) => <meta property="article:tag" content={t} />)}
+    <script type="application/ld+json" set:html={JSON.stringify(blogPostingLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+    {faqJson && <script type="application/ld+json" set:html={JSON.stringify(faqJson)} />}
+    {howToJson && <script type="application/ld+json" set:html={JSON.stringify(howToJson)} />}
+  </Fragment>
+
+  <article class="post-wrap">
+    <div class="wrap">
+      <header class="post-header">
+        <div class="post-meta">
+          <a class="post-back" href="/blog/">← Blog</a>
+          <span class="post-id">#{post.data.id}</span>
+          <time datetime={post.data.publishedAt.toISOString()}>{fmtDate(post.data.publishedAt)}</time>
+          <span class="post-reading">読了 {readMin} 分</span>
+          {post.data.series && (
+            <span class="post-series">
+              {post.data.series.name} シリーズ · {post.data.series.part}/{seriesTotal}
+            </span>
+          )}
+        </div>
+        <h1 class="post-title">{post.data.title}</h1>
+        {post.data.tags.length > 0 && (
+          <div class="post-tags">
+            {post.data.tags.map((t) => <span class="blog-tag">{t}</span>)}
+          </div>
+        )}
+      </header>
+
+      {toc.length > 1 && (
+        <nav class="post-toc" aria-label="目次">
+          <h2 class="post-toc-title">目次</h2>
+          <ol>
+            {toc.map((h) => (
+              <li class={`post-toc-d${h.depth}`}>
+                <a href={`#${h.slug}`}>{h.text}</a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )}
+
+      <div class="docs-body post-body">
+        <Content />
+      </div>
+
+      {post.data.faq.length > 0 && (
+        <section class="post-faq" aria-labelledby="faq-heading">
+          <h2 id="faq-heading">よくある質問</h2>
+          <dl>
+            {post.data.faq.map((item) => (
+              <>
+                <dt>{item.q}</dt>
+                <dd>{item.a}</dd>
+              </>
+            ))}
+          </dl>
+        </section>
+      )}
+
+      {post.data.syndications.length > 0 && (
+        <aside class="post-syndications">
+          <h3>転載先</h3>
+          <p>この記事は以下のサイトにも転載しています（正規版はこのページです）:</p>
+          <ul>
+            {post.data.syndications.map((s) => (
+              <li>
+                <a href={s.url} target="_blank" rel="noopener external">
+                  {syndicationLabel[s.platform] ?? s.platform}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )}
+
+      {author && (
+        <aside class="post-author">
+          <div class="post-author-name">
+            Written by <a href={author.data.url} target="_blank" rel="noopener author">{author.data.name}</a>
+          </div>
+          {author.data.bio?.ja && <p class="post-author-bio">{author.data.bio.ja}</p>}
+        </aside>
+      )}
+
+      {(prev || next) && (
+        <nav class="post-pager">
+          {prev ? (
+            <a class="post-pager-link prev" href={`/blog/${prev.id}/`}>
+              <span class="post-pager-label">← 前の記事</span>
+              <span class="post-pager-title">{prev.data.title}</span>
+            </a>
+          ) : <span />}
+          {next ? (
+            <a class="post-pager-link next" href={`/blog/${next.id}/`}>
+              <span class="post-pager-label">次の記事 →</span>
+              <span class="post-pager-title">{next.data.title}</span>
+            </a>
+          ) : <span />}
+        </nav>
+      )}
+    </div>
+  </article>
+</Base>

@@ -74,6 +74,17 @@ claude mcp add jpzip -- npx -y @jpzip/mcp-server-jpzip
 - [Spec repo](https://github.com/jpzip/spec): プロトコル仕様 v1.0 の正本
 - [MCP server repo](https://github.com/jpzip/mcp): `@jpzip/mcp-server-jpzip` のソース
 
+## Blog
+
+jpzip の設計判断・実測値・AI 駆動開発の知見は [/blog/](https://jpzip.nadai.dev/blog/) (日本語) / [/en/blog/](https://jpzip.nadai.dev/en/blog/) (英語) にまとめている。同じ著者 (nadai) が書いた 4 本構成のシリーズ:
+
+- [Cloudflare Pages 無料枠だけで micro-SaaS データセットを作った話](https://jpzip.nadai.dev/blog/cloudflare-pages-micro-saas/): jpzip 全体像と、課金軸ゼロで運用が成立する Cloudflare Pages 設計の根拠。
+- [KEN_ALL.csv を Cloudflare Pages から 120,677 件配信する設計](https://jpzip.nadai.dev/blog/cloudflare-pages-static-zipcode-delivery/): ファイル分割戦略・ETL・Worker/R2/KV を使わない理由。
+- [MCP サーバーを書いて Claude が日本の郵便番号を扱えるようにした](https://jpzip.nadai.dev/blog/mcp-server-japanese-postcode/): `@jpzip/mcp-server-jpzip` の Tool 設計、キャッシュ寿命分離、漢字/カナ/ローマ字 3 言語横断検索の実装。
+- [Claude Code 1 人開発で 6 時間で 8 言語 SDK を実装した話](https://jpzip.nadai.dev/blog/claude-code-8-sdks-6-hours/): プロトコル先行設計、翻訳タスクとしての多言語移植、言語固有の落とし穴。
+
+ライセンス: 記事本文は CC BY 4.0 相当で引用・転載自由 (アトリビューションのみ希望)。RSS は [/blog/feed.xml](https://jpzip.nadai.dev/blog/feed.xml) / [/en/blog/feed.xml](https://jpzip.nadai.dev/en/blog/feed.xml)。
+
 ## License
 
 - 仕様書 / SDK / ETL: MIT

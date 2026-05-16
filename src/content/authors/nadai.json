@@ -1,0 +1,12 @@
+{
+  "name": "野田大貴",
+  "url": "https://nadai.dev",
+  "bio": {
+    "ja": "個人開発者 / OSS 作家。jpzip など、登録不要で使える小さなデータセット系プロジェクトを作っています。",
+    "en": "Indie developer / OSS author. Builds small no-signup dataset projects, including jpzip."
+  },
+  "sameAs": [
+    "https://nadai.dev",
+    "https://github.com/jpzip"
+  ]
+}

@@ -1,0 +1,128 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { personLd, resolveImage } from '../../lib/blog';
+
+const posts = (await getCollection('blog-ja', ({ data }) => data.status === 'published')).sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
+);
+
+// シリーズ名 → 件数(動的算出)
+const seriesTotals = new Map<string, number>();
+for (const p of posts) {
+  const name = p.data.series?.name;
+  if (name) seriesTotals.set(name, (seriesTotals.get(name) ?? 0) + 1);
+}
+
+const author = await getEntry('authors', 'nadai');
+
+const siteUrl = 'https://jpzip.nadai.dev';
+const blogUrl = `${siteUrl}/blog/`;
+
+const authorLd = personLd(author?.data);
+const defaultImage = resolveImage(siteUrl, undefined);
+
+const blogLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: 'jpzip blog',
+  description: 'jpzip 開発の裏側・郵便番号データ周辺の知見・AI 駆動開発の記事',
+  url: blogUrl,
+  inLanguage: 'ja',
+  image: defaultImage,
+  author: authorLd,
+  publisher: authorLd,
+  blogPost: posts.map((p) => ({
+    '@type': 'BlogPosting',
+    headline: p.data.title,
+    description: p.data.description,
+    url: `${siteUrl}/blog/${p.id}/`,
+    image: resolveImage(siteUrl, p.data.ogImage),
+    datePublished: p.data.publishedAt.toISOString(),
+    inLanguage: 'ja',
+  })),
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'jpzip', item: siteUrl },
+    { '@type': 'ListItem', position: 2, name: 'Blog', item: blogUrl },
+  ],
+};
+
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<Base
+  title="jpzip Blog — 個人開発・AI 駆動開発・郵便番号データの周辺"
+  description="jpzip の開発知見・Cloudflare Pages 設計・MCP server・Claude Code の活用法など、個人開発と AI 駆動開発の周辺記事。"
+  active="blog"
+  ogType="website"
+  lang="ja"
+>
+  <Fragment slot="head">
+    <link rel="alternate" type="application/rss+xml" title="jpzip blog (ja)" href="/blog/feed.xml" />
+    <script type="application/ld+json" set:html={JSON.stringify(blogLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+  </Fragment>
+
+  <section class="hero docs-hero blog-hero">
+    <div class="hero-bg">
+      <div class="blob b1"></div>
+      <div class="blob b2"></div>
+      <div class="blob b3"></div>
+      <div class="blob b4"></div>
+    </div>
+    <div class="wrap">
+      <div class="hero-inner">
+        <div class="eyebrow"><span class="pulse"></span>jpzip Blog · {posts.length} 記事</div>
+        <h1 class="hero-title">
+          jpzip の<br />
+          <span class="grad">設計ノート</span>
+        </h1>
+        <p class="hero-sub">
+          Cloudflare Pages の使いこなし、MCP server の作り方、Claude Code を使った 8 言語 SDK 展開まで — jpzip プロジェクトの設計判断と数字を書き残します。
+        </p>
+        <div class="hero-cta-row">
+          <a class="btn-ghost" href="/blog/feed.xml">↗ RSS</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blog-section">
+    <div class="wrap">
+      <ol class="blog-list">
+        {
+          posts.map((p) => (
+            <li class="blog-card">
+              <a class="blog-card-link" href={`/blog/${p.id}/`}>
+                <div class="blog-card-meta">
+                  <span class="blog-card-id">#{p.data.id}</span>
+                  <time datetime={p.data.publishedAt.toISOString()}>{fmtDate(p.data.publishedAt)}</time>
+                  {p.data.series && (
+                    <span class="blog-card-series">
+                      {p.data.series.name} · {p.data.series.part}/{seriesTotals.get(p.data.series.name) ?? p.data.series.part}
+                    </span>
+                  )}
+                </div>
+                <h2 class="blog-card-title">{p.data.title}</h2>
+                <p class="blog-card-desc">{p.data.description}</p>
+                {p.data.tags.length > 0 && (
+                  <div class="blog-card-tags">
+                    {p.data.tags.map((t) => (
+                      <span class="blog-tag">{t}</span>
+                    ))}
+                  </div>
+                )}
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+</Base>

@@ -7,7 +7,7 @@ type Lang = 'ja' | 'en';
 interface Props {
   title: string;
   description?: string;
-  active?: 'home' | 'docs';
+  active?: 'home' | 'docs' | 'blog';
   ogType?: 'website' | 'article';
   ogImage?: string;
   lang?: Lang;
@@ -18,9 +18,19 @@ const {
   description,
   active,
   ogType = 'website',
-  ogImage = '/og.svg',
+  ogImage = '/og.png',
   lang = 'ja',
 } = Astro.props;
+
+// og:image:type を拡張子から推定 (PNG / JPEG / SVG / WebP)
+const imageMime = (() => {
+  const ext = ogImage.split('?')[0].split('#')[0].toLowerCase();
+  if (ext.endsWith('.png')) return 'image/png';
+  if (ext.endsWith('.jpg') || ext.endsWith('.jpeg')) return 'image/jpeg';
+  if (ext.endsWith('.webp')) return 'image/webp';
+  if (ext.endsWith('.svg')) return 'image/svg+xml';
+  return 'image/png';
+})();
 
 const t = {
   ja: {
@@ -30,15 +40,18 @@ const t = {
     navPlayground: 'Playground',
     navSdk: 'SDK',
     navDocs: 'Docs',
+    navBlog: 'Blog',
     navGithub: 'GitHub',
     navCta: '試す →',
     feedTitle: 'jpzip data releases',
     home: '/',
     docs: '/docs',
+    blog: '/blog/',
     playgroundHash: '/#playground',
     codeHash: '/#code',
     altHref: '/en/',
     altHrefDocs: '/en/docs',
+    altHrefBlog: '/en/blog/',
     altLabel: 'EN',
     footerTagline:
       '個人開発者・OSS のための、登録不要の郵便番号データセット。日本郵便の公式 API を使えない場面の補完選択肢として。',
@@ -51,6 +64,10 @@ const t = {
     footerGithubOrg: 'GitHub Org',
     footerSpecRepo: 'Spec repo',
     footerJp: '日本郵便',
+    footerBlog: 'Blog',
+    footerRss: 'Blog RSS',
+    footerBlogHref: '/blog/',
+    footerRssHref: '/blog/feed.xml',
     footerCopyright: '© 2026 nadai · MIT',
     footerSource: 'data source: 日本郵便 KEN_ALL.csv (Public Domain)',
   },
@@ -61,15 +78,18 @@ const t = {
     navPlayground: 'Playground',
     navSdk: 'SDK',
     navDocs: 'Docs',
+    navBlog: 'Blog',
     navGithub: 'GitHub',
     navCta: 'Try it →',
     feedTitle: 'jpzip data releases',
     home: '/en/',
     docs: '/en/docs',
+    blog: '/en/blog/',
     playgroundHash: '/en/#playground',
     codeHash: '/en/#code',
     altHref: '/',
     altHrefDocs: '/docs',
+    altHrefBlog: '/blog/',
     altLabel: '日本語',
     footerTagline:
       'A no-signup Japanese zipcode dataset for indie devs and OSS — a complement when Japan Post’s official API is not an option.',
@@ -82,6 +102,10 @@ const t = {
     footerGithubOrg: 'GitHub Org',
     footerSpecRepo: 'Spec repo',
     footerJp: 'Japan Post',
+    footerBlog: 'Blog',
+    footerRss: 'Blog RSS',
+    footerBlogHref: '/en/blog/',
+    footerRssHref: '/en/blog/feed.xml',
     footerCopyright: '© 2026 nadai · MIT',
     footerSource: 'data source: Japan Post KEN_ALL.csv (Public Domain)',
   },
@@ -109,11 +133,12 @@ const links = [
   navLink(t.playgroundHash, t.navPlayground, 'playground'),
   navLink(t.codeHash, t.navSdk, 'sdk'),
   navLink(t.docs, t.navDocs, 'docs'),
+  navLink(t.blog, t.navBlog, 'blog'),
   navLink('https://github.com/jpzip', t.navGithub),
 ];
 
-// 言語切替先 — 現在ページに対応する反対言語の URL
-const altLangHref = active === 'docs' ? t.altHrefDocs : t.altHref;
+// 言語切替先 — 現在ページに対応する反対言語の URL (pathname から動的に算出)
+const altLangHref = lang === 'ja' ? enPath : jaPath;
 ---
 
 <!doctype html>
@@ -136,6 +161,9 @@ const altLangHref = active === 'docs' ? t.altHrefDocs : t.altHref;
     <meta property="og:description" content={desc} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:type" content={imageMime} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:locale" content={t.ogLocale} />
     {lang === 'ja' && <meta property="og:locale:alternate" content="en_US" />}
     {lang === 'en' && <meta property="og:locale:alternate" content="ja_JP" />}
@@ -236,6 +264,8 @@ const altLangHref = active === 'docs' ? t.altHrefDocs : t.altHref;
           <div class="foot-col">
             <h4>{t.footerLinks}</h4>
             <ul>
+              <li><a href={t.footerBlogHref}>{t.footerBlog}</a></li>
+              <li><a href={t.footerRssHref}>{t.footerRss}</a></li>
               <li><a href="https://github.com/jpzip">{t.footerGithubOrg}</a></li>
               <li><a href="https://github.com/jpzip/spec">{t.footerSpecRepo}</a></li>
               <li>
