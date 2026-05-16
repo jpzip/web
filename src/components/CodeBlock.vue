@@ -45,7 +45,7 @@ const tabs: { id: Lang; label: string }[] = [
 <span class="c">// 以降の lookup() はネットワーク不要</span>
 <span class="k">const</span> <span class="v">e2</span> = <span class="k">await</span> <span class="f">lookup</span>(<span class="s">"1500001"</span>)</pre>
 
-    <pre v-show="tab === 'go'" class="code"><span class="k">import</span> <span class="s">"github.com/jpzip/go"</span>
+    <pre v-show="tab === 'go'" class="code"><span class="k">import</span> jpzip <span class="s">"github.com/jpzip/go"</span>
 
 <span class="v">entry</span>, <span class="v">err</span> := jpzip.<span class="f">Lookup</span>(ctx, <span class="s">"2310017"</span>)
 <span class="k">if</span> err != <span class="n">nil</span> { <span class="k">return</span> err }

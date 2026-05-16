@@ -289,7 +289,7 @@ composer require jpzip/jpzip
 
           <!-- ============= Go ============= -->
           <Fragment slot="go">
-            <pre><code is:raw><span class="k">import</span> <span class="s">"github.com/jpzip/go"</span>
+            <pre><code is:raw><span class="k">import</span> jpzip <span class="s">"github.com/jpzip/go"</span>
 
 ctx := context.<span class="f">Background</span>()
 e, err := jpzip.<span class="f">Lookup</span>(ctx, <span class="s">"2310017"</span>)
@@ -298,7 +298,7 @@ e, err := jpzip.<span class="f">Lookup</span>(ctx, <span class="s">"2310017"</sp
             <p>Module <code>github.com/jpzip/go</code>. Runs on Go 1.21+, zero dependencies (standard library only).</p>
 
             <h3 id="sdk-functional">Package functions (singleton)</h3>
-            <pre><code is:raw><span class="k">import</span> <span class="s">"github.com/jpzip/go"</span>
+            <pre><code is:raw><span class="k">import</span> jpzip <span class="s">"github.com/jpzip/go"</span>
 
 ctx := context.<span class="f">Background</span>()
 
