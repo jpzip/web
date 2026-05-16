@@ -1,0 +1,68 @@
+# jpzip — https://jpzip.nadai.dev
+# データ層 (/g/, /p/, /meta.json, /feed.xml) は同一 Pages プロジェクト配下にあるが、
+# 検索インデックスにはランディング (/, /docs) だけを乗せる方針。
+
+User-agent: *
+Allow: /
+Disallow: /g/
+Disallow: /p/
+
+# ----------------------------------------------------------------------------
+# AI / LLM クローラを明示的に許可。データセット系は LLM からの引用が
+# 直接ユーザー流入になりやすいので、ブロックではなく Allow を選択する。
+# ----------------------------------------------------------------------------
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Meta-ExternalFetcher
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: MistralAI-User
+Allow: /
+
+Sitemap: https://jpzip.nadai.dev/sitemap-index.xml

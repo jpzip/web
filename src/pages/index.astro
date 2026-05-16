@@ -25,6 +25,126 @@ try {
 }
 
 const fmt = (n: number) => n.toLocaleString('en-US');
+
+const siteUrl = 'https://jpzip.nadai.dev';
+
+// schema.org Dataset — Google Dataset Search 用
+const datasetLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Dataset',
+  name: 'jpzip — 日本郵便番号データセット',
+  alternateName: 'jpzip zipcode dataset',
+  description:
+    '日本郵便 KEN_ALL.csv / KEN_ALL_ROME を正規化して CDN から配信する非公式の郵便番号データセット。漢字・カナ・ローマ字・総務省コードを含む。月次更新。登録不要・無料・MIT。',
+  url: siteUrl,
+  sameAs: ['https://github.com/jpzip', 'https://github.com/jpzip/spec'],
+  identifier: `jpzip-${meta.version}`,
+  version: meta.version,
+  inLanguage: 'ja',
+  isAccessibleForFree: true,
+  license: 'https://opensource.org/licenses/MIT',
+  keywords: [
+    '郵便番号',
+    'zipcode',
+    '日本郵便',
+    'KEN_ALL',
+    'データセット',
+    'CDN',
+    'free',
+    'no-auth',
+    'open data',
+  ],
+  spatialCoverage: {
+    '@type': 'Place',
+    name: '日本',
+    geo: { '@type': 'GeoShape', addressCountry: 'JP' },
+  },
+  temporalCoverage: meta.version,
+  creator: {
+    '@type': 'Person',
+    name: 'nadai',
+    url: 'https://github.com/jpzip',
+  },
+  isBasedOn: {
+    '@type': 'Dataset',
+    name: '日本郵便 郵便番号データ (KEN_ALL.csv)',
+    url: 'https://www.post.japanpost.jp/service/search/zipcode/download/',
+  },
+  variableMeasured: [
+    { '@type': 'PropertyValue', name: 'prefecture', description: '都道府県名 (漢字)' },
+    { '@type': 'PropertyValue', name: 'prefecture_kana', description: '都道府県名 (カナ)' },
+    { '@type': 'PropertyValue', name: 'prefecture_roma', description: '都道府県名 (ローマ字)' },
+    { '@type': 'PropertyValue', name: 'prefecture_code', description: 'JIS X 0401 (2 桁)' },
+    { '@type': 'PropertyValue', name: 'city', description: '市区町村名 (漢字)' },
+    { '@type': 'PropertyValue', name: 'city_kana', description: '市区町村名 (カナ)' },
+    { '@type': 'PropertyValue', name: 'city_roma', description: '市区町村名 (ローマ字)' },
+    { '@type': 'PropertyValue', name: 'city_code', description: '総務省全国地方公共団体コード (5 桁)' },
+    { '@type': 'PropertyValue', name: 'towns[].town', description: '町域名 (漢字/カナ/ローマ字)' },
+  ],
+  distribution: [
+    {
+      '@type': 'DataDownload',
+      name: 'meta.json — バージョンと統計',
+      encodingFormat: 'application/json',
+      contentUrl: `${siteUrl}/meta.json`,
+    },
+    {
+      '@type': 'DataDownload',
+      name: '/g/{1}.json — 1 桁プレフィックス単位の全エントリ',
+      encodingFormat: 'application/json',
+      contentUrl: `${siteUrl}/g/0.json`,
+    },
+    {
+      '@type': 'DataDownload',
+      name: '/p/{3}.json — 3 桁プレフィックス単位の全エントリ',
+      encodingFormat: 'application/json',
+      contentUrl: `${siteUrl}/p/231.json`,
+    },
+  ],
+};
+
+// schema.org WebSite — sitelink / 検索ボックス対応
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'jpzip',
+  url: siteUrl,
+  inLanguage: 'ja',
+  description: '登録不要・無料・無制限の日本郵便番号データセット',
+  publisher: { '@type': 'Person', name: 'nadai' },
+};
+
+// schema.org SoftwareSourceCode — SDK 一覧
+const softwareLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareSourceCode',
+  name: 'jpzip SDK',
+  description:
+    'jpzip データセットの公式 SDK 群。TypeScript / Go / Python / Rust / Ruby / Java / PHP / Swift / Kotlin / C# / Dart / Elixir / Scala / C / C++ / Perl / R の 15+ 言語で同一シグネチャを提供。',
+  codeRepository: 'https://github.com/jpzip',
+  programmingLanguage: [
+    'TypeScript',
+    'Go',
+    'Python',
+    'Rust',
+    'Ruby',
+    'Java',
+    'PHP',
+    'Swift',
+    'Kotlin',
+    'C#',
+    'Dart',
+    'Elixir',
+    'Scala',
+    'C',
+    'C++',
+    'Perl',
+    'R',
+  ],
+  license: 'https://opensource.org/licenses/MIT',
+  author: { '@type': 'Person', name: 'nadai' },
+};
+
 const features = [
   {
     icon: '¥',
@@ -60,7 +180,16 @@ const features = [
 ];
 ---
 
-<Base title="jpzip — 登録不要・無料・無制限の郵便番号データセット" active="home">
+<Base
+  title="jpzip — 登録不要・無料・無制限の郵便番号データセット"
+  description={`日本の全郵便番号 (${fmt(meta.total_zipcodes)} 件) を CDN から配信する無料データセット。漢字・カナ・ローマ字・総務省コードを含み、15+ 言語の SDK で 3 行から利用可能。MIT。`}
+  active="home"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(websiteLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(datasetLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(softwareLd)} />
+  </Fragment>
   <!-- HERO -->
   <section class="hero">
     <div class="hero-bg">

@@ -1,0 +1,66 @@
+# jpzip
+
+> 登録不要・無料・無制限の日本郵便番号データセット。日本郵便 KEN_ALL.csv / KEN_ALL_ROME を正規化して CDN から配信する非公式ミラー。漢字 / カナ / ローマ字 / 総務省コードを含む。月次更新。MIT。
+
+jpzip は `https://jpzip.nadai.dev` から静的 JSON ファイル群として全 12 万件の郵便番号データを配信するデータセット。各言語の薄い SDK が提供され、L1 メモリ + L2 永続キャッシュにより完全オフラインでも動作する。日本郵便の公式 API を使えない個人開発者・OSS のための補完選択肢。
+
+## Endpoints
+
+- [meta.json](https://jpzip.nadai.dev/meta.json): バージョンと統計 (~10 KB)
+- [/g/{1}.json](https://jpzip.nadai.dev/g/0.json): 1 桁プレフィックス単位の全エントリ (3-4 MB)
+- [/p/{3}.json](https://jpzip.nadai.dev/p/231.json): 3 桁プレフィックス単位の全エントリ (~10 KB)
+
+HTTP は GET のみ、`Content-Type: application/json; charset=utf-8`、gzip / brotli、`Cache-Control: public, max-age=86400`、CORS は全オリジン許可 (`Access-Control-Allow-Origin: *`)。`/all.json` は意図的に存在しない (Cloudflare Pages の 25 MiB 上限を超えるため)。全件が必要なときは `/g/0.json` 〜 `/g/9.json` を並列取得する。
+
+## Schema
+
+各エントリは以下の構造。
+
+```json
+{
+  "prefecture": "神奈川県",
+  "prefecture_kana": "カナガワケン",
+  "prefecture_roma": "Kanagawa",
+  "prefecture_code": "14",
+  "city": "横浜市中区",
+  "city_kana": "ヨコハマシナカク",
+  "city_roma": "Yokohama Shi Naka Ku",
+  "city_code": "14104",
+  "towns": [
+    { "town": "本町", "kana": "ホンチョウ", "roma": "Honcho" }
+  ]
+}
+```
+
+`prefecture_code` は JIS X 0401 (2 桁)、`city_code` は総務省全国地方公共団体コード (5 桁)。1 つの郵便番号に複数町域が紐づく場合 (京都の通り名など) は `towns` 配列が複数要素になる。
+
+## SDKs
+
+全 SDK で `lookup` / `lookupGroup` / `lookupAll` / `preload` / `getMeta` / `refresh` / `isValidZipcode` の同一シグネチャを実装。L1 LRU + オプショナル L2 永続キャッシュ + 5xx 指数バックオフ + データ version 変更時の自動 invalidate を全言語で共通実装している。
+
+- [TypeScript](https://github.com/jpzip/js): `npm i jpzip` (Node 18+ / browser / Bun / Deno / Workers)
+- [Go](https://github.com/jpzip/go): `go get github.com/jpzip/go` (Go 1.21+)
+- [Python](https://github.com/jpzip/python): `pip install jpzip` (3.10+, sync/async)
+- [Rust](https://github.com/jpzip/rust): `cargo add jpzip` (1.75+, tokio)
+- [Ruby](https://github.com/jpzip/ruby): `gem install jpzip` (3.2+)
+- [Java](https://github.com/jpzip/java): `dev.nadai:jpzip:0.1.0` (17+)
+- [PHP](https://github.com/jpzip/php): `composer require jpzip/jpzip` (8.2+)
+- [Swift](https://github.com/jpzip/swift): SwiftPM (5.9+)
+- 他 9 言語 (Kotlin / C# / Dart / Elixir / Scala / C / C++ / Perl / R)
+
+## Docs
+
+- [Docs](https://jpzip.nadai.dev/docs): SDK の使い方とプロトコル仕様
+- [llms-full.txt](https://jpzip.nadai.dev/llms-full.txt): ドキュメント全文 (LLM 向け Markdown)
+- [Spec repo](https://github.com/jpzip/spec): プロトコル仕様 v1.0 の正本
+
+## License
+
+- 仕様書 / SDK / ETL: MIT
+- 配信データ: Public Domain 相当 (元データは日本郵便)
+
+商用利用・再配布・改変、いずれも自由。アトリビューションは不要 (歓迎)。
+
+## Update cadence
+
+毎月 1 日と 15 日に GitHub Actions が日本郵便の最新データを取り込み、CDN へデプロイする。データ version の変化は `/meta.json` の `version` フィールド (例: `2026-05`) で検知できる。RSS フィードは [/feed.xml](https://jpzip.nadai.dev/feed.xml)。

@@ -1,0 +1,309 @@
+# jpzip — 日本郵便番号データセット (LLM 向け完全リファレンス)
+
+> このファイルは LLM / AI エージェントが jpzip を正確に引用・実装支援できるよう、ドキュメント全文を 1 ファイルに集約した Markdown です。ヒューマン向けのドキュメントは <https://jpzip.nadai.dev/docs> にあります。
+
+## 概要
+
+jpzip は静的 JSON ファイル群を `https://jpzip.nadai.dev` から配信する日本郵便番号データセットです。日本郵便公式の KEN_ALL.csv / KEN_ALL_ROME を結合・正規化し、Cloudflare Pages から無料配信しています。日本郵便の公式 API ではなく、個人開発者・OSS のための非公式の補完選択肢です。
+
+- ベース URL: `https://jpzip.nadai.dev`
+- ライセンス: MIT (SDK・仕様書・ETL) / Public Domain 相当 (配信データ)
+- 認証: 不要 (API キー不要、CORS は全オリジン許可)
+- 課金: なし (Cloudflare Pages 無料枠のみで成立)
+- 更新頻度: 毎月 1 日・15 日 (GitHub Actions 自動)
+
+## HTTP プロトコル仕様 v1.0
+
+### エンドポイント
+
+| パス | 内容 | サイズ目安 |
+|---|---|---|
+| `/meta.json` | バージョンと統計 | ~10 KB |
+| `/g/{1}.json` | 1 桁プレフィックスの全エントリ (`{1}` は `0`-`9`) | 3-4 MB |
+| `/p/{3}.json` | 3 桁プレフィックスの全エントリ (`{3}` は実在する 3 桁プレフィックス、948 ファイル) | ~10 KB |
+
+`/all.json` は意図的に存在しません。全件で 25 MiB を超え Cloudflare Pages の単一ファイル上限を超過するためです。全件取得は `/g/0.json` 〜 `/g/9.json` を並列取得してマージしてください。各 SDK の `lookupAll` / `preload({ scope: "all" })` はこれを自動で実行します。
+
+### HTTP 仕様
+
+- Method: `GET` のみ (クエリパラメータなし)
+- Content-Type: `application/json; charset=utf-8`
+- Encoding: gzip / brotli (Cloudflare 自動)
+- Cache-Control: `public, max-age=86400` (24 時間)
+- CORS: `Access-Control-Allow-Origin: *`
+- 404: 実在しない prefix。SDK は「該当なし」として扱う
+- 5xx / network エラー: SDK は指数バックオフで最大 3 回リトライ
+
+### スキーマ
+
+`/g/*` と `/p/*` は同じ構造のフラットな辞書。キーは 7 桁の zipcode (例 `"2310017"`)、値は `ZipcodeEntry`。
+
+```json
+{
+  "prefecture": "神奈川県",
+  "prefecture_kana": "カナガワケン",
+  "prefecture_roma": "Kanagawa",
+  "prefecture_code": "14",
+  "city": "横浜市中区",
+  "city_kana": "ヨコハマシナカク",
+  "city_roma": "Yokohama Shi Naka Ku",
+  "city_code": "14104",
+  "towns": [
+    { "town": "本町", "kana": "ホンチョウ", "roma": "Honcho" }
+  ]
+}
+```
+
+- `prefecture_code`: JIS X 0401 (2 桁)
+- `city_code`: 総務省全国地方公共団体コード (5 桁)
+- `towns[]`: 1 zipcode に複数町域が紐づく場合 (京都の通り名など) は複数要素になる
+- `towns[].note`: 「以下に掲載がない場合」などの特記事項が入る (任意)
+
+### バージョニング
+
+- `spec_version` (例 `1.0`): プロトコルのバージョン。SemVer 準拠。v1 系列の中では既存フィールドの削除・型変更は行わない。
+- `version` (例 `2026-05`): データの月次バージョン。互換性とは無関係、データの新鮮さの指標。
+
+### meta.json の構造
+
+```json
+{
+  "spec_version": "1.0",
+  "version": "2026-05",
+  "total_zipcodes": 120677,
+  "prefix_count": 948
+}
+```
+
+## SDK 共通仕様
+
+全 SDK (TypeScript / Go / Python / Rust / Ruby / Java / PHP / Swift / Kotlin / C# / Dart / Elixir / Scala / C / C++ / Perl / R) は同一シグネチャの API を持ちます。
+
+| 関数 | 引数 | 返り値 |
+|---|---|---|
+| `lookup(zip)` | `zip: string` (7 桁) | `ZipcodeEntry | null` |
+| `lookupGroup(prefix)` | `prefix: string` (1-3 桁) | `Record<string, ZipcodeEntry>` |
+| `lookupAll()` | — | `Record<string, ZipcodeEntry>` (内部で `/g/0..9` 並列) |
+| `preload({ scope })` | `scope: "all" \| "0" \| "23" \| "231"` | `void` |
+| `getMeta()` | — | `Meta \| null` |
+| `isValidZipcode(s)` | `s: string` | `boolean` (形式チェックのみ、fetch しない) |
+| `refresh()` | — | `void` (L1/L2 を破棄して meta を再取得) |
+
+### クライアント共通オプション
+
+```
+baseUrl:           "https://jpzip.nadai.dev"  // デフォルト
+memoryCacheSize:   100                         // L1 LRU の prefix 数
+cache:             undefined                   // L2 (PersistentCache 実装)
+fetch:             globalThis.fetch            // テストで差し替え可
+onSpecMismatch:    ({ expected, received }) => void
+```
+
+### キャッシュ戦略 (3 層)
+
+| 層 | 目的 | サイズ目安 | デフォルト |
+|---|---|---|---|
+| L1 メモリ LRU | 同一プロセス内の重複 fetch 抑制 | ~1 MB | 常時 ON (内部) |
+| L2 永続キャッシュ | preload / 起動高速化 | 最大 ~10 MB | OFF (ユーザー有効化) |
+| L3 HTTP キャッシュ | ブラウザ / OS / fetch 層 | 環境依存 | Cache-Control 準拠 |
+
+月次のデータ更新は `/meta.json` の `version` 変化で検知し、SDK は L1 と L2 を自動 invalidate します。明示的に再取得したい場合は `refresh()` を呼びます。
+
+### PersistentCache インタフェース (L2)
+
+```ts
+interface PersistentCache {
+  get(key: string): Promise<Uint8Array | null>;
+  set(key: string, value: Uint8Array, ttl?: number): Promise<void>;
+  delete(key: string): Promise<void>;
+  clear(): Promise<void>;
+}
+```
+
+標準実装は意図的に同梱されていません。環境に合わせて選んでください。
+
+- ブラウザ: IndexedDB
+- Node.js: ファイルシステム
+- Cloudflare Workers: KV / Cache API
+- Redis / SQLite / S3 など任意
+
+## 言語別の使用例
+
+### TypeScript / JavaScript
+
+```bash
+npm i jpzip
+```
+
+```ts
+import { lookup, lookupGroup, preload } from "jpzip";
+
+const e = await lookup("2310017");
+if (e) console.log(e.prefecture, e.city, e.towns[0].town);
+// 神奈川県 横浜市中区 本町
+
+await preload({ scope: "all" }); // 全件キャッシュへ
+```
+
+明示的なインスタンス:
+
+```ts
+import { JpzipClient } from "jpzip";
+
+const client = new JpzipClient({
+  baseUrl: "https://jpzip.nadai.dev",
+  memoryCacheSize: 100,
+  cache: myCache,
+});
+const e = await client.lookup("1500001");
+```
+
+ESM / CJS 両対応、完全型付き、Node 18+ / 主要ブラウザ / Bun / Deno / Cloudflare Workers で動作。
+
+### Go
+
+```bash
+go get github.com/jpzip/go
+```
+
+```go
+import "github.com/jpzip/go"
+
+ctx := context.Background()
+e, err := jpzip.Lookup(ctx, "2310017")
+// e.Prefecture, e.City, e.Towns[0].Town
+```
+
+Go 1.21+、依存ゼロ (標準ライブラリのみ)。`jpzip.New(jpzip.WithBaseURL(...), jpzip.WithCache(...))` で明示的クライアント生成。
+
+### Python
+
+```bash
+pip install jpzip
+```
+
+```python
+from jpzip import lookup
+
+e = lookup("2310017")
+if e:
+    print(e.prefecture, e.city, e.towns[0].town)
+```
+
+Python 3.10+、`httpx` 経由で sync / async 両対応。`JpzipClient` (sync) / `AsyncJpzipClient` (async) を context manager で使用。frozen dataclass で型付き。
+
+### Rust
+
+```bash
+cargo add jpzip
+```
+
+```rust
+use jpzip::JpzipClient;
+
+let client = JpzipClient::builder().build();
+let e = client.lookup("2310017").await?;
+```
+
+Rust 1.75+、`tokio` + `reqwest` (rustls) + `serde`。
+
+### Ruby
+
+```bash
+gem install jpzip
+```
+
+```ruby
+require "jpzip"
+
+e = Jpzip.lookup("2310017")
+puts "#{e.prefecture} #{e.city}" if e
+```
+
+Ruby 3.2+、依存ゼロ (stdlib の `Net::HTTP` のみ)。値オブジェクトは `Data.define`。
+
+### Java
+
+Maven: `dev.nadai:jpzip:0.1.0`
+
+```java
+import dev.nadai.jpzip.Jpzip;
+
+var e = Jpzip.lookup("2310017");
+e.ifPresent(x -> System.out.println(x.prefecture() + " " + x.city()));
+```
+
+Java 17+、`java.net.http.HttpClient` + Jackson のみ。`CompletableFuture` で内部並列。
+
+### PHP
+
+```bash
+composer require jpzip/jpzip
+```
+
+```php
+use function Jpzip\lookup;
+
+$e = lookup("2310017");
+if ($e) echo "{$e->prefecture} {$e->city}";
+```
+
+PHP 8.2+、Guzzle 7 + readonly classes。2 桁 fan-out は Guzzle `Pool` で並列。
+
+### Swift
+
+SwiftPM: `https://github.com/jpzip/swift`
+
+```swift
+import Jpzip
+
+if let e = try await lookup("2310017") {
+    print(e.prefecture, e.city, e.towns[0].town)
+}
+```
+
+Swift 5.9+、iOS 15+ / macOS 12+。`actor` ベースで Sendable 安全、依存ゼロ (URLSession のみ)。
+
+### その他の SDK
+
+| 言語 | リポジトリ | インストール |
+|---|---|---|
+| Kotlin | `jpzip/kotlin` | `dev.nadai:jpzip:0.1.0` (Ktor + coroutines) |
+| C# / .NET | `jpzip/dotnet` | `dotnet add package Jpzip` (net8.0) |
+| Dart | `jpzip/dart` | `dart pub add jpzip` (Flutter / CLI / Web) |
+| Elixir | `jpzip/elixir` | `{:jpzip, "~> 0.1"}` (Req + GenServer + ETS) |
+| Scala | `jpzip/scala` | `"dev.nadai" %% "jpzip" % "0.1.0"` (Scala 3) |
+| C | `jpzip/c` | `cmake -S . -B build` (libcurl + cJSON) |
+| C++ | `jpzip/cpp` | `FetchContent_Declare(jpzip ...)` (C++17) |
+| Perl | `jpzip/perl` | `cpanm Jpzip` (HTTP::Tiny + Moo) |
+| R | `jpzip/r` | `remotes::install_github("jpzip/r")` (httr2 + R6) |
+
+## Edge / Serverless 環境での注意
+
+- Cloudflare Workers / Vercel Edge: ファイル L2 は使えない。`caches.default` や Workers KV をラップした `PersistentCache` を渡す。
+- 短命プロセス (Lambda / FaaS): L1 がリクエスト間で再利用されない。`preload` は init 時に 1 度だけ実行する設計にする。
+- `getMeta()` は SDK 内で 1 度しか叩かれないが、毎リクエストで意図的に呼ばないこと。
+
+## ライセンスと帰属
+
+- SDK / 仕様書 / ETL: MIT
+- 配信データ: Public Domain 相当 (元データは日本郵便)
+- 商用利用、再配布、改変、いずれも自由
+- アトリビューション不要 (歓迎はする)
+- 元データの権利は日本郵便に帰属 (KEN_ALL.csv は同省の判断で Public Domain 相当として配布されている)
+
+## 注意事項
+
+- jpzip は日本郵便の**公式 API ではない**。公式 API を使えない場面の補完選択肢。
+- データの正確性は日本郵便の公式 KEN_ALL.csv に依存する。jpzip 側は CSV のスキーマ正規化のみを行い、内容の改変はしない。
+- 月次の取り込みタイミングと日本郵便側の更新タイミングのずれにより、最大 2 週間程度の遅延が発生する可能性がある。
+- 緊急の住所バリデーションには適さない。住所バリデーションが第一目的の場合は、有償の公式 API か商用サービスの利用を検討する。
+
+## 関連リソース
+
+- サイト: <https://jpzip.nadai.dev>
+- Docs (人向け): <https://jpzip.nadai.dev/docs>
+- GitHub Org: <https://github.com/jpzip>
+- Spec repo: <https://github.com/jpzip/spec>
+- 日本郵便 (元データ): <https://www.post.japanpost.jp/service/search/zipcode/download/>
+- RSS (データリリース): <https://jpzip.nadai.dev/feed.xml>

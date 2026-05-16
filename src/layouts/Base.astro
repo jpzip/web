@@ -6,9 +6,22 @@ interface Props {
   title: string;
   description?: string;
   active?: 'home' | 'docs';
+  ogType?: 'website' | 'article';
+  ogImage?: string;
 }
 
-const { title, description = '登録不要・無料・無制限の郵便番号データセット', active } = Astro.props;
+const {
+  title,
+  description = '登録不要・無料・無制限の郵便番号データセット',
+  active,
+  ogType = 'website',
+  ogImage = '/og.svg',
+} = Astro.props;
+
+const site = Astro.site ?? new URL('https://jpzip.nadai.dev');
+const canonical = new URL(Astro.url.pathname, site).toString();
+const ogImageUrl = new URL(ogImage, site).toString();
+
 const navLink = (href: string, label: string, key?: string) => ({ href, label, key });
 const links = [
   navLink('/#playground', 'Playground', 'playground'),
@@ -25,7 +38,28 @@ const links = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- OGP -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="jpzip" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:locale" content="ja_JP" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- Feeds & discovery -->
+    <link rel="alternate" type="application/rss+xml" title="jpzip data releases" href="/feed.xml" />
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -40,6 +74,7 @@ const links = [
         document.documentElement.dataset.theme = saved || preferred;
       })();
     </script>
+    <slot name="head" />
   </head>
   <body>
     <nav class="site">

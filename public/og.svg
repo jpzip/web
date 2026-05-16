@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fbf8f1" />
+      <stop offset="100%" stop-color="#f3ece0" />
+    </linearGradient>
+    <linearGradient id="grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#c0392b" />
+      <stop offset="100%" stop-color="#e67e22" />
+    </linearGradient>
+    <pattern id="stripe" patternUnits="userSpaceOnUse" width="24" height="24" patternTransform="rotate(45)">
+      <rect width="24" height="24" fill="#c0392b" />
+      <rect x="0" y="0" width="12" height="24" fill="#2c3e50" />
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)" />
+
+  <rect x="0" y="0" width="1200" height="16" fill="url(#stripe)" />
+  <rect x="0" y="614" width="1200" height="16" fill="url(#stripe)" />
+
+  <g transform="translate(96, 132)">
+    <rect width="120" height="120" rx="22" fill="#2c3e50" />
+    <text x="60" y="86" font-family="'Noto Serif JP', 'Yu Mincho', serif" font-weight="900" font-size="70" fill="#fbf8f1" text-anchor="middle">郵</text>
+  </g>
+
+  <text x="240" y="200" font-family="'Noto Serif JP', 'Yu Mincho', serif" font-weight="900" font-size="96" fill="#1a1a1a">jpzip</text>
+  <text x="240" y="245" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" font-size="22" fill="#6b6b6b">jpzip.nadai.dev</text>
+
+  <text x="96" y="360" font-family="'Noto Serif JP', 'Yu Mincho', serif" font-weight="900" font-size="64" fill="#1a1a1a">
+    日本の郵便番号を、
+  </text>
+  <text x="96" y="440" font-family="'Noto Serif JP', 'Yu Mincho', serif" font-weight="900" font-size="64" fill="url(#grad)">
+    CDN から配るデータセット。
+  </text>
+
+  <g transform="translate(96, 510)">
+    <rect width="180" height="44" rx="22" fill="#2c3e50" />
+    <text x="90" y="29" font-family="'Noto Sans JP', system-ui, sans-serif" font-weight="700" font-size="16" fill="#fbf8f1" text-anchor="middle">登録不要 · 無料 · MIT</text>
+  </g>
+  <text x="296" y="540" font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="500" font-size="18" fill="#6b6b6b">120,677 zipcodes · 15+ SDKs · since 2026</text>
+</svg>

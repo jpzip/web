@@ -38,9 +38,48 @@ const sections = [
   },
   { id: 'license', label: 'ライセンス' },
 ];
+
+const siteUrl = 'https://jpzip.nadai.dev';
+
+const techArticleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: 'jpzip SDK の使い方とプロトコル仕様 v1.0',
+  description:
+    'jpzip データセットの SDK (TypeScript / Go / Python / Rust / Ruby / Java / PHP / Swift / Kotlin / C# / Dart / Elixir / Scala / C / C++ / Perl / R) の使い方と HTTP プロトコル仕様 v1.0。',
+  inLanguage: 'ja',
+  url: `${siteUrl}/docs`,
+  proficiencyLevel: 'Beginner',
+  about: {
+    '@type': 'Dataset',
+    name: 'jpzip',
+    url: siteUrl,
+  },
+  author: { '@type': 'Person', name: 'nadai' },
+  publisher: { '@type': 'Person', name: 'nadai' },
+  license: 'https://opensource.org/licenses/MIT',
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'jpzip', item: siteUrl },
+    { '@type': 'ListItem', position: 2, name: 'Docs', item: `${siteUrl}/docs` },
+  ],
+};
 ---
 
-<Base title="jpzip — Docs" description="jpzip SDK の使い方とプロトコル仕様 v1.0" active="docs">
+<Base
+  title="jpzip Docs — SDK の使い方とプロトコル仕様 v1.0"
+  description="jpzip データセットの SDK 使用例 (TypeScript / Go / Python / Rust / Ruby / Java / PHP / Swift ほか 15+ 言語) と HTTP プロトコル仕様 v1.0。"
+  ogType="article"
+  active="docs"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(techArticleLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+  </Fragment>
   <div class="wrap">
     <div class="docs-layout">
       <aside class="docs-toc">
