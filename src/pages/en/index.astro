@@ -1,7 +1,7 @@
 ---
-import Base from '../layouts/Base.astro';
-import Playground from '../components/Playground.vue';
-import CodeBlock from '../components/CodeBlock.vue';
+import Base from '../../layouts/Base.astro';
+import Playground from '../../components/Playground.vue';
+import CodeBlock from '../../components/CodeBlock.vue';
 
 // メタ統計は build 時に jpzip.nadai.dev/meta.json から取り、失敗したらデフォルト。
 type Meta = {
@@ -28,27 +28,27 @@ const fmt = (n: number) => n.toLocaleString('en-US');
 
 const siteUrl = 'https://jpzip.nadai.dev';
 
-// schema.org Dataset — Google Dataset Search 用
+// schema.org Dataset — Google Dataset Search 用 (English)
 const datasetLd = {
   '@context': 'https://schema.org',
   '@type': 'Dataset',
-  name: 'jpzip — 日本郵便番号データセット',
-  alternateName: 'jpzip zipcode dataset',
+  name: 'jpzip — Japan zipcode dataset',
+  alternateName: 'jpzip Japan postal code dataset',
   description:
-    '日本郵便 KEN_ALL.csv / KEN_ALL_ROME を正規化して CDN から配信する非公式の郵便番号データセット。漢字・カナ・ローマ字・総務省コードを含む。月次更新。登録不要・無料・MIT。',
-  url: siteUrl,
+    'An unofficial Japanese zipcode dataset normalized from Japan Post’s KEN_ALL.csv / KEN_ALL_ROME and served from a CDN. Contains kanji, kana, romaji and MIC municipality codes. Updated monthly. No signup, free, MIT.',
+  url: `${siteUrl}/en/`,
   sameAs: ['https://github.com/jpzip', 'https://github.com/jpzip/spec'],
   identifier: `jpzip-${meta.version}`,
   version: meta.version,
-  inLanguage: 'ja',
+  inLanguage: 'en',
   isAccessibleForFree: true,
   license: 'https://opensource.org/licenses/MIT',
   keywords: [
-    '郵便番号',
     'zipcode',
-    '日本郵便',
+    'postal code',
+    'japan',
     'KEN_ALL',
-    'データセット',
+    'dataset',
     'CDN',
     'free',
     'no-auth',
@@ -56,7 +56,7 @@ const datasetLd = {
   ],
   spatialCoverage: {
     '@type': 'Place',
-    name: '日本',
+    name: 'Japan',
     geo: { '@type': 'GeoShape', addressCountry: 'JP' },
   },
   temporalCoverage: meta.version,
@@ -67,60 +67,58 @@ const datasetLd = {
   },
   isBasedOn: {
     '@type': 'Dataset',
-    name: '日本郵便 郵便番号データ (KEN_ALL.csv)',
+    name: 'Japan Post zipcode data (KEN_ALL.csv)',
     url: 'https://www.post.japanpost.jp/service/search/zipcode/download/',
   },
   variableMeasured: [
-    { '@type': 'PropertyValue', name: 'prefecture', description: '都道府県名 (漢字)' },
-    { '@type': 'PropertyValue', name: 'prefecture_kana', description: '都道府県名 (カナ)' },
-    { '@type': 'PropertyValue', name: 'prefecture_roma', description: '都道府県名 (ローマ字)' },
-    { '@type': 'PropertyValue', name: 'prefecture_code', description: 'JIS X 0401 (2 桁)' },
-    { '@type': 'PropertyValue', name: 'city', description: '市区町村名 (漢字)' },
-    { '@type': 'PropertyValue', name: 'city_kana', description: '市区町村名 (カナ)' },
-    { '@type': 'PropertyValue', name: 'city_roma', description: '市区町村名 (ローマ字)' },
-    { '@type': 'PropertyValue', name: 'city_code', description: '総務省全国地方公共団体コード (5 桁)' },
-    { '@type': 'PropertyValue', name: 'towns[].town', description: '町域名 (漢字/カナ/ローマ字)' },
+    { '@type': 'PropertyValue', name: 'prefecture', description: 'Prefecture name (kanji)' },
+    { '@type': 'PropertyValue', name: 'prefecture_kana', description: 'Prefecture name (kana)' },
+    { '@type': 'PropertyValue', name: 'prefecture_roma', description: 'Prefecture name (romaji)' },
+    { '@type': 'PropertyValue', name: 'prefecture_code', description: 'JIS X 0401 (2 digits)' },
+    { '@type': 'PropertyValue', name: 'city', description: 'City / ward name (kanji)' },
+    { '@type': 'PropertyValue', name: 'city_kana', description: 'City / ward name (kana)' },
+    { '@type': 'PropertyValue', name: 'city_roma', description: 'City / ward name (romaji)' },
+    { '@type': 'PropertyValue', name: 'city_code', description: 'MIC municipality code (5 digits)' },
+    { '@type': 'PropertyValue', name: 'towns[].town', description: 'Town area (kanji / kana / romaji)' },
   ],
   distribution: [
     {
       '@type': 'DataDownload',
-      name: 'meta.json — バージョンと統計',
+      name: 'meta.json — version and stats',
       encodingFormat: 'application/json',
       contentUrl: `${siteUrl}/meta.json`,
     },
     {
       '@type': 'DataDownload',
-      name: '/g/{1}.json — 1 桁プレフィックス単位の全エントリ',
+      name: '/g/{1}.json — all entries grouped by 1-digit prefix',
       encodingFormat: 'application/json',
       contentUrl: `${siteUrl}/g/0.json`,
     },
     {
       '@type': 'DataDownload',
-      name: '/p/{3}.json — 3 桁プレフィックス単位の全エントリ',
+      name: '/p/{3}.json — all entries grouped by 3-digit prefix',
       encodingFormat: 'application/json',
       contentUrl: `${siteUrl}/p/231.json`,
     },
   ],
 };
 
-// schema.org WebSite — sitelink / 検索ボックス対応
 const websiteLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'jpzip',
-  url: siteUrl,
-  inLanguage: 'ja',
-  description: '登録不要・無料・無制限の日本郵便番号データセット',
+  url: `${siteUrl}/en/`,
+  inLanguage: 'en',
+  description: 'Free, unlimited, no-signup Japanese zipcode dataset',
   publisher: { '@type': 'Person', name: 'nadai' },
 };
 
-// schema.org SoftwareSourceCode — SDK 一覧
 const softwareLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareSourceCode',
   name: 'jpzip SDK',
   description:
-    'jpzip データセットの公式 SDK 群。TypeScript / Go / Python / Rust / Ruby / Java / PHP / Swift / Kotlin / C# / Dart / Elixir / Scala / C / C++ / Perl / R の 15+ 言語で同一シグネチャを提供。',
+    'Official SDKs for the jpzip dataset. Identical signatures across TypeScript / Go / Python / Rust / Ruby / Java / PHP / Swift / Kotlin / C# / Dart / Elixir / Scala / C / C++ / Perl / R (15+ languages).',
   codeRepository: 'https://github.com/jpzip',
   programmingLanguage: [
     'TypeScript',
@@ -148,42 +146,43 @@ const softwareLd = {
 const features = [
   {
     icon: '¥',
-    title: '永続的に無料',
-    desc: 'Cloudflare Pages の無料枠のみで成立。約 1,000 ファイル × 25 MiB 未満、課金軸そのものが存在しない構造。',
+    title: 'Free forever',
+    desc: 'Runs entirely on Cloudflare Pages free tier. ~1,000 files, each under 25 MiB — there is simply no metered axis to bill.',
   },
   {
     icon: '⌖',
-    title: 'オフライン対応',
-    desc: 'preload({ scope: "all" }) で全件を SDK にキャッシュ。以降はネットワーク不要で動作。',
+    title: 'Offline-ready',
+    desc: 'preload({ scope: "all" }) caches the full dataset into the SDK. After that, every lookup works without network.',
     html: true,
   },
   {
     icon: 'A',
-    title: '登録・認証なし',
-    desc: 'API キー不要。CORS は全オリジン許可。ブラウザから直接 fetch して使えます。',
+    title: 'No signup, no auth',
+    desc: 'No API key needed. CORS allows all origins. Fetch directly from the browser.',
   },
   {
     icon: '↻',
-    title: '月次自動更新',
-    desc: '毎月 1 日と 15 日に GitHub Actions が日本郵便の最新データを取り込み、CDN へデプロイ。',
+    title: 'Monthly auto-updates',
+    desc: 'GitHub Actions ingests the latest Japan Post data on the 1st and 15th of each month and redeploys the CDN.',
   },
   {
     icon: 'あ',
-    title: '漢字・カナ・ローマ字',
-    desc: 'KEN_ALL と KEN_ALL_ROME を結合済み。city_code (総務省コード) も付与。',
+    title: 'Kanji, kana, romaji',
+    desc: 'KEN_ALL and KEN_ALL_ROME are pre-joined. The MIC municipality code (city_code) is included too.',
   },
   {
     icon: '⚖',
     title: 'MIT & Public Domain',
-    desc: 'SDK は MIT。データは元データが Public Domain 相当のため、商用利用も再配布も自由。',
+    desc: 'SDKs are MIT. The data is effectively public domain (Japan Post). Commercial use and redistribution are free.',
   },
 ];
 ---
 
 <Base
-  title="jpzip — 登録不要・無料・無制限の郵便番号データセット"
-  description={`日本の全郵便番号 (${fmt(meta.total_zipcodes)} 件) を CDN から配信する無料データセット。漢字・カナ・ローマ字・総務省コードを含み、15+ 言語の SDK で 3 行から利用可能。MIT。`}
+  title="jpzip — Free, unlimited Japanese zipcode dataset (no signup)"
+  description={`A free dataset of every Japanese zipcode (${fmt(meta.total_zipcodes)} entries) served from a CDN. Kanji, kana, romaji and MIC municipality codes included. Usable from 15+ language SDKs in 3 lines. MIT.`}
   active="home"
+  lang="en"
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(websiteLd)} />
@@ -200,18 +199,18 @@ const features = [
     </div>
     <div class="wrap">
       <div class="hero-inner">
-        <div class="eyebrow"><span class="pulse"></span>登録不要 · 無料 · 無制限 · MIT</div>
+        <div class="eyebrow"><span class="pulse"></span>No signup · Free · Unlimited · MIT</div>
         <h1 class="hero-title">
-          日本の郵便番号を、<br />
-          <span class="grad">CDN から配るデータセット。</span>
+          Every Japanese zipcode,<br />
+          <span class="grad">served from a CDN.</span>
         </h1>
         <p class="hero-sub">
-          個人開発者と OSS のための日本郵便番号データセット。Cloudflare Pages から配信される <strong
-            >{fmt(meta.total_zipcodes)}</strong
-          > 件の正規化済みデータを、各言語の薄い SDK 経由でオフラインまで持っていける。
+          A Japan zipcode dataset for indie developers and OSS. <strong>{fmt(meta.total_zipcodes)}</strong>
+          normalized entries are delivered from Cloudflare Pages, and each language SDK lets you
+          take them all the way offline.
         </p>
         <div class="hero-cta-row">
-          <a class="btn-primary" href="#playground">いますぐ試す →</a>
+          <a class="btn-primary" href="#playground">Try it now →</a>
           <a class="btn-ghost" href="https://github.com/jpzip" target="_blank" rel="noopener">↗ GitHub</a>
         </div>
 
@@ -222,7 +221,7 @@ const features = [
           </div>
           <div class="hero-stat">
             <div class="n">{fmt(meta.prefix_count)}</div>
-            <div class="l">3桁 Prefix</div>
+            <div class="l">3-digit prefixes</div>
           </div>
           <div class="hero-stat">
             <div class="n">10 files</div>
@@ -242,10 +241,11 @@ const features = [
     <div class="wrap">
       <div class="section-eyebrow"><span class="dot"></span>Playground</div>
       <h2 class="section-title">
-        7 桁、入れてみる。<br />本物の CDN が、<span class="grad">返事を返す。</span>
+        Type 7 digits.<br />A real CDN <span class="grad">answers.</span>
       </h2>
       <p class="section-desc">
-        下のフォームはブラウザから直接 jpzip.nadai.dev を叩いています。CORS が通れば本物のデータ、通らなければデモ用フォールバックが返ります。
+        The form below hits jpzip.nadai.dev directly from your browser. If CORS clears you get real
+        data; otherwise a built-in demo response.
       </p>
       <Playground client:visible />
     </div>
@@ -256,10 +256,11 @@ const features = [
     <div class="wrap">
       <div class="section-eyebrow"><span class="dot"></span>SDK</div>
       <h2 class="section-title">
-        3 行で読める SDK。<br />同じシグネチャ、<span class="grad">どの言語でも。</span>
+        A 3-line SDK.<br />Same signature, <span class="grad">every language.</span>
       </h2>
       <p class="section-desc">
-        プロトコル仕様を固定してあるから、SDK の中身は数十行。各言語で同じシグネチャを揃えています。
+        The protocol is fixed, so each SDK is just a few dozen lines — with identical signatures
+        across languages.
       </p>
       <CodeBlock client:visible />
     </div>
@@ -270,9 +271,9 @@ const features = [
     <div class="wrap">
       <div class="section-eyebrow"><span class="dot"></span>Why jpzip</div>
       <h2 class="section-title">
-        構造的に、無料。<br /><span class="grad">壊れにくい設計。</span>
+        Free by design.<br /><span class="grad">Hard to break.</span>
       </h2>
-      <p class="section-desc">Worker・R2・KV を一切使わない設計。アクセスが何億あっても課金軸が存在しません。</p>
+      <p class="section-desc">No Workers, no R2, no KV. Even at billions of requests, there is no metered axis to bill.</p>
 
       <div class="features-grid">
         {
@@ -282,7 +283,7 @@ const features = [
               <h3>{f.title}</h3>
               {f.html ? (
                 <p>
-                  <code>{`preload({ scope: "all" })`}</code> で全件を SDK にキャッシュ。以降はネットワーク不要で動作。
+                  <code>{`preload({ scope: "all" })`}</code> caches the full dataset into the SDK. After that, every lookup works without network.
                 </p>
               ) : (
                 <p>{f.desc}</p>
@@ -298,13 +299,14 @@ const features = [
   <section class="section" style="padding-top: 0;">
     <div class="wrap">
       <div class="cta-box">
-        <h2>3 行で、<span class="grad">郵便番号が引ける。</span></h2>
+        <h2>Three lines, <span class="grad">one zipcode lookup.</span></h2>
         <p>
-          登録不要、API キー不要、課金リスクなし。今すぐ npm でインストールして、ブラウザでもサーバでも動かしてみてください。
+          No signup, no API key, no billing surprises. Install from npm (or your language’s package
+          manager) and run it in the browser, on a server, or at the edge.
         </p>
         <div class="cta-actions">
-          <a class="btn-primary" href="#playground">Playground を試す →</a>
-          <a class="btn-ghost" href="https://github.com/jpzip" target="_blank" rel="noopener">GitHub で見る ↗</a>
+          <a class="btn-primary" href="#playground">Try the Playground →</a>
+          <a class="btn-ghost" href="https://github.com/jpzip" target="_blank" rel="noopener">View on GitHub ↗</a>
         </div>
       </div>
     </div>

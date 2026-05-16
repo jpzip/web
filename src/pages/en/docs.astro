@@ -1,42 +1,40 @@
 ---
-import Base from '../layouts/Base.astro';
-import SdkTabs from '../components/SdkTabs.vue';
+import Base from '../../layouts/Base.astro';
+import SdkTabs from '../../components/SdkTabs.vue';
 
 // SDK の小節 ID は言語共通 (sdk-functional, sdk-client, sdk-cache, sdk-edge)。
-// SdkTabs.vue が v-if で active な言語の節だけを DOM に置くので、同一 ID で
-// 言語間の同等セクションへ自然に切り替わる。
 const sections = [
   {
     id: 'intro',
-    label: 'はじめに',
+    label: 'Introduction',
     sub: [
-      { id: 'install', label: 'インストール' },
-      { id: 'quickstart', label: '60 秒クイックスタート' },
+      { id: 'install', label: 'Install' },
+      { id: 'quickstart', label: '60-second quickstart' },
     ],
   },
   {
     id: 'sdk',
     label: 'SDK',
     sub: [
-      { id: 'sdk-functional', label: '関数 API' },
-      { id: 'sdk-client', label: '明示的 Client' },
-      { id: 'sdk-cache', label: '永続キャッシュ' },
+      { id: 'sdk-functional', label: 'Functional API' },
+      { id: 'sdk-client', label: 'Explicit Client' },
+      { id: 'sdk-cache', label: 'Persistent cache' },
       { id: 'sdk-edge', label: 'Edge / Serverless' },
     ],
   },
-  { id: 'other-sdks', label: 'その他の SDK' },
-  { id: 'caching', label: 'キャッシュ戦略' },
+  { id: 'other-sdks', label: 'Other SDKs' },
+  { id: 'caching', label: 'Cache strategy' },
   {
     id: 'protocol',
-    label: 'プロトコル仕様',
+    label: 'Protocol spec',
     sub: [
-      { id: 'endpoints', label: 'エンドポイント' },
-      { id: 'schema', label: 'スキーマ' },
-      { id: 'http', label: 'HTTP 仕様' },
-      { id: 'versioning', label: 'バージョニング' },
+      { id: 'endpoints', label: 'Endpoints' },
+      { id: 'schema', label: 'Schema' },
+      { id: 'http', label: 'HTTP spec' },
+      { id: 'versioning', label: 'Versioning' },
     ],
   },
-  { id: 'license', label: 'ライセンス' },
+  { id: 'license', label: 'License' },
 ];
 
 const siteUrl = 'https://jpzip.nadai.dev';
@@ -44,11 +42,11 @@ const siteUrl = 'https://jpzip.nadai.dev';
 const techArticleLd = {
   '@context': 'https://schema.org',
   '@type': 'TechArticle',
-  headline: 'jpzip SDK の使い方とプロトコル仕様 v1.0',
+  headline: 'jpzip SDK usage and protocol spec v1.0',
   description:
-    'jpzip データセットの SDK (TypeScript / Go / Python / Rust / Ruby / Java / PHP / Swift / Kotlin / C# / Dart / Elixir / Scala / C / C++ / Perl / R) の使い方と HTTP プロトコル仕様 v1.0。',
-  inLanguage: 'ja',
-  url: `${siteUrl}/docs`,
+    'How to use the jpzip dataset SDKs (TypeScript / Go / Python / Rust / Ruby / Java / PHP / Swift / Kotlin / C# / Dart / Elixir / Scala / C / C++ / Perl / R) and the HTTP protocol spec v1.0.',
+  inLanguage: 'en',
+  url: `${siteUrl}/en/docs`,
   proficiencyLevel: 'Beginner',
   about: {
     '@type': 'Dataset',
@@ -64,17 +62,18 @@ const breadcrumbLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'jpzip', item: siteUrl },
-    { '@type': 'ListItem', position: 2, name: 'Docs', item: `${siteUrl}/docs` },
+    { '@type': 'ListItem', position: 1, name: 'jpzip', item: `${siteUrl}/en/` },
+    { '@type': 'ListItem', position: 2, name: 'Docs', item: `${siteUrl}/en/docs` },
   ],
 };
 ---
 
 <Base
-  title="jpzip Docs — SDK の使い方とプロトコル仕様 v1.0"
-  description="jpzip データセットの SDK 使用例 (TypeScript / Go / Python / Rust / Ruby / Java / PHP / Swift ほか 15+ 言語) と HTTP プロトコル仕様 v1.0。"
+  title="jpzip Docs — SDK usage and protocol spec v1.0"
+  description="Usage examples for the jpzip dataset SDKs (TypeScript / Go / Python / Rust / Ruby / Java / PHP / Swift and 15+ languages) and the HTTP protocol spec v1.0."
   ogType="article"
   active="docs"
+  lang="en"
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(techArticleLd)} />
@@ -91,16 +90,17 @@ const breadcrumbLd = {
     </div>
     <div class="wrap">
       <div class="hero-inner">
-        <div class="eyebrow"><span class="pulse"></span>Docs · spec v1.0 · 15+ 言語対応</div>
+        <div class="eyebrow"><span class="pulse"></span>Docs · spec v1.0 · 15+ languages</div>
         <h1 class="hero-title">
-          SDK で郵便番号を、<br />
-          <span class="grad">3 行で引く。</span>
+          Look up a zipcode in <br />
+          <span class="grad">3 lines.</span>
         </h1>
         <p class="hero-sub">
-          登録不要、API キー不要。お好みの言語の SDK をインストールするだけで、関数 1 つで郵便番号データが取り出せます。
+          No signup, no API key. Install your language’s SDK and a single function returns the
+          zipcode data.
         </p>
         <div class="hero-cta-row">
-          <a class="btn-primary" href="#quickstart">クイックスタート →</a>
+          <a class="btn-primary" href="#quickstart">Quickstart →</a>
           <a class="btn-ghost" href="https://github.com/jpzip/spec" target="_blank" rel="noopener">↗ Spec on GitHub</a>
         </div>
       </div>
@@ -135,22 +135,19 @@ const breadcrumbLd = {
 
         <article class="docs-body">
           <div class="docs-callout">
-          <strong>サポート言語 ·</strong> 全 15 言語で SDK を提供しています。深いドキュメントは TypeScript / Go / Python /
-          Rust / Ruby / Java / PHP / Swift の 8 言語、残り 7 言語 (Kotlin / C# / Dart / Elixir / Scala / C / C++ / Perl /
-          R) は <a href="#other-sdks">「その他の SDK」</a> セクションを参照。全 SDK の API シグネチャは <a
-            href="https://github.com/jpzip/spec"
-            target="_blank"
-            rel="noopener">spec v1.0</a
-          > に揃えています。
+          <strong>Supported languages ·</strong> SDKs are available in all 15+ languages. In-depth docs cover 8 languages —
+          TypeScript / Go / Python / Rust / Ruby / Java / PHP / Swift. The remaining 9 (Kotlin / C# / Dart / Elixir / Scala /
+          C / C++ / Perl / R) are listed in the <a href="#other-sdks">Other SDKs</a> section. All SDK signatures follow
+          <a href="https://github.com/jpzip/spec" target="_blank" rel="noopener">spec v1.0</a>.
         </div>
 
-        <h2 id="intro">はじめに</h2>
+        <h2 id="intro">Introduction</h2>
         <p>
-          jpzip は静的 JSON ファイル群を <code>https://jpzip.nadai.dev</code> から配信するデータセットです。各言語の SDK は
-          このデータを取得し、メモリ / 永続キャッシュを管理し、オフラインでも動かすための薄いラッパーを提供します。
+          jpzip is a set of static JSON files served from <code>https://jpzip.nadai.dev</code>. Each language SDK is a thin
+          wrapper around that data — it fetches, manages memory / persistent caches, and lets you go all the way offline.
         </p>
 
-        <h3 id="install">インストール</h3>
+        <h3 id="install">Install</h3>
         <pre><code is:raw><span class="c"># JavaScript / TypeScript (Node / browser / Bun / Deno)</span>
 npm i jpzip
 
@@ -175,16 +172,15 @@ composer require jpzip/jpzip
 <span class="c"># Swift (5.9+) — SwiftPM Package.swift</span>
 .package(url: <span class="s">"https://github.com/jpzip/swift"</span>, from: <span class="s">"0.1.0"</span>)</code></pre>
         <p>
-          他言語 (Kotlin / C# / Dart / Elixir / Scala / C / C++ / Perl / R) のインストール手順は <a href="#other-sdks"
-            >「その他の SDK」</a
-          > セクション。
+          Install steps for the remaining languages (Kotlin / C# / Dart / Elixir / Scala / C / C++ / Perl / R) live in the
+          <a href="#other-sdks">Other SDKs</a> section.
         </p>
 
-        <h3 id="quickstart">60 秒クイックスタート</h3>
-        <p>最小の使用例 — シングルトンが自動で初期化されるので、いきなり呼べます。下の SDK セクションで言語タブを切り替えてください。</p>
+        <h3 id="quickstart">60-second quickstart</h3>
+        <p>Minimal example — the singleton initialises itself, so you can call it directly. Switch languages in the SDK section below.</p>
 
         <h2 id="sdk">SDK</h2>
-        <p>言語タブで切り替えてください。URL の hash (例: <code>#go-client</code>) で直接該当言語にも飛べます。</p>
+        <p>Use the language tabs. The hash in the URL (e.g. <code>#go-client</code>) jumps directly to a language.</p>
 
         <SdkTabs client:load>
           <!-- ============= TypeScript ============= -->
@@ -193,56 +189,57 @@ composer require jpzip/jpzip
 
 <span class="k">const</span> e = <span class="k">await</span> <span class="f">lookup</span>(<span class="s">"2310017"</span>);
 <span class="k">if</span> (e) console.log(e.prefecture, e.city, e.towns[<span class="n">0</span>].town);
-<span class="c">// 神奈川県 横浜市中区 本町</span></code></pre>
+<span class="c">// 神奈川県 横浜市中区 本町 (Kanagawa, Yokohama Naka-ku, Honcho)</span></code></pre>
 
             <p>
-              npm パッケージ名 <code>jpzip</code>。ESM / CJS 両対応、完全型付き、Node 18+ / 主要ブラウザ / Bun / Deno /
-              Cloudflare Workers で動作します。
+              npm package <code>jpzip</code>. ESM / CJS dual, fully typed, runs on Node 18+, major browsers, Bun, Deno
+              and Cloudflare Workers.
             </p>
 
-            <h3 id="sdk-functional">関数 API (シングルトン)</h3>
-            <p>1 つの app に 1 つのクライアントで足りる場合は関数 API が最も簡潔です。内部で遅延初期化された JpzipClient を共有し、L1 メモリキャッシュが効きます。</p>
+            <h3 id="sdk-functional">Functional API (singleton)</h3>
+            <p>When one app needs one client, the functional API is shortest. It shares a lazily-initialised JpzipClient under the hood, so the L1 in-memory cache always applies.</p>
             <pre><code is:raw><span class="k">import</span> &#123;
   lookup,        <span class="c">// (zip: string) =&gt; Promise&lt;ZipcodeEntry | null&gt;</span>
-  lookupGroup,   <span class="c">// (prefix: 1-3桁) =&gt; Promise&lt;ZipcodeDict&gt;</span>
-  lookupAll,     <span class="c">// () =&gt; Promise&lt;ZipcodeDict&gt; (内部で /g/0..9 並列)</span>
+  lookupGroup,   <span class="c">// (prefix: 1-3 digits) =&gt; Promise&lt;ZipcodeDict&gt;</span>
+  lookupAll,     <span class="c">// () =&gt; Promise&lt;ZipcodeDict&gt; (parallel /g/0..9)</span>
   preload,       <span class="c">// ({ scope: 'all' | '0' | '23' | '231' }) =&gt; Promise&lt;void&gt;</span>
   getMeta,       <span class="c">// () =&gt; Promise&lt;Meta | null&gt;</span>
-  isValidZipcode,<span class="c">// (zip: string) =&gt; boolean ← fetch しない簡易検証</span>
-  configure,     <span class="c">// シングルトンに options を渡し直す</span>
+  isValidZipcode,<span class="c">// (zip: string) =&gt; boolean ← format check, no fetch</span>
+  configure,     <span class="c">// re-apply options to the singleton</span>
 &#125; <span class="k">from</span> <span class="s">"jpzip"</span>;
 
-<span class="c">// 単発検索 — /p/231.json を 1 回 fetch → L1 にキャッシュ</span>
+<span class="c">// Single lookup — fetch /p/231.json once, then L1 hits</span>
 <span class="k">const</span> e = <span class="k">await</span> <span class="f">lookup</span>(<span class="s">"2310017"</span>);
 
-<span class="c">// グループ — 3桁=1 file / 2桁=10 並列 / 1桁=/g/&#123;n&#125;.json</span>
+<span class="c">// Group — 3-digit=1 file / 2-digit=10 in parallel / 1-digit=/g/&#123;n&#125;.json</span>
 <span class="k">const</span> dict = <span class="k">await</span> <span class="f">lookupGroup</span>(<span class="s">"23"</span>);
 
-<span class="c">// 全件 preload — /g/0..9 を並列 fetch して L1 を温める</span>
+<span class="c">// Full preload — fetch /g/0..9 in parallel and warm the L1</span>
 <span class="k">await</span> <span class="f">preload</span>(&#123; scope: <span class="s">"all"</span> &#125;);
-<span class="c">// 以降の lookup() / lookupGroup() はネットワーク不要</span></code></pre>
+<span class="c">// Subsequent lookup() / lookupGroup() need no network</span></code></pre>
 
-            <h3 id="sdk-client">JpzipClient (明示的なインスタンス)</h3>
-            <p>テスト、マルチ環境、独立した永続キャッシュなどが必要な場合は <code>new JpzipClient()</code> を直接作ります。</p>
+            <h3 id="sdk-client">JpzipClient (explicit instance)</h3>
+            <p>For tests, multi-environment setups, or independent persistent caches, instantiate <code>new JpzipClient()</code> yourself.</p>
             <pre><code is:raw><span class="k">import</span> &#123; JpzipClient &#125; <span class="k">from</span> <span class="s">"jpzip"</span>;
 
 <span class="k">const</span> client = <span class="k">new</span> <span class="f">JpzipClient</span>(&#123;
-  <span class="c">// すべてのオプションは省略可</span>
-  baseUrl: <span class="s">"https://jpzip.nadai.dev"</span>,  <span class="c">// デフォルト</span>
-  memoryCacheSize: <span class="n">100</span>,               <span class="c">// L1 LRU の prefix 数</span>
-  cache: undefined,                  <span class="c">// L2 (後述)</span>
-  fetch: globalThis.fetch,           <span class="c">// テストで差し替え可</span>
+  <span class="c">// every option is optional</span>
+  baseUrl: <span class="s">"https://jpzip.nadai.dev"</span>,  <span class="c">// default</span>
+  memoryCacheSize: <span class="n">100</span>,               <span class="c">// number of prefixes in the L1 LRU</span>
+  cache: undefined,                  <span class="c">// L2 (below)</span>
+  fetch: globalThis.fetch,           <span class="c">// swappable in tests</span>
   onSpecMismatch: (&#123; expected, received &#125;) =&gt;
     console.warn(<span class="s">`spec mismatch: $&#123;received&#125;`</span>),
 &#125;);
 
 <span class="k">const</span> e = <span class="k">await</span> client.<span class="f">lookup</span>(<span class="s">"1500001"</span>);
-<span class="k">await</span> client.<span class="f">refresh</span>();  <span class="c">// L1/L2 を破棄して meta を再取得</span></code></pre>
+<span class="k">await</span> client.<span class="f">refresh</span>();  <span class="c">// drop L1/L2 and re-fetch meta</span></code></pre>
 
-            <h3 id="sdk-cache">永続キャッシュ (L2)</h3>
+            <h3 id="sdk-cache">Persistent cache (L2)</h3>
             <p>
-              <code>cache</code> オプションに <code>PersistentCache</code> インタフェースを満たすオブジェクトを渡すと、
-              起動をまたいでデータが保持されます。標準実装は意図的に同梱していません — 環境に合わせて選んでください。
+              Pass any object that satisfies the <code>PersistentCache</code> interface as the <code>cache</code> option
+              and data survives across process restarts. No default implementation ships with the SDK — pick one that
+              suits your runtime.
             </p>
             <pre><code is:raw><span class="k">interface</span> PersistentCache &#123;
   get(key: <span class="n">string</span>): <span class="n">Promise</span>&lt;<span class="n">Uint8Array</span> | <span class="n">null</span>&gt;;
@@ -250,8 +247,8 @@ composer require jpzip/jpzip
   delete(key: <span class="n">string</span>): <span class="n">Promise</span>&lt;<span class="n">void</span>&gt;;
   clear(): <span class="n">Promise</span>&lt;<span class="n">void</span>&gt;;
 &#125;</code></pre>
-            <p>ブラウザでは IndexedDB、Node ではファイル、Cloudflare では KV / Cache API、Redis なども差し込めます。</p>
-            <pre><code is:raw><span class="c">// 例: Node.js のシンプルなファイルキャッシュ</span>
+            <p>IndexedDB in browsers, files on Node, KV / Cache API on Cloudflare, Redis — anything goes.</p>
+            <pre><code is:raw><span class="c">// Example: a simple Node.js file cache</span>
 <span class="k">import</span> &#123; readFile, writeFile, unlink, rm &#125; <span class="k">from</span> <span class="s">"node:fs/promises"</span>;
 <span class="k">import</span> &#123; createHash &#125; <span class="k">from</span> <span class="s">"node:crypto"</span>;
 <span class="k">import</span> &#123; JpzipClient, PersistentCache &#125; <span class="k">from</span> <span class="s">"jpzip"</span>;
@@ -269,19 +266,20 @@ composer require jpzip/jpzip
 
 <span class="k">const</span> client = <span class="k">new</span> <span class="f">JpzipClient</span>(&#123; cache &#125;);
 <span class="k">await</span> client.<span class="f">preload</span>(&#123; scope: <span class="s">"all"</span> &#125;);
-<span class="c">// → 全件 L2 に永続化、次回起動でもネットワーク不要</span></code></pre>
+<span class="c">// → entire dataset is L2-persisted; next start works offline</span></code></pre>
 
-            <h3 id="sdk-edge">Edge / Serverless 環境での注意</h3>
+            <h3 id="sdk-edge">Edge / Serverless notes</h3>
             <ul>
               <li>
-                <strong>Cloudflare Workers / Vercel Edge</strong> ではファイル L2 は使えません。<code>caches.default</code>
-                や Workers KV をラップした <code>PersistentCache</code> 実装を渡してください。
+                <strong>Cloudflare Workers / Vercel Edge</strong> can’t use file-based L2. Wrap <code>caches.default</code>
+                or Workers KV in a <code>PersistentCache</code> instead.
               </li>
               <li>
-                短命プロセスでは L1 がリクエスト間で再利用されない可能性が高いので、<code>preload</code> は init 時に一度だけ実行する設計にします。
+                On short-lived runtimes the L1 won’t reliably survive between requests, so call <code>preload</code>
+                once at init time.
               </li>
               <li>
-                <code>getMeta()</code> は SDK 内で 1 度しか呼ばれません (キャッシュ) — 毎リクエストで叩かないでください。
+                <code>getMeta()</code> is fetched once and cached inside the SDK — don’t call it per request.
               </li>
             </ul>
           </Fragment>
@@ -294,49 +292,49 @@ ctx := context.<span class="f">Background</span>()
 e, err := jpzip.<span class="f">Lookup</span>(ctx, <span class="s">"2310017"</span>)
 <span class="c">// e.Prefecture, e.City, e.Towns[0].Town</span></code></pre>
 
-            <p>モジュール <code>github.com/jpzip/go</code>。Go 1.21+ で動作、依存ゼロ (標準ライブラリのみ)。</p>
+            <p>Module <code>github.com/jpzip/go</code>. Runs on Go 1.21+, zero dependencies (standard library only).</p>
 
-            <h3 id="sdk-functional">パッケージ関数 (シングルトン)</h3>
+            <h3 id="sdk-functional">Package functions (singleton)</h3>
             <pre><code is:raw><span class="k">import</span> <span class="s">"github.com/jpzip/go"</span>
 
 ctx := context.<span class="f">Background</span>()
 
-<span class="c">// 単発検索</span>
+<span class="c">// Single lookup</span>
 e, err := jpzip.<span class="f">Lookup</span>(ctx, <span class="s">"2310017"</span>)
 <span class="k">if</span> err != <span class="n">nil</span> &#123; <span class="k">return</span> err &#125;
-<span class="k">if</span> e == <span class="n">nil</span> &#123; <span class="c">/* 該当なし */</span> &#125;
+<span class="k">if</span> e == <span class="n">nil</span> &#123; <span class="c">/* not found */</span> &#125;
 
-<span class="c">// その他の関数</span>
-dict, err := jpzip.<span class="f">LookupGroup</span>(ctx, <span class="s">"23"</span>)   <span class="c">// 1-3桁</span>
-all,  err := jpzip.<span class="f">LookupAll</span>(ctx)            <span class="c">// 内部で /g/0..9 並列</span>
-err     := jpzip.<span class="f">Preload</span>(ctx, <span class="s">"all"</span>)        <span class="c">// 全件キャッシュへ</span>
-meta, _ := jpzip.<span class="f">GetMeta</span>(ctx)              <span class="c">// /meta.json (1 回だけ)</span>
+<span class="c">// Other functions</span>
+dict, err := jpzip.<span class="f">LookupGroup</span>(ctx, <span class="s">"23"</span>)   <span class="c">// 1-3 digits</span>
+all,  err := jpzip.<span class="f">LookupAll</span>(ctx)            <span class="c">// parallel /g/0..9</span>
+err     := jpzip.<span class="f">Preload</span>(ctx, <span class="s">"all"</span>)        <span class="c">// cache full dataset</span>
+meta, _ := jpzip.<span class="f">GetMeta</span>(ctx)              <span class="c">// /meta.json (once)</span>
 
-ok := jpzip.<span class="f">IsValidZipcode</span>(<span class="s">"2310017"</span>)      <span class="c">// 形式チェックのみ</span></code></pre>
+ok := jpzip.<span class="f">IsValidZipcode</span>(<span class="s">"2310017"</span>)      <span class="c">// format check only</span></code></pre>
 
-            <h3 id="sdk-client">Client + Option パターン</h3>
+            <h3 id="sdk-client">Client + Option pattern</h3>
             <pre><code is:raw>client := jpzip.<span class="f">New</span>(
   jpzip.<span class="f">WithBaseURL</span>(<span class="s">"https://jpzip.nadai.dev"</span>),
   jpzip.<span class="f">WithHTTPClient</span>(&amp;http.Client&#123; Timeout: <span class="n">30</span> * time.Second &#125;),
-  jpzip.<span class="f">WithMemoryCacheSize</span>(<span class="n">100</span>),     <span class="c">// L1 LRU の prefix 数</span>
-  jpzip.<span class="f">WithCache</span>(myFileCache),       <span class="c">// L2 (jpzip.Cache を満たす任意の実装)</span>
+  jpzip.<span class="f">WithMemoryCacheSize</span>(<span class="n">100</span>),     <span class="c">// number of prefixes in the L1 LRU</span>
+  jpzip.<span class="f">WithCache</span>(myFileCache),       <span class="c">// L2 (any jpzip.Cache impl)</span>
   jpzip.<span class="f">OnSpecMismatch</span>(<span class="k">func</span>(expected, received <span class="n">string</span>) &#123;
     log.<span class="f">Printf</span>(<span class="s">"spec mismatch: %s"</span>, received)
   &#125;),
 )
 
 e, err := client.<span class="f">Lookup</span>(ctx, <span class="s">"1500001"</span>)
-err     := client.<span class="f">Refresh</span>(ctx)  <span class="c">// L1/L2 破棄 + meta 再取得</span></code></pre>
+err     := client.<span class="f">Refresh</span>(ctx)  <span class="c">// drop L1/L2 + re-fetch meta</span></code></pre>
 
-            <h3 id="sdk-cache">Cache インタフェース</h3>
-            <p>L2 を有効化するには以下のインタフェースを満たす実装を <code>WithCache</code> に渡します。</p>
+            <h3 id="sdk-cache">Cache interface</h3>
+            <p>To enable L2, pass any implementation of the following interface to <code>WithCache</code>.</p>
             <pre><code is:raw><span class="k">type</span> Cache <span class="k">interface</span> &#123;
   Get(ctx context.Context, key <span class="n">string</span>)    ([]<span class="n">byte</span>, <span class="n">bool</span>, <span class="n">error</span>)
   Set(ctx context.Context, key <span class="n">string</span>, v []<span class="n">byte</span>) <span class="n">error</span>
   Delete(ctx context.Context, key <span class="n">string</span>)              <span class="n">error</span>
   Clear(ctx context.Context)                          <span class="n">error</span>
 &#125;</code></pre>
-            <pre><code is:raw><span class="c">// 例: ローカルファイル実装</span>
+            <pre><code is:raw><span class="c">// Example: local file implementation</span>
 <span class="k">type</span> fileCache struct&#123; dir <span class="n">string</span> &#125;
 
 <span class="k">func</span> (c *fileCache) <span class="f">Get</span>(_ context.Context, k <span class="n">string</span>) ([]<span class="n">byte</span>, <span class="n">bool</span>, <span class="n">error</span>) &#123;
@@ -344,22 +342,22 @@ err     := client.<span class="f">Refresh</span>(ctx)  <span class="c">// L1/L2 
   <span class="k">if</span> errors.<span class="f">Is</span>(err, os.ErrNotExist) &#123; <span class="k">return</span> <span class="n">nil</span>, <span class="n">false</span>, <span class="n">nil</span> &#125;
   <span class="k">return</span> b, err == <span class="n">nil</span>, err
 &#125;
-<span class="c">// Set / Delete / Clear は同様…</span>
+<span class="c">// Set / Delete / Clear are similar…</span>
 
 client := jpzip.<span class="f">New</span>(jpzip.<span class="f">WithCache</span>(&amp;fileCache&#123;dir: <span class="s">"/var/cache/jpzip"</span>&#125;))
 client.<span class="f">Preload</span>(ctx, <span class="s">"all"</span>)</code></pre>
 
-            <h3 id="sdk-edge">Edge / Serverless 環境での注意</h3>
+            <h3 id="sdk-edge">Edge / Serverless notes</h3>
             <ul>
               <li>
-                Cloudflare Workers / 各種 FaaS では <code>os.ReadFile</code> ベースの L2 は使えません。<code>jpzip.Cache</code> インタフェースを満たす Workers KV / Redis / S3 ラッパーを渡してください。
+                On Cloudflare Workers / FaaS, file-based L2 won’t work — wrap Workers KV / Redis / S3 in <code>jpzip.Cache</code>.
               </li>
               <li>
-                短命プロセスでは L1 がリクエスト間で再利用されません。<code>init()</code> または最初のリクエスト時に
-                <code>Preload</code> を 1 度だけ呼ぶ設計が安全です。
+                On short-lived processes, L1 won’t survive between requests. Run <code>Preload</code> once from
+                <code>init()</code> or your first request.
               </li>
               <li>
-                <code>GetMeta</code> は SDK 内で 1 回しかネットワークに出ません — 毎リクエストで叩かないようにしてください。
+                <code>GetMeta</code> hits the network once per client — don’t call it per request.
               </li>
             </ul>
           </Fragment>
@@ -374,11 +372,11 @@ e = <span class="f">lookup</span>(<span class="s">"2310017"</span>)
 <span class="c"># 神奈川県 横浜市中区 本町</span></code></pre>
 
             <p>
-              PyPI パッケージ名 <code>jpzip</code>。Python 3.10+、<code>httpx</code> 経由で sync / async 両対応、frozen
-              dataclass で型付き。
+              PyPI package <code>jpzip</code>. Python 3.10+, sync and async via <code>httpx</code>, typed with frozen
+              dataclasses.
             </p>
 
-            <h3 id="sdk-functional">関数 API (シングルトン)</h3>
+            <h3 id="sdk-functional">Functional API (singleton)</h3>
             <pre><code is:raw><span class="k">from</span> jpzip <span class="k">import</span> (
     lookup,          <span class="c"># (zip: str) -&gt; ZipcodeEntry | None</span>
     lookup_group,    <span class="c"># (prefix: str) -&gt; dict[str, ZipcodeEntry]</span>
@@ -389,30 +387,30 @@ e = <span class="f">lookup</span>(<span class="s">"2310017"</span>)
 )
 
 e = <span class="f">lookup</span>(<span class="s">"2310017"</span>)
-dict_ = <span class="f">lookup_group</span>(<span class="s">"23"</span>)         <span class="c"># 2 桁は 10 並列 fetch</span>
-<span class="f">preload</span>(<span class="s">"all"</span>)                     <span class="c"># 全件 L1 を温める</span></code></pre>
+dict_ = <span class="f">lookup_group</span>(<span class="s">"23"</span>)         <span class="c"># 2-digit fans out 10 in parallel</span>
+<span class="f">preload</span>(<span class="s">"all"</span>)                     <span class="c"># warm the full L1</span></code></pre>
 
-            <h3 id="sdk-client">JpzipClient (明示的なインスタンス)</h3>
+            <h3 id="sdk-client">JpzipClient (explicit instance)</h3>
             <p>
-              テスト・複数環境・L2 キャッシュなどが必要な場合は <code>JpzipClient</code> (sync) / <code>AsyncJpzipClient</code>
-              (async) を直接構築します。どちらも context manager 対応。
+              For tests, multi-env apps, or L2 caches, instantiate <code>JpzipClient</code> (sync) or
+              <code>AsyncJpzipClient</code> (async) directly. Both work as context managers.
             </p>
             <pre><code is:raw><span class="k">from</span> jpzip <span class="k">import</span> JpzipClient, AsyncJpzipClient
 
 <span class="k">with</span> <span class="f">JpzipClient</span>(
     base_url=<span class="s">"https://jpzip.nadai.dev"</span>,
     memory_cache_size=<span class="n">100</span>,
-    cache=my_cache,                  <span class="c"># L2 (省略可)</span>
+    cache=my_cache,                  <span class="c"># L2 (optional)</span>
     on_spec_mismatch=<span class="k">lambda</span> exp, recv: <span class="f">print</span>(<span class="s">f"spec: &#123;recv&#125;"</span>),
 ) <span class="k">as</span> client:
     e = client.<span class="f">lookup</span>(<span class="s">"1500001"</span>)
-    client.<span class="f">refresh</span>()  <span class="c"># L1/L2 を破棄</span>
+    client.<span class="f">refresh</span>()  <span class="c"># drop L1/L2</span>
 
-<span class="c"># async 版</span>
+<span class="c"># async variant</span>
 <span class="k">async with</span> <span class="f">AsyncJpzipClient</span>() <span class="k">as</span> client:
     e = <span class="k">await</span> client.<span class="f">lookup</span>(<span class="s">"2310017"</span>)</code></pre>
 
-            <h3 id="sdk-cache">永続キャッシュ (L2)</h3>
+            <h3 id="sdk-cache">Persistent cache (L2)</h3>
             <pre><code is:raw><span class="k">from</span> jpzip <span class="k">import</span> Cache <span class="c"># Protocol (sync) — runtime_checkable</span>
 <span class="k">from</span> jpzip <span class="k">import</span> AsyncCache <span class="c"># Protocol (async)</span>
 
@@ -422,17 +420,17 @@ dict_ = <span class="f">lookup_group</span>(<span class="s">"23"</span>)        
     <span class="k">def</span> <span class="f">delete</span>(<span class="v">self</span>, key: <span class="n">str</span>) -&gt; <span class="n">None</span>: ...
     <span class="k">def</span> <span class="f">clear</span>(<span class="v">self</span>) -&gt; <span class="n">None</span>: ...</code></pre>
             <p>
-              Redis / SQLite / S3 など任意の実装を <code>cache=</code> に渡せます。リポジトリは <a
+              Plug in Redis / SQLite / S3 / anything. Source at <a
                 href="https://github.com/jpzip/python"
                 target="_blank"
                 rel="noopener">github.com/jpzip/python</a
-              >。
+              >.
             </p>
 
-            <h3 id="sdk-edge">Edge / Serverless 環境での注意</h3>
+            <h3 id="sdk-edge">Edge / Serverless notes</h3>
             <ul>
-              <li>AWS Lambda / Cloud Functions では L1 がリクエスト間で生きるかどうかが warm 起動次第。<code>preload</code> はモジュールトップで 1 回。</li>
-              <li><code>get_meta()</code> の結果はクライアント単位でキャッシュされるので、毎リクエストで叩かない。</li>
+              <li>On AWS Lambda / Cloud Functions, L1 survival depends on warm starts. Call <code>preload</code> once at module top.</li>
+              <li><code>get_meta()</code> is cached per client — don’t call it per request.</li>
             </ul>
           </Fragment>
 
@@ -445,19 +443,18 @@ dict_ = <span class="f">lookup_group</span>(<span class="s">"23"</span>)        
 <span class="c">// → Some(ZipcodeEntry &#123; prefecture: "神奈川県", city: "横浜市中区", .. &#125;)</span></code></pre>
 
             <p>
-              crate 名 <code>jpzip</code>。Rust 1.75+、<code>tokio</code> + <code>reqwest</code> (rustls) + <code>serde</code>
-              。
+              crate <code>jpzip</code>. Rust 1.75+, <code>tokio</code> + <code>reqwest</code> (rustls) + <code>serde</code>.
             </p>
 
-            <h3 id="sdk-functional">関数 API (シングルトン)</h3>
+            <h3 id="sdk-functional">Functional API (singleton)</h3>
             <pre><code is:raw><span class="k">use</span> jpzip::&#123;lookup, lookup_group, lookup_all, preload, get_meta, is_valid_zipcode&#125;;
 
 <span class="k">let</span> e   = jpzip::<span class="f">lookup</span>(<span class="s">"2310017"</span>).<span class="f">await</span>?;
-<span class="k">let</span> dict = jpzip::<span class="f">lookup_group</span>(<span class="s">"23"</span>).<span class="f">await</span>?;     <span class="c">// 1-3 桁</span>
-<span class="k">let</span> all  = jpzip::<span class="f">lookup_all</span>().<span class="f">await</span>?;          <span class="c">// /g/0..9 並列</span>
+<span class="k">let</span> dict = jpzip::<span class="f">lookup_group</span>(<span class="s">"23"</span>).<span class="f">await</span>?;     <span class="c">// 1-3 digits</span>
+<span class="k">let</span> all  = jpzip::<span class="f">lookup_all</span>().<span class="f">await</span>?;          <span class="c">// /g/0..9 parallel</span>
 jpzip::<span class="f">preload</span>(<span class="s">"all"</span>).<span class="f">await</span>?;
 
-<span class="k">let</span> ok = jpzip::<span class="f">is_valid_zipcode</span>(<span class="s">"2310017"</span>);    <span class="c">// 形式チェック</span></code></pre>
+<span class="k">let</span> ok = jpzip::<span class="f">is_valid_zipcode</span>(<span class="s">"2310017"</span>);    <span class="c">// format check</span></code></pre>
 
             <h3 id="sdk-client">JpzipClient + Builder</h3>
             <pre><code is:raw><span class="k">use</span> jpzip::JpzipClient;
@@ -466,7 +463,7 @@ jpzip::<span class="f">preload</span>(<span class="s">"all"</span>).<span class=
 <span class="k">let</span> client = JpzipClient::<span class="f">builder</span>()
     .<span class="f">base_url</span>(<span class="s">"https://jpzip.nadai.dev"</span>)
     .<span class="f">memory_cache_size</span>(<span class="n">100</span>)
-    .<span class="f">cache</span>(Arc::<span class="f">new</span>(my_cache))         <span class="c">// L2 (省略可)</span>
+    .<span class="f">cache</span>(Arc::<span class="f">new</span>(my_cache))         <span class="c">// L2 (optional)</span>
     .<span class="f">on_spec_mismatch</span>(Arc::<span class="f">new</span>(|exp, recv| {
         <span class="f">eprintln!</span>(<span class="s">"spec mismatch: &#123;recv&#125;"</span>);
     }))
@@ -484,10 +481,10 @@ client.<span class="f">refresh</span>().<span class="f">await</span>?;</code></p
     <span class="k">async fn</span> <span class="f">clear</span>(&amp;<span class="v">self</span>) -&gt; <span class="n">Result</span>&lt;(), Error&gt;;
 &#125;</code></pre>
 
-            <h3 id="sdk-edge">Edge / Serverless 環境での注意</h3>
+            <h3 id="sdk-edge">Edge / Serverless notes</h3>
             <ul>
-              <li>Lambda / Workers (Rust 経由) では <code>tokio</code> シングルスレッド runtime を共有。<code>JpzipClient</code> は <code>Clone</code> 可能なので <code>Arc</code> 不要。</li>
-              <li><code>reqwest</code> は <code>rustls-tls</code> feature を選択。<code>native-tls</code> はクロスコンパイル時に詰まることがあります。</li>
+              <li>On Lambda / Workers (via Rust) tokio shares a single-threaded runtime. <code>JpzipClient</code> is <code>Clone</code>, so no <code>Arc</code> needed.</li>
+              <li>Prefer <code>reqwest</code> with <code>rustls-tls</code>; <code>native-tls</code> can be painful to cross-compile.</li>
             </ul>
           </Fragment>
 
@@ -502,37 +499,36 @@ e = Jpzip.<span class="f">lookup</span>(<span class="s">"2310017"</span>)
 <span class="k">end</span></code></pre>
 
             <p>
-              gem 名 <code>jpzip</code>。Ruby 3.2+、依存ゼロ (stdlib の <code>Net::HTTP</code> のみ)。型は <code
-                >Data.define</code
-              > の immutable な値オブジェクト。
+              gem <code>jpzip</code>. Ruby 3.2+, zero dependencies (stdlib <code>Net::HTTP</code> only). Values are immutable
+              via <code>Data.define</code>.
             </p>
 
-            <h3 id="sdk-functional">モジュール関数 (シングルトン)</h3>
+            <h3 id="sdk-functional">Module functions (singleton)</h3>
             <pre><code is:raw><span class="k">require</span> <span class="s">"jpzip"</span>
 
 e    = Jpzip.<span class="f">lookup</span>(<span class="s">"2310017"</span>)              <span class="c"># ZipcodeEntry | nil</span>
-dict = Jpzip.<span class="f">lookup_group</span>(<span class="s">"23"</span>)             <span class="c"># 1-3 桁</span>
-all_ = Jpzip.<span class="f">lookup_all</span>                        <span class="c"># /g/0..9 並列</span>
+dict = Jpzip.<span class="f">lookup_group</span>(<span class="s">"23"</span>)             <span class="c"># 1-3 digits</span>
+all_ = Jpzip.<span class="f">lookup_all</span>                        <span class="c"># /g/0..9 parallel</span>
 Jpzip.<span class="f">preload</span>(<span class="s">"all"</span>)
 meta = Jpzip.<span class="f">meta</span>                              <span class="c"># /meta.json</span>
 
 ok = Jpzip.<span class="f">valid_zipcode?</span>(<span class="s">"2310017"</span>)</code></pre>
 
-            <h3 id="sdk-client">Jpzip::Client (明示的なインスタンス)</h3>
+            <h3 id="sdk-client">Jpzip::Client (explicit instance)</h3>
             <pre><code is:raw><span class="k">require</span> <span class="s">"jpzip"</span>
 
 client = Jpzip::Client.<span class="f">new</span>(
   base_url: <span class="s">"https://jpzip.nadai.dev"</span>,
   memory_cache_size: <span class="n">100</span>,
-  cache: my_cache,                             <span class="c"># L2 (省略可)</span>
+  cache: my_cache,                             <span class="c"># L2 (optional)</span>
   on_spec_mismatch: <span class="k">-&gt;</span>(exp, recv) &#123; <span class="f">warn</span> <span class="s">"spec: #&#123;recv&#125;"</span> &#125;,
 )
 
 e = client.<span class="f">lookup</span>(<span class="s">"1500001"</span>)
-client.<span class="f">refresh</span>  <span class="c"># L1/L2 を破棄</span></code></pre>
+client.<span class="f">refresh</span>  <span class="c"># drop L1/L2</span></code></pre>
 
-            <h3 id="sdk-cache">Cache インタフェース</h3>
-            <p>L2 を有効化するには <code>Jpzip::Cache</code> を継承し以下を実装します。</p>
+            <h3 id="sdk-cache">Cache interface</h3>
+            <p>To enable L2, inherit from <code>Jpzip::Cache</code> and implement:</p>
             <pre><code is:raw><span class="k">class</span> FileCache &lt; Jpzip::Cache
   <span class="k">def</span> <span class="f">get</span>(key); ...; <span class="k">end</span>      <span class="c"># String | nil</span>
   <span class="k">def</span> <span class="f">set</span>(key, value); ...; <span class="k">end</span>
@@ -540,10 +536,10 @@ client.<span class="f">refresh</span>  <span class="c"># L1/L2 を破棄</span><
   <span class="k">def</span> <span class="f">clear</span>; ...; <span class="k">end</span>
 <span class="k">end</span></code></pre>
 
-            <h3 id="sdk-edge">Edge / Serverless 環境での注意</h3>
+            <h3 id="sdk-edge">Edge / Serverless notes</h3>
             <ul>
-              <li>AWS Lambda Ruby runtime / Heroku で動作。<code>Thread</code> ベースの fan-out を使用 (10 並列)。</li>
-              <li>Sidekiq などのワーカーで起動時に <code>preload</code> しておくと、ジョブ実行時のレイテンシが消える。</li>
+              <li>Runs on AWS Lambda Ruby runtime / Heroku. Internal fan-out uses <code>Thread</code> (10 concurrent).</li>
+              <li>For Sidekiq workers, call <code>preload</code> at boot so per-job latency vanishes.</li>
             </ul>
           </Fragment>
 
@@ -556,15 +552,15 @@ e.<span class="f">ifPresent</span>(x -&gt; System.out.<span class="f">println</s
 <span class="c">// 神奈川県 横浜市中区</span></code></pre>
 
             <p>
-              Maven coordinates <code>dev.nadai:jpzip:0.1.0</code>。Java 17+、<code>java.net.http.HttpClient</code> + Jackson
-              のみ。<code>CompletableFuture</code> で内部並列。
+              Maven coordinates <code>dev.nadai:jpzip:0.1.0</code>. Java 17+, only <code>java.net.http.HttpClient</code> + Jackson.
+              Parallelism via <code>CompletableFuture</code>.
             </p>
 
-            <h3 id="sdk-functional">static ヘルパ (シングルトン)</h3>
+            <h3 id="sdk-functional">Static helpers (singleton)</h3>
             <pre><code is:raw><span class="k">import</span> dev.nadai.jpzip.Jpzip;
 
 <span class="v">var</span> e    = Jpzip.<span class="f">lookup</span>(<span class="s">"2310017"</span>);             <span class="c">// Optional&lt;ZipcodeEntry&gt;</span>
-<span class="v">var</span> dict = Jpzip.<span class="f">lookupGroup</span>(<span class="s">"23"</span>);            <span class="c">// 1-3 桁</span>
+<span class="v">var</span> dict = Jpzip.<span class="f">lookupGroup</span>(<span class="s">"23"</span>);            <span class="c">// 1-3 digits</span>
 <span class="v">var</span> all  = Jpzip.<span class="f">lookupAll</span>();
 Jpzip.<span class="f">preload</span>(<span class="s">"all"</span>);
 <span class="v">var</span> meta = Jpzip.<span class="f">getMeta</span>();
@@ -577,14 +573,14 @@ Jpzip.<span class="f">preload</span>(<span class="s">"all"</span>);
 <span class="v">var</span> client = JpzipClient.<span class="f">builder</span>()
     .<span class="f">baseUrl</span>(<span class="s">"https://jpzip.nadai.dev"</span>)
     .<span class="f">memoryCacheSize</span>(<span class="n">100</span>)
-    .<span class="f">cache</span>(myCache)                    <span class="c">// L2 (省略可)</span>
+    .<span class="f">cache</span>(myCache)                    <span class="c">// L2 (optional)</span>
     .<span class="f">onSpecMismatch</span>((exp, recv) -&gt; System.err.<span class="f">println</span>(<span class="s">"spec: "</span> + recv))
     .<span class="f">build</span>();
 
 <span class="v">var</span> e = client.<span class="f">lookup</span>(<span class="s">"1500001"</span>);
 client.<span class="f">refresh</span>();</code></pre>
 
-            <h3 id="sdk-cache">Cache インタフェース</h3>
+            <h3 id="sdk-cache">Cache interface</h3>
             <pre><code is:raw><span class="k">public interface</span> Cache &#123;
     <span class="n">Optional</span>&lt;<span class="n">byte</span>[]&gt; <span class="f">get</span>(<span class="n">String</span> key);
     <span class="k">void</span> <span class="f">set</span>(<span class="n">String</span> key, <span class="n">byte</span>[] value);
@@ -592,10 +588,10 @@ client.<span class="f">refresh</span>();</code></pre>
     <span class="k">void</span> <span class="f">clear</span>();
 &#125;</code></pre>
 
-            <h3 id="sdk-edge">Edge / Serverless 環境での注意</h3>
+            <h3 id="sdk-edge">Edge / Serverless notes</h3>
             <ul>
-              <li>AWS Lambda / SnapStart で warm 起動を想定する場合、<code>JpzipClient</code> を static に持ち <code>preload</code> を init で 1 度実行。</li>
-              <li><code>HttpClient</code> は新しい仮想スレッドで I/O 並列化。Project Loom 環境で特に高速。</li>
+              <li>On AWS Lambda / SnapStart, hold <code>JpzipClient</code> in a static field and run <code>preload</code> once at init.</li>
+              <li><code>HttpClient</code> uses virtual threads for I/O parallelism — especially fast on Project Loom.</li>
             </ul>
           </Fragment>
 
@@ -608,27 +604,27 @@ client.<span class="f">refresh</span>();</code></pre>
 <span class="c">// 神奈川県 横浜市中区</span></code></pre>
 
             <p>
-              composer パッケージ <code>jpzip/jpzip</code>。PHP 8.2+、Guzzle 7 + readonly classes。2 桁 fan-out は Guzzle
-              <code>Pool</code> で並列。
+              composer package <code>jpzip/jpzip</code>. PHP 8.2+, Guzzle 7 + readonly classes. 2-digit fan-out uses
+              Guzzle <code>Pool</code>.
             </p>
 
-            <h3 id="sdk-functional">名前空間関数 (シングルトン)</h3>
+            <h3 id="sdk-functional">Namespace functions (singleton)</h3>
             <pre><code is:raw><span class="k">use</span> <span class="k">function</span> Jpzip\&#123;lookup, lookupGroup, lookupAll, preload, getMeta, isValidZipcode&#125;;
 
 <span class="v">$e</span>    = <span class="f">lookup</span>(<span class="s">"2310017"</span>);          <span class="c">// ?ZipcodeEntry</span>
-<span class="v">$dict</span> = <span class="f">lookupGroup</span>(<span class="s">"23"</span>);          <span class="c">// 1-3 桁、2 桁は 10 並列</span>
+<span class="v">$dict</span> = <span class="f">lookupGroup</span>(<span class="s">"23"</span>);          <span class="c">// 1-3 digits; 2-digit fans out 10</span>
 <span class="v">$all</span>  = <span class="f">lookupAll</span>();
 <span class="f">preload</span>(<span class="s">"all"</span>);
 
 <span class="v">$ok</span> = <span class="f">isValidZipcode</span>(<span class="s">"2310017"</span>);</code></pre>
 
-            <h3 id="sdk-client">Jpzip\Client (明示的なインスタンス)</h3>
+            <h3 id="sdk-client">Jpzip\Client (explicit instance)</h3>
             <pre><code is:raw><span class="k">use</span> Jpzip\Client;
 
 <span class="v">$client</span> = <span class="k">new</span> <span class="f">Client</span>(
     baseUrl: <span class="s">"https://jpzip.nadai.dev"</span>,
     memoryCacheSize: <span class="n">100</span>,
-    cache: <span class="v">$myCache</span>,                            <span class="c">// L2 (省略可)</span>
+    cache: <span class="v">$myCache</span>,                            <span class="c">// L2 (optional)</span>
     onSpecMismatch: <span class="k">fn</span>(<span class="v">$exp</span>, <span class="v">$recv</span>) =&gt; <span class="f">error_log</span>(<span class="s">"spec: $recv"</span>),
 );
 
@@ -645,10 +641,10 @@ client.<span class="f">refresh</span>();</code></pre>
     <span class="k">public function</span> <span class="f">clear</span>(): <span class="k">void</span>;
 &#125;</code></pre>
 
-            <h3 id="sdk-edge">Edge / Serverless 環境での注意</h3>
+            <h3 id="sdk-edge">Edge / Serverless notes</h3>
             <ul>
-              <li>FPM / Laravel Octane / Swoole などの長命プロセスでは L1 LRU が完全に効く。</li>
-              <li>RoadRunner や Bref (Lambda) では、ワーカーごとに <code>preload</code> 1 回が定石。</li>
+              <li>On long-lived runtimes (FPM / Laravel Octane / Swoole), the L1 LRU is fully effective.</li>
+              <li>On RoadRunner / Bref (Lambda), call <code>preload</code> once per worker on boot.</li>
             </ul>
           </Fragment>
 
@@ -662,15 +658,15 @@ client.<span class="f">refresh</span>();</code></pre>
 &#125;</code></pre>
 
             <p>
-              SwiftPM パッケージ <code>jpzip</code>。Swift 5.9+、iOS 15+ / macOS 12+ / tvOS 15+ / watchOS 8+。<code>actor</code>
-              ベースで Sendable 安全、依存ゼロ (URLSession のみ)。
+              SwiftPM package <code>jpzip</code>. Swift 5.9+, iOS 15+ / macOS 12+ / tvOS 15+ / watchOS 8+. <code>actor</code>-based,
+              Sendable-safe, zero dependencies (URLSession only).
             </p>
 
-            <h3 id="sdk-functional">トップレベル関数 (シングルトン)</h3>
+            <h3 id="sdk-functional">Top-level functions (singleton)</h3>
             <pre><code is:raw><span class="k">import</span> Jpzip
 
 <span class="k">let</span> e    = <span class="k">try await</span> <span class="f">lookup</span>(<span class="s">"2310017"</span>)        <span class="c">// ZipcodeEntry?</span>
-<span class="k">let</span> dict = <span class="k">try await</span> <span class="f">lookupGroup</span>(<span class="s">"23"</span>)       <span class="c">// 1-3 桁</span>
+<span class="k">let</span> dict = <span class="k">try await</span> <span class="f">lookupGroup</span>(<span class="s">"23"</span>)       <span class="c">// 1-3 digits</span>
 <span class="k">let</span> all  = <span class="k">try await</span> <span class="f">lookupAll</span>()
 <span class="k">try await</span> <span class="f">preload</span>(<span class="s">"all"</span>)
 <span class="k">let</span> meta = <span class="k">try await</span> <span class="f">getMeta</span>()
@@ -683,7 +679,7 @@ client.<span class="f">refresh</span>();</code></pre>
 <span class="k">let</span> client = <span class="f">JpzipClient</span>(
     baseURL: <span class="s">"https://jpzip.nadai.dev"</span>,
     memoryCacheSize: <span class="n">100</span>,
-    cache: myCache,                              <span class="c">// L2 (省略可)</span>
+    cache: myCache,                              <span class="c">// L2 (optional)</span>
     onSpecMismatch: &#123; expected, received <span class="k">in</span>
         <span class="f">print</span>(<span class="s">"spec: \(received)"</span>)
     &#125;
@@ -700,22 +696,22 @@ client.<span class="f">refresh</span>();</code></pre>
     <span class="k">func</span> <span class="f">clear</span>() <span class="k">async throws</span>
 &#125;</code></pre>
 
-            <h3 id="sdk-edge">Edge / Serverless 環境での注意</h3>
+            <h3 id="sdk-edge">Edge / Serverless notes</h3>
             <ul>
-              <li>iOS / macOS アプリでは <code>FileManager</code> を使った L2 を <code>UserDefaults</code> 代わりに使うと、起動時オフラインから即動く。</li>
-              <li><code>actor</code> 隔離なので await 呼び出しが必要。<code>@MainActor</code> から呼ぶと UI 更新と直結。</li>
+              <li>On iOS / macOS apps a <code>FileManager</code>-backed L2 makes cold launches work offline immediately.</li>
+              <li>Since <code>actor</code> isolates state, call sites need <code>await</code>. Using <code>@MainActor</code> integrates cleanly with UI updates.</li>
             </ul>
           </Fragment>
         </SdkTabs>
 
-        <h2 id="other-sdks">その他の SDK</h2>
+        <h2 id="other-sdks">Other SDKs</h2>
         <p>
-          上記 8 言語以外にも、以下の 7 言語で SDK を提供しています。API
-          シグネチャは全て揃っており、リポジトリ内の README に各言語の使い方を記載しています。
+          Beyond the 8 languages above, jpzip ships SDKs in 7 more languages. All SDK signatures are aligned, and per-language
+          README files in each repo cover the details.
         </p>
         <table>
           <thead>
-            <tr><th>言語</th><th>リポジトリ</th><th>インストール</th><th>備考</th></tr>
+            <tr><th>Language</th><th>Repository</th><th>Install</th><th>Notes</th></tr>
           </thead>
           <tbody>
             <tr>
@@ -734,7 +730,7 @@ client.<span class="f">refresh</span>();</code></pre>
               <td>Dart</td>
               <td><a href="https://github.com/jpzip/dart" target="_blank" rel="noopener">jpzip/dart</a></td>
               <td><code>dart pub add jpzip</code></td>
-              <td>Flutter / CLI / Web 共通</td>
+              <td>Shared across Flutter / CLI / Web</td>
             </tr>
             <tr>
               <td>Elixir</td>
@@ -752,7 +748,7 @@ client.<span class="f">refresh</span>();</code></pre>
               <td>C</td>
               <td><a href="https://github.com/jpzip/c" target="_blank" rel="noopener">jpzip/c</a></td>
               <td><code>cmake -S . -B build</code></td>
-              <td>C99, libcurl + cJSON、FFI 友好的</td>
+              <td>C99, libcurl + cJSON, FFI-friendly</td>
             </tr>
             <tr>
               <td>C++</td>
@@ -770,109 +766,110 @@ client.<span class="f">refresh</span>();</code></pre>
               <td>R</td>
               <td><a href="https://github.com/jpzip/r" target="_blank" rel="noopener">jpzip/r</a></td>
               <td><code>{`remotes::install_github("jpzip/r")`}</code></td>
-              <td>httr2 + R6, <code>jpzip_to_dataframe</code> 同梱</td>
+              <td>httr2 + R6, includes <code>jpzip_to_dataframe</code></td>
             </tr>
           </tbody>
         </table>
         <p>
-          API 一覧 (<code>lookup</code> / <code>lookupGroup</code> / <code>lookupAll</code> / <code>preload</code> /
-          <code>getMeta</code> / <code>refresh</code> / <code>isValidZipcode</code>)、L1 LRU、オプショナル L2 キャッシュ、5xx
-          指数バックオフリトライ、データ version 変更時の自動 invalidate ― これらは全 SDK で共通実装されています。
+          The shared surface (<code>lookup</code> / <code>lookupGroup</code> / <code>lookupAll</code> / <code>preload</code> /
+          <code>getMeta</code> / <code>refresh</code> / <code>isValidZipcode</code>), the L1 LRU, the optional L2 cache,
+          5xx exponential-backoff retries and version-change auto-invalidation are implemented identically across all SDKs.
         </p>
 
-        <h2 id="caching">キャッシュ戦略</h2>
-        <p>SDK は 3 層のキャッシュを区別して管理します。デフォルト挙動を理解しておくと、preload / refresh のタイミングを判断しやすくなります。</p>
+        <h2 id="caching">Cache strategy</h2>
+        <p>The SDK distinguishes three cache layers. Knowing the defaults makes it easy to reason about when to call preload / refresh.</p>
         <table>
           <thead>
-            <tr><th>層</th><th>目的</th><th>サイズ目安</th><th>デフォルト</th></tr>
+            <tr><th>Layer</th><th>Purpose</th><th>Typical size</th><th>Default</th></tr>
           </thead>
           <tbody>
-            <tr><td>L1 メモリ LRU</td><td>同一プロセス内の重複 fetch 抑制</td><td>~1 MB</td><td>常時 ON (内部)</td></tr>
-            <tr><td>L2 永続キャッシュ</td><td>preload / 起動高速化</td><td>最大 ~10 MB</td><td>OFF (ユーザー有効化)</td></tr>
-            <tr><td>L3 HTTP キャッシュ</td><td>ブラウザ / OS / fetch 層</td><td>環境依存</td><td>Cache-Control 準拠</td></tr>
+            <tr><td>L1 in-memory LRU</td><td>Suppress duplicate fetches within one process</td><td>~1 MB</td><td>Always on (internal)</td></tr>
+            <tr><td>L2 persistent cache</td><td>preload / fast boot</td><td>Up to ~10 MB</td><td>Off (user-enabled)</td></tr>
+            <tr><td>L3 HTTP cache</td><td>Browser / OS / fetch layer</td><td>Environment-dependent</td><td>Follows Cache-Control</td></tr>
           </tbody>
         </table>
         <p>
-          月次のデータ更新は <code>/meta.json</code> の <code>version</code> 変化で検知し、SDK は L1 と L2 を自動で
-          invalidate します。明示的に再取得したい場合は <code>refresh()</code> を呼んでください。
+          Monthly data updates are detected from the <code>version</code> field in <code>/meta.json</code>; the SDK
+          automatically invalidates L1 and L2. To re-fetch explicitly, call <code>refresh()</code>.
         </p>
 
-        <h2 id="protocol">プロトコル仕様</h2>
+        <h2 id="protocol">Protocol spec</h2>
         <p>
-          SDK を使わず raw HTTP で叩く場合や、別言語の SDK を実装する場合の参照です。spec の正本は{' '}
-          <a href="https://github.com/jpzip/spec" target="_blank" rel="noopener">github.com/jpzip/spec</a> にあります。
+          Reference for raw HTTP usage or for writing your own SDK. The authoritative spec lives at{' '}
+          <a href="https://github.com/jpzip/spec" target="_blank" rel="noopener">github.com/jpzip/spec</a>.
         </p>
 
-        <h3 id="endpoints">エンドポイント</h3>
+        <h3 id="endpoints">Endpoints</h3>
         <table>
           <thead>
-            <tr><th>パス</th><th>内容</th><th>サイズ目安</th></tr>
+            <tr><th>Path</th><th>Contents</th><th>Approx. size</th></tr>
           </thead>
           <tbody>
-            <tr><td><code>/meta.json</code></td><td>バージョン & 統計</td><td>~10 KB</td></tr>
-            <tr><td><code>/g/&#123;1&#125;.json</code></td><td>1 桁プレフィックスの全エントリ</td><td>3〜4 MB</td></tr>
-            <tr><td><code>/p/&#123;3&#125;.json</code></td><td>3 桁プレフィックスの全エントリ</td><td>~10 KB</td></tr>
+            <tr><td><code>/meta.json</code></td><td>Version &amp; stats</td><td>~10 KB</td></tr>
+            <tr><td><code>/g/&#123;1&#125;.json</code></td><td>All entries for a 1-digit prefix</td><td>3–4 MB</td></tr>
+            <tr><td><code>/p/&#123;3&#125;.json</code></td><td>All entries for a 3-digit prefix</td><td>~10 KB</td></tr>
           </tbody>
         </table>
         <p>
-          <code>/all.json</code> は意図的にありません — 全件で 25 MiB を超え Cloudflare Pages の上限を超過するためです。
-          全件が必要なときは <code>/g/0.json</code> 〜 <code>/g/9.json</code> を並列取得してマージします
-          (SDK の <code>lookupAll</code> / <code>preload</code> はこれを自動で実行します)。
+          There is intentionally no <code>/all.json</code> — at over 25 MiB it would exceed Cloudflare Pages limits.
+          When you need the whole dataset, fetch <code>/g/0.json</code> through <code>/g/9.json</code> in parallel and
+          merge (the SDK’s <code>lookupAll</code> / <code>preload</code> do this for you).
         </p>
         <pre><code is:raw>curl https://jpzip.nadai.dev/p/231.json \
   | jq <span class="s">'."2310017"'</span></code></pre>
 
-        <h3 id="schema">スキーマ</h3>
+        <h3 id="schema">Schema</h3>
         <p>
-          <code>/g/*</code> と <code>/p/*</code> は同じ構造のフラットな辞書。キーは 7 桁の zipcode、値は <code>ZipcodeEntry</code>。
+          <code>/g/*</code> and <code>/p/*</code> are flat dictionaries with the same shape. Keys are 7-digit zipcodes and
+          values are <code>ZipcodeEntry</code>.
         </p>
         <pre><code is:raw>&#123;
   <span class="s">"prefecture"</span>:      <span class="s">"神奈川県"</span>,
   <span class="s">"prefecture_kana"</span>: <span class="s">"カナガワケン"</span>,
   <span class="s">"prefecture_roma"</span>: <span class="s">"Kanagawa"</span>,
-  <span class="s">"prefecture_code"</span>: <span class="s">"14"</span>,           <span class="c">// JIS X 0401 (2桁)</span>
+  <span class="s">"prefecture_code"</span>: <span class="s">"14"</span>,           <span class="c">// JIS X 0401 (2 digits)</span>
   <span class="s">"city"</span>:            <span class="s">"横浜市中区"</span>,
   <span class="s">"city_kana"</span>:       <span class="s">"ヨコハマシナカク"</span>,
   <span class="s">"city_roma"</span>:       <span class="s">"Yokohama Shi Naka Ku"</span>,
-  <span class="s">"city_code"</span>:       <span class="s">"14104"</span>,         <span class="c">// 総務省コード (5桁)</span>
+  <span class="s">"city_code"</span>:       <span class="s">"14104"</span>,         <span class="c">// MIC municipality code (5 digits)</span>
   <span class="s">"towns"</span>: [
     &#123; <span class="s">"town"</span>: <span class="s">"本町"</span>, <span class="s">"kana"</span>: <span class="s">"ホンチョウ"</span>, <span class="s">"roma"</span>: <span class="s">"Honcho"</span> &#125;
   ]
 &#125;</code></pre>
         <p>
-          1 つの zipcode に複数町域が紐づく場合 (例: 京都の通り名) は <code>towns</code> 配列が複数要素になります。
-          「以下に掲載がない場合」のような特記事項は <code>towns[].note</code> に正規化されます。
+          When one zipcode covers several town areas (e.g. Kyoto’s street-name addresses), the <code>towns</code> array
+          has multiple entries. Notes like “if not listed below” are normalised into <code>towns[].note</code>.
         </p>
 
-        <h3 id="http">HTTP 仕様</h3>
+        <h3 id="http">HTTP spec</h3>
         <ul>
-          <li><strong>Method:</strong> GET のみ (クエリパラメータなし)</li>
+          <li><strong>Method:</strong> GET only (no query parameters)</li>
           <li><strong>Content-Type:</strong> <code>application/json; charset=utf-8</code></li>
-          <li><strong>Encoding:</strong> gzip / brotli (Cloudflare 自動)</li>
+          <li><strong>Encoding:</strong> gzip / brotli (Cloudflare, automatic)</li>
           <li><strong>Cache-Control:</strong> <code>public, max-age=86400</code> (24h)</li>
           <li><strong>CORS:</strong> <code>Access-Control-Allow-Origin: *</code></li>
-          <li><strong>404:</strong> 実在しない prefix。SDK は「該当なし」として扱う</li>
-          <li><strong>5xx / network:</strong> SDK は指数バックオフで最大 3 回リトライ</li>
+          <li><strong>404:</strong> Prefix does not exist. SDKs treat this as “not found”.</li>
+          <li><strong>5xx / network:</strong> SDKs retry up to 3 times with exponential backoff.</li>
         </ul>
 
-        <h3 id="versioning">バージョニング</h3>
+        <h3 id="versioning">Versioning</h3>
         <ul>
           <li>
-            <strong>spec_version</strong> (<code>1.0</code> など): プロトコルのバージョン。SemVer 準拠。v1 系列の中では
-            既存フィールドの削除・型変更は行わない。
+            <strong>spec_version</strong> (e.g. <code>1.0</code>): the protocol version, SemVer. Within v1.x no existing
+            field is removed or type-changed.
           </li>
           <li>
-            <strong>version</strong> (<code>2026-05</code> など): データの月次バージョン。互換性とは無関係、データの
-            新鮮さの指標。
+            <strong>version</strong> (e.g. <code>2026-05</code>): the monthly data version. Unrelated to compatibility —
+            it just tells you how fresh the data is.
           </li>
         </ul>
 
-        <h2 id="license">ライセンス</h2>
+        <h2 id="license">License</h2>
         <ul>
-          <li>仕様書 / SDK / ETL: <strong>MIT</strong></li>
-          <li>配信データ: <strong>Public Domain 相当</strong> (元データは日本郵便)</li>
+          <li>Spec / SDK / ETL: <strong>MIT</strong></li>
+          <li>Distributed data: <strong>effectively public domain</strong> (sourced from Japan Post)</li>
         </ul>
-        <p>商用利用・再配布・改変、いずれも自由です。アトリビューションも不要 (歓迎はしますが)。</p>
+        <p>Commercial use, redistribution and modification are all free. Attribution is not required (though appreciated).</p>
       </article>
     </div>
   </div>
@@ -882,13 +879,14 @@ client.<span class="f">refresh</span>();</code></pre>
   <section class="section docs-cta-section">
     <div class="wrap">
       <div class="cta-box">
-        <h2>仕様は固定、<span class="grad">中身は薄い。</span></h2>
+        <h2>Fixed spec, <span class="grad">tiny SDKs.</span></h2>
         <p>
-          spec v1.0 はもう固定済み。プロトコルが薄いから、SDK の中身は数十行。各言語で同じシグネチャ、同じキャッシュ戦略を揃えています。
+          spec v1.0 is frozen. Because the protocol is small, each SDK is only a few dozen lines — with identical
+          signatures and identical cache strategies across languages.
         </p>
         <div class="cta-actions">
-          <a class="btn-primary" href="/#playground">Playground を試す →</a>
-          <a class="btn-ghost" href="https://github.com/jpzip" target="_blank" rel="noopener">GitHub で見る ↗</a>
+          <a class="btn-primary" href="/en/#playground">Try the Playground →</a>
+          <a class="btn-ghost" href="https://github.com/jpzip" target="_blank" rel="noopener">View on GitHub ↗</a>
         </div>
       </div>
     </div>

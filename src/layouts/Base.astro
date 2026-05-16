@@ -2,62 +2,152 @@
 import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle.vue';
 
+type Lang = 'ja' | 'en';
+
 interface Props {
   title: string;
   description?: string;
   active?: 'home' | 'docs';
   ogType?: 'website' | 'article';
   ogImage?: string;
+  lang?: Lang;
 }
 
 const {
   title,
-  description = '登録不要・無料・無制限の郵便番号データセット',
+  description,
   active,
   ogType = 'website',
   ogImage = '/og.svg',
+  lang = 'ja',
 } = Astro.props;
+
+const t = {
+  ja: {
+    htmlLang: 'ja',
+    ogLocale: 'ja_JP',
+    defaultDesc: '登録不要・無料・無制限の郵便番号データセット',
+    navPlayground: 'Playground',
+    navSdk: 'SDK',
+    navDocs: 'Docs',
+    navGithub: 'GitHub',
+    navCta: '試す →',
+    feedTitle: 'jpzip data releases',
+    home: '/',
+    docs: '/docs',
+    playgroundHash: '/#playground',
+    codeHash: '/#code',
+    altHref: '/en/',
+    altHrefDocs: '/en/docs',
+    altLabel: 'EN',
+    footerTagline:
+      '個人開発者・OSS のための、登録不要の郵便番号データセット。日本郵便の公式 API を使えない場面の補完選択肢として。',
+    footerData: 'DATA',
+    footerSdk: 'SDK',
+    footerLinks: 'LINKS',
+    footerSpec: 'Spec v1.0',
+    footerOther: '+ 他 7 言語',
+    footerUsage: '使い方',
+    footerGithubOrg: 'GitHub Org',
+    footerSpecRepo: 'Spec repo',
+    footerJp: '日本郵便',
+    footerCopyright: '© 2026 nadai · MIT',
+    footerSource: 'data source: 日本郵便 KEN_ALL.csv (Public Domain)',
+  },
+  en: {
+    htmlLang: 'en',
+    ogLocale: 'en_US',
+    defaultDesc: 'Free, unlimited, no-signup Japanese zipcode dataset',
+    navPlayground: 'Playground',
+    navSdk: 'SDK',
+    navDocs: 'Docs',
+    navGithub: 'GitHub',
+    navCta: 'Try it →',
+    feedTitle: 'jpzip data releases',
+    home: '/en/',
+    docs: '/en/docs',
+    playgroundHash: '/en/#playground',
+    codeHash: '/en/#code',
+    altHref: '/',
+    altHrefDocs: '/docs',
+    altLabel: '日本語',
+    footerTagline:
+      'A no-signup Japanese zipcode dataset for indie devs and OSS — a complement when Japan Post’s official API is not an option.',
+    footerData: 'DATA',
+    footerSdk: 'SDK',
+    footerLinks: 'LINKS',
+    footerSpec: 'Spec v1.0',
+    footerOther: '+ 7 more languages',
+    footerUsage: 'Usage',
+    footerGithubOrg: 'GitHub Org',
+    footerSpecRepo: 'Spec repo',
+    footerJp: 'Japan Post',
+    footerCopyright: '© 2026 nadai · MIT',
+    footerSource: 'data source: Japan Post KEN_ALL.csv (Public Domain)',
+  },
+}[lang];
+
+const desc = description ?? t.defaultDesc;
 
 const site = Astro.site ?? new URL('https://jpzip.nadai.dev');
 const canonical = new URL(Astro.url.pathname, site).toString();
 const ogImageUrl = new URL(ogImage, site).toString();
 
+// hreflang alternates — pathname を JA/EN で対応させる
+const path = Astro.url.pathname;
+const jaPath = path.startsWith('/en/') ? path.replace(/^\/en\//, '/') : path === '/en' ? '/' : path;
+const enPath = path.startsWith('/en/') || path === '/en'
+  ? path
+  : path === '/'
+    ? '/en/'
+    : `/en${path}`;
+const jaAlt = new URL(jaPath, site).toString();
+const enAlt = new URL(enPath, site).toString();
+
 const navLink = (href: string, label: string, key?: string) => ({ href, label, key });
 const links = [
-  navLink('/#playground', 'Playground', 'playground'),
-  navLink('/#code', 'SDK', 'sdk'),
-  navLink('/docs', 'Docs', 'docs'),
-  navLink('https://github.com/jpzip', 'GitHub'),
+  navLink(t.playgroundHash, t.navPlayground, 'playground'),
+  navLink(t.codeHash, t.navSdk, 'sdk'),
+  navLink(t.docs, t.navDocs, 'docs'),
+  navLink('https://github.com/jpzip', t.navGithub),
 ];
+
+// 言語切替先 — 現在ページに対応する反対言語の URL
+const altLangHref = active === 'docs' ? t.altHrefDocs : t.altHref;
 ---
 
 <!doctype html>
-<html lang="ja">
+<html lang={t.htmlLang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
-    <meta name="description" content={description} />
+    <meta name="description" content={desc} />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="ja" href={jaAlt} />
+    <link rel="alternate" hreflang="en" href={enAlt} />
+    <link rel="alternate" hreflang="x-default" href={jaAlt} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <!-- OGP -->
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content="jpzip" />
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={desc} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImageUrl} />
-    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:locale" content={t.ogLocale} />
+    {lang === 'ja' && <meta property="og:locale:alternate" content="en_US" />}
+    {lang === 'en' && <meta property="og:locale:alternate" content="ja_JP" />}
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:description" content={desc} />
     <meta name="twitter:image" content={ogImageUrl} />
 
     <!-- Feeds & discovery -->
-    <link rel="alternate" type="application/rss+xml" title="jpzip data releases" href="/feed.xml" />
+    <link rel="alternate" type="application/rss+xml" title={t.feedTitle} href="/feed.xml" />
     <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -78,7 +168,7 @@ const links = [
   </head>
   <body>
     <nav class="site">
-      <a class="logo" href="/">
+      <a class="logo" href={t.home}>
         <span class="logo-mark">郵</span>
         <span class="logo-name">jpzip</span>
       </a>
@@ -96,8 +186,11 @@ const links = [
             </a>
           ))
         }
+        <a class="lang-switch" href={altLangHref} hreflang={lang === 'ja' ? 'en' : 'ja'}>
+          {t.altLabel}
+        </a>
         <ThemeToggle client:load />
-        <a class="nav-cta" href="/#playground">試す →</a>
+        <a class="nav-cta" href={t.playgroundHash}>{t.navCta}</a>
       </div>
     </nav>
 
@@ -109,26 +202,25 @@ const links = [
       <div class="wrap">
         <div class="foot">
           <div>
-            <a class="logo" href="/">
+            <a class="logo" href={t.home}>
               <span class="logo-mark" style="width:28px;height:28px;font-size:14px;border-radius:8px;">郵</span>
               <span class="logo-name" style="font-size:18px;">jpzip</span>
             </a>
             <p style="max-width: 280px; margin-top: 12px; line-height: 1.7;">
-              個人開発者・OSS のための、登録不要の郵便番号データセット。日本郵便の公式 API
-              を使えない場面の補完選択肢として。
+              {t.footerTagline}
             </p>
           </div>
           <div class="foot-col">
-            <h4>DATA</h4>
+            <h4>{t.footerData}</h4>
             <ul>
               <li><a href="https://jpzip.nadai.dev/meta.json">/meta.json</a></li>
               <li><a href="https://jpzip.nadai.dev/g/0.json">/g/&#123;1&#125;.json</a></li>
               <li><a href="https://jpzip.nadai.dev/p/231.json">/p/&#123;3&#125;.json</a></li>
-              <li><a href="/docs">Spec v1.0</a></li>
+              <li><a href={t.docs}>{t.footerSpec}</a></li>
             </ul>
           </div>
           <div class="foot-col">
-            <h4>SDK</h4>
+            <h4>{t.footerSdk}</h4>
             <ul>
               <li><a href="https://github.com/jpzip/js">TypeScript</a></li>
               <li><a href="https://github.com/jpzip/go">Go</a></li>
@@ -138,26 +230,26 @@ const links = [
               <li><a href="https://github.com/jpzip/java">Java</a></li>
               <li><a href="https://github.com/jpzip/php">PHP</a></li>
               <li><a href="https://github.com/jpzip/swift">Swift</a></li>
-              <li><a href="/docs#other-sdks">+ 他 7 言語</a></li>
-              <li><a href="/docs#sdk">使い方</a></li>
+              <li><a href={`${t.docs}#other-sdks`}>{t.footerOther}</a></li>
+              <li><a href={`${t.docs}#sdk`}>{t.footerUsage}</a></li>
             </ul>
           </div>
           <div class="foot-col">
-            <h4>LINKS</h4>
+            <h4>{t.footerLinks}</h4>
             <ul>
-              <li><a href="https://github.com/jpzip">GitHub Org</a></li>
-              <li><a href="https://github.com/jpzip/spec">Spec repo</a></li>
+              <li><a href="https://github.com/jpzip">{t.footerGithubOrg}</a></li>
+              <li><a href="https://github.com/jpzip/spec">{t.footerSpecRepo}</a></li>
               <li>
                 <a href="https://www.post.japanpost.jp/service/search/zipcode/download/" target="_blank" rel="noopener"
-                  >日本郵便</a
+                  >{t.footerJp}</a
                 >
               </li>
             </ul>
           </div>
         </div>
         <div class="foot-bottom">
-          <span>© 2026 nadai · MIT</span>
-          <span>data source: 日本郵便 KEN_ALL.csv (Public Domain)</span>
+          <span>{t.footerCopyright}</span>
+          <span>{t.footerSource}</span>
         </div>
       </div>
     </footer>

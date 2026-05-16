@@ -41,11 +41,33 @@ onMounted(() => {
 
 function select(lang: Lang) {
   if (active.value === lang) return;
+
+  // 言語ごとに pane の高さが違うので、active を切り替えるだけだと
+  // 現在読んでいる位置が勝手にズレる。ビューポート上端のすぐ上にある
+  // 見出しを覚えておき、切替後に同じ Y にくるよう scrollBy で補正する。
+  let anchorId: string | null = null;
+  let anchorOffset = 0;
+  const headings = document.querySelectorAll<HTMLElement>(
+    '.sdk-tab-pane h2[id], .sdk-tab-pane h3[id], .sdk-tab-pane h4[id]',
+  );
+  for (const h of headings) {
+    const top = h.getBoundingClientRect().top;
+    if (top > 0) break;
+    anchorId = h.id;
+    anchorOffset = top;
+  }
+
   active.value = lang;
   localStorage.setItem('jpzip-sdk-lang', lang);
-  // タブ切替後も hash の指す節 (例: #sdk-cache) は同じ ID で生きているので
-  // そちらにスクロールし直す
-  if (location.hash) scrollToHash();
+
+  if (anchorId) {
+    requestAnimationFrame(() => {
+      const el = document.getElementById(anchorId!);
+      if (!el) return;
+      const delta = el.getBoundingClientRect().top - anchorOffset;
+      if (delta !== 0) window.scrollBy(0, delta);
+    });
+  }
 }
 </script>
 
