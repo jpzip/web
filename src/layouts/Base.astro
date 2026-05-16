@@ -201,32 +201,31 @@ const altLangHref = lang === 'ja' ? enPath : jaPath;
         <span class="logo-name">jpzip</span>
       </a>
       <span class="ver-pill">v1.0 · 2026-05</span>
-      <details class="nav-drawer">
-        <summary class="nav-toggle" aria-label={lang === 'ja' ? 'メニュー' : 'Menu'}>
-          <span class="nav-toggle-bars" aria-hidden="true">
-            <span></span><span></span><span></span>
-          </span>
-        </summary>
-        <div class="nav-links">
-          {
-            links.map((l) => (
-              <a
-                href={l.href}
-                class={active && l.key === active ? 'active' : ''}
-                target={l.href.startsWith('http') ? '_blank' : undefined}
-                rel={l.href.startsWith('http') ? 'noopener' : undefined}
-              >
-                {l.label}
-              </a>
-            ))
-          }
-          <a class="lang-switch" href={altLangHref} hreflang={lang === 'ja' ? 'en' : 'ja'}>
-            {t.altLabel}
-          </a>
-          <ThemeToggle client:load />
-          <a class="nav-cta" href={t.playgroundHash}>{t.navCta}</a>
-        </div>
-      </details>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle-input" aria-hidden="true" />
+      <label class="nav-toggle" for="nav-toggle" aria-label={lang === 'ja' ? 'メニュー' : 'Menu'}>
+        <span class="nav-toggle-bars" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+      </label>
+      <div class="nav-links">
+        {
+          links.map((l) => (
+            <a
+              href={l.href}
+              class={active && l.key === active ? 'active' : ''}
+              target={l.href.startsWith('http') ? '_blank' : undefined}
+              rel={l.href.startsWith('http') ? 'noopener' : undefined}
+            >
+              {l.label}
+            </a>
+          ))
+        }
+        <a class="lang-switch" href={altLangHref} hreflang={lang === 'ja' ? 'en' : 'ja'}>
+          {t.altLabel}
+        </a>
+        <ThemeToggle client:load />
+        <a class="nav-cta" href={t.playgroundHash}>{t.navCta}</a>
+      </div>
     </nav>
 
     <main>

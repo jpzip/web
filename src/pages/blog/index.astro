@@ -4,7 +4,7 @@ import Base from '../../layouts/Base.astro';
 import { personLd, resolveImage } from '../../lib/blog';
 
 const posts = (await getCollection('blog-ja', ({ data }) => data.status === 'published')).sort(
-  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
+  (a, b) => Number(b.data.id) - Number(a.data.id),
 );
 
 // シリーズ名 → 件数(動的算出)

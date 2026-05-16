@@ -1,7 +1,7 @@
 ---
 id: "0004"
 title: How Claude Code shipped 8 language SDKs in 6 hours
-description: How I shipped TypeScript / Go / Python / Rust / Ruby / Dart / PHP / Swift SDKs for jpzip in 6 hours using Claude Code — spec-first design, translation-not-transpilation prompting, and per-language gotchas.
+description: How I shipped Go / TypeScript / Python / Rust / Ruby / Dart / PHP / Swift SDKs for jpzip in 6 hours using Claude Code — spec-first design, Go as the reference implementation, translation-not-transpilation prompting, and per-language gotchas.
 lang: en
 publishedAt: 2026-05-17
 author: nadai
@@ -12,33 +12,32 @@ series:
 status: published
 ---
 
-> Final post in the [jpzip](https://jpzip.nadai.dev/) series. I built SDKs in **TypeScript, Go, Python, Rust, Ruby, Dart, PHP, and Swift** in 6 hours of focused work with Claude Code. Read [part 1](https://jpzip.nadai.dev/en/blog/cloudflare-pages-micro-saas/), [part 2](https://jpzip.nadai.dev/en/blog/cloudflare-pages-static-zipcode-delivery/), and [part 3](https://jpzip.nadai.dev/en/blog/mcp-server-japanese-postcode/) first if you want the surrounding context.
+> Final post in the [jpzip](https://jpzip.nadai.dev/) series. I built SDKs in **Go, TypeScript, Python, Rust, Ruby, Dart, PHP, and Swift** in 6 hours of focused work with Claude Code. Read [part 1](https://jpzip.nadai.dev/en/blog/cloudflare-pages-micro-saas/), [part 2](https://jpzip.nadai.dev/en/blog/cloudflare-pages-static-zipcode-delivery/), and [part 3](https://jpzip.nadai.dev/en/blog/mcp-server-japanese-postcode/) first if you want the surrounding context.
 
 ## TL;DR
 
 - 8 SDKs shipped in 6 hours of work, with the help of Claude Code.
-- Published to npm / Go / PyPI / crates.io / RubyGems / pub.dev / Packagist / Swift Package Index.
+- Published to Go / npm / PyPI / crates.io / RubyGems / pub.dev / Packagist / Swift Package Index.
 - Every SDK has the **same API surface, the same cache design, the same retry behavior**.
 - The unlock was **pinning the protocol in prose first**, then dropping implementation to a level Claude can finish.
 - Language-specific gotchas absolutely exist — handle them by **asking Claude to translate, not transpile**.
 
 ## What "8 SDKs in 6 hours" really means
 
-To be honest about the headline: the 6 hours is the **actual implementation time for the 8 SDKs**, but a lot was already in place before the timer started:
+To be honest about the headline: the 6 hours covers **from the moment I started writing the Go SDK to the initial publish of all 8 SDKs**. A lot was already in place before that timer started:
 
 - The dataset (120,677 records of JSON) was already on the CDN ([part 2](https://jpzip.nadai.dev/en/blog/cloudflare-pages-static-zipcode-delivery/)).
 - The protocol spec (`spec/v1/protocol.md`) was already pinned, with JSON Schema.
-- The TypeScript SDK existed as a working reference implementation.
 
-So the honest framing is: **with the spec, the reference implementation, and the CDN all in place, the remaining 7 languages rolled out in 6 hours.** That's not "AI made it possible." That's "I lined up everything AI-driven dev needs *before* starting, and the 6 hours was the payoff."
+So the honest framing is: **with the spec and the CDN in place, I wrote the Go SDK as the reference, then rolled out the remaining 7 languages — all within 6 hours, end to end.** That's not "AI made it possible." That's "I lined up everything AI-driven dev needs *before* starting, and the 6 hours was the payoff."
 
 ## The overall flow
 
 The work happened in three phases:
 
-1. **Pin the protocol in prose** (hours).
-2. **Build the TypeScript SDK carefully** (hours).
-3. **Use the TypeScript SDK as a reference and roll out the other 7 languages** (the 6 hours).
+1. **Pin the protocol in prose** (done up front, not in the 6 hours).
+2. **Build the Go SDK carefully as the reference implementation** (first half of the 6 hours).
+3. **Use the Go SDK as a reference and translate to the other 7 languages** (second half of the 6 hours).
 
 Phase 3 was essentially "ask Claude Code to translate, language by language."
 
@@ -67,7 +66,7 @@ spec/
 - CORS and `Cache-Control` rules.
 - Versioning policy (minor versions are backwards-compatible).
 
-The bar I aimed for: **I can hand this document to Claude and say "implement this in Go,"** and Claude can finish.
+The bar I aimed for: **I can hand this document to Claude and say "implement this in Go,"** and Claude can finish. In practice that's exactly how the Go SDK — the reference implementation — was kicked off.
 
 ## The shared API surface
 
@@ -75,8 +74,8 @@ Five functions: `lookup`, `lookupGroup`, `lookupAll`, `preload`, `getMeta`. Each
 
 | Language | Package | Single lookup |
 |---|---|---|
-| TypeScript | `@jpzip/jpzip` | `await lookup("2310017")` |
 | Go | `github.com/jpzip/go` | `jpzip.Lookup(ctx, "2310017")` |
+| TypeScript | `@jpzip/jpzip` | `await lookup("2310017")` |
 | Python | `jpzip` | `lookup("2310017")` / `await client.lookup(...)` |
 | Rust | `jpzip` | `jpzip::lookup("2310017").await?` |
 | Ruby | `jpzip` | `Jpzip.lookup("2310017")` |
@@ -100,12 +99,12 @@ L2 is just an interface in each language — implementations are 20–30 lines a
 
 ## Inside the 6 hours
 
-The thing that made the 6 hours actually work was reframing every prompt as a **translation task**, not a transpilation task.
+The first chunk of the 6 hours was writing the Go SDK carefully — that became the reference. From there, every remaining language prompt was framed as a **translation task**, not a transpilation task.
 
 ### The template
 
 ```
-Here's the TypeScript reference implementation.
+Here's the Go reference implementation.
 Reimplement it in idiomatic Ruby.
 
 Must hold:
@@ -121,18 +120,18 @@ Avoid:
 - camelCase method names
 ```
 
-"Port the TypeScript API verbatim" produces strange code. "Re-express it in idiomatic Ruby" produces Ruby that happens to honor the same contract — L1 LRU rendered as a Hash, retries done as `rescue ... retry`, the whole thing reading like a Ruby gem someone would actually write.
+"Port the Go API verbatim" produces strange code. "Re-express it in idiomatic Ruby" produces Ruby that happens to honor the same contract — L1 LRU rendered as a Hash, retries done as `rescue ... retry`, the whole thing reading like a Ruby gem someone would actually write.
 
 ### "Build, then fix" — one language at a time
 
-Per language:
+Per non-Go language:
 
-1. Have Claude translate the test suite from TypeScript (same fixtures, same expectations).
+1. Have Claude translate the test suite from Go (same fixtures, same expectations).
 2. Have Claude translate the implementation.
 3. Run the tests.
 4. Feed failures back to Claude, fix.
 
-Eight times. The time wasn't going into implementation prose; it was going into **teaching Claude the language-specific traps**.
+Seven times (Go is the reference, so it's the source side of the loop, not the target). The time wasn't going into implementation prose; it was going into **teaching Claude the language-specific traps**.
 
 ### Per-language gotchas that surfaced
 
@@ -152,9 +151,9 @@ Most of these surfaced when I told Claude "this has to work without a C toolchai
 ### Worked
 
 - **Spec-first.** Behavior decided in prose before any code. That document became Claude's source of truth.
-- **A working reference.** Starting with one finished SDK gave Claude a concrete "match this behavior" target.
+- **Go as the reference.** Go's explicit types and errors leave little room for implicit behavior to hide in the source. Using Python or Ruby as the reference would have let dynamic-typing assumptions leak into every translation.
 - **Translate the tests first.** Once the tests are in the new language, correctness becomes automatable.
-- **Specify idiom in the prompt.** "Pythonic," "idiomatic Go" — these words change output quality measurably.
+- **Specify idiom in the prompt.** "Pythonic," "idiomatic Rust" — these words change output quality measurably.
 - **Reuse CI templates.** Eight publish-to-package-manager workflows on GitHub Actions, copy-edited per language.
 
 ### Didn't
@@ -192,8 +191,8 @@ The throughline across all four: a single-developer scope has gotten meaningfull
 
 | Language | Install |
 |---|---|
-| TypeScript | `npm i @jpzip/jpzip` |
 | Go | `go get github.com/jpzip/go` |
+| TypeScript | `npm i @jpzip/jpzip` |
 | Python | `pip install jpzip` |
 | Rust | `cargo add jpzip` |
 | Ruby | `gem install jpzip` |

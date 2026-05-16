@@ -105,9 +105,17 @@ nav.site {
   padding: 5px 10px;
   border-radius: 999px;
 }
-/* details で囲んだナビ — デスクトップでは details が "消えて" 子要素が flex 直下に並ぶ */
-.nav-drawer {
-  display: contents;
+/* モバイル用ハンバーガー — checkbox hack。デスクトップでは toggle 非表示で nav-links が常時表示 */
+.nav-toggle-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+  white-space: nowrap;
 }
 .nav-toggle {
   display: none;
@@ -1394,27 +1402,17 @@ footer.site {
     border-radius: 8px;
     font-size: 14px;
   }
-  .nav-drawer {
-    display: block;
-    margin-left: auto;
-    position: relative;
-  }
   .nav-toggle {
     display: grid;
     place-items: center;
+    margin-left: auto;
     width: 38px;
     height: 38px;
     background: var(--surface);
     border: 1px solid var(--rule);
     border-radius: 10px;
     cursor: pointer;
-    list-style: none;
     color: var(--ink);
-  }
-  .nav-toggle::-webkit-details-marker,
-  .nav-toggle::marker {
-    display: none;
-    content: '';
   }
   .nav-toggle-bars {
     display: inline-grid;
@@ -1427,26 +1425,26 @@ footer.site {
     border-radius: 1px;
     transition: transform 0.18s ease, opacity 0.18s ease;
   }
-  .nav-drawer[open] .nav-toggle-bars span:nth-child(1) {
+  #nav-toggle:checked ~ .nav-toggle .nav-toggle-bars span:nth-child(1) {
     transform: translateY(6px) rotate(45deg);
   }
-  .nav-drawer[open] .nav-toggle-bars span:nth-child(2) {
+  #nav-toggle:checked ~ .nav-toggle .nav-toggle-bars span:nth-child(2) {
     opacity: 0;
   }
-  .nav-drawer[open] .nav-toggle-bars span:nth-child(3) {
+  #nav-toggle:checked ~ .nav-toggle .nav-toggle-bars span:nth-child(3) {
     transform: translateY(-6px) rotate(-45deg);
   }
-  .nav-drawer .nav-links {
+  .nav-links {
     display: none;
   }
-  .nav-drawer[open] .nav-links {
+  #nav-toggle:checked ~ .nav-links {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 2px;
     position: absolute;
-    top: calc(100% + 12px);
-    right: 0;
+    top: calc(100% + 8px);
+    right: 12px;
     margin-left: 0;
     background: var(--surface);
     border: 1px solid var(--rule);
@@ -1456,24 +1454,24 @@ footer.site {
     box-shadow: 0 20px 50px -18px rgba(0, 0, 0, 0.22);
     z-index: 100;
   }
-  .nav-drawer[open] .nav-links a {
+  #nav-toggle:checked ~ .nav-links a {
     padding: 10px 12px;
     font-size: 15px;
     border-radius: 8px;
   }
-  .nav-drawer[open] .nav-links a.lang-switch {
+  #nav-toggle:checked ~ .nav-links a.lang-switch {
     margin: 6px 0 0;
     text-align: center;
     justify-content: center;
     font-size: 12px;
     padding: 8px 12px;
   }
-  .nav-drawer[open] .nav-links a.nav-cta {
+  #nav-toggle:checked ~ .nav-links a.nav-cta {
     margin-top: 6px;
     justify-content: center;
     padding: 10px 16px;
   }
-  .nav-drawer[open] .nav-links .theme-toggle {
+  #nav-toggle:checked ~ .nav-links .theme-toggle {
     align-self: center;
     margin-top: 6px;
   }
