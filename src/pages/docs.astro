@@ -134,9 +134,9 @@ composer require jpzip/jpzip
           <Fragment slot="ts">
             <pre><code is:raw><span class="k">import</span> &#123; lookup &#125; <span class="k">from</span> <span class="s">"jpzip"</span>;
 
-<span class="k">const</span> e = <span class="k">await</span> <span class="f">lookup</span>(<span class="s">"2310831"</span>);
+<span class="k">const</span> e = <span class="k">await</span> <span class="f">lookup</span>(<span class="s">"2310017"</span>);
 <span class="k">if</span> (e) console.log(e.prefecture, e.city, e.towns[<span class="n">0</span>].town);
-<span class="c">// 神奈川県 横浜市中区 矢口台</span></code></pre>
+<span class="c">// 神奈川県 横浜市中区 本町</span></code></pre>
 
             <p>
               npm パッケージ名 <code>jpzip</code>。ESM / CJS 両対応、完全型付き、Node 18+ / 主要ブラウザ / Bun / Deno /
@@ -156,7 +156,7 @@ composer require jpzip/jpzip
 &#125; <span class="k">from</span> <span class="s">"jpzip"</span>;
 
 <span class="c">// 単発検索 — /p/231.json を 1 回 fetch → L1 にキャッシュ</span>
-<span class="k">const</span> e = <span class="k">await</span> <span class="f">lookup</span>(<span class="s">"2310831"</span>);
+<span class="k">const</span> e = <span class="k">await</span> <span class="f">lookup</span>(<span class="s">"2310017"</span>);
 
 <span class="c">// グループ — 3桁=1 file / 2桁=10 並列 / 1桁=/g/&#123;n&#125;.json</span>
 <span class="k">const</span> dict = <span class="k">await</span> <span class="f">lookupGroup</span>(<span class="s">"23"</span>);
@@ -234,7 +234,7 @@ composer require jpzip/jpzip
             <pre><code is:raw><span class="k">import</span> <span class="s">"github.com/jpzip/go"</span>
 
 ctx := context.<span class="f">Background</span>()
-e, err := jpzip.<span class="f">Lookup</span>(ctx, <span class="s">"2310831"</span>)
+e, err := jpzip.<span class="f">Lookup</span>(ctx, <span class="s">"2310017"</span>)
 <span class="c">// e.Prefecture, e.City, e.Towns[0].Town</span></code></pre>
 
             <p>モジュール <code>github.com/jpzip/go</code>。Go 1.21+ で動作、依存ゼロ (標準ライブラリのみ)。</p>
@@ -245,7 +245,7 @@ e, err := jpzip.<span class="f">Lookup</span>(ctx, <span class="s">"2310831"</sp
 ctx := context.<span class="f">Background</span>()
 
 <span class="c">// 単発検索</span>
-e, err := jpzip.<span class="f">Lookup</span>(ctx, <span class="s">"2310831"</span>)
+e, err := jpzip.<span class="f">Lookup</span>(ctx, <span class="s">"2310017"</span>)
 <span class="k">if</span> err != <span class="n">nil</span> &#123; <span class="k">return</span> err &#125;
 <span class="k">if</span> e == <span class="n">nil</span> &#123; <span class="c">/* 該当なし */</span> &#125;
 
@@ -255,7 +255,7 @@ all,  err := jpzip.<span class="f">LookupAll</span>(ctx)            <span class=
 err     := jpzip.<span class="f">Preload</span>(ctx, <span class="s">"all"</span>)        <span class="c">// 全件キャッシュへ</span>
 meta, _ := jpzip.<span class="f">GetMeta</span>(ctx)              <span class="c">// /meta.json (1 回だけ)</span>
 
-ok := jpzip.<span class="f">IsValidZipcode</span>(<span class="s">"2310831"</span>)      <span class="c">// 形式チェックのみ</span></code></pre>
+ok := jpzip.<span class="f">IsValidZipcode</span>(<span class="s">"2310017"</span>)      <span class="c">// 形式チェックのみ</span></code></pre>
 
             <h3 id="sdk-client">Client + Option パターン</h3>
             <pre><code is:raw>client := jpzip.<span class="f">New</span>(
@@ -311,10 +311,10 @@ client.<span class="f">Preload</span>(ctx, <span class="s">"all"</span>)</code><
           <Fragment slot="python">
             <pre><code is:raw><span class="k">from</span> jpzip <span class="k">import</span> lookup
 
-e = <span class="f">lookup</span>(<span class="s">"2310831"</span>)
+e = <span class="f">lookup</span>(<span class="s">"2310017"</span>)
 <span class="k">if</span> e:
     <span class="f">print</span>(e.prefecture, e.city, e.towns[<span class="n">0</span>].town)
-<span class="c"># 神奈川県 横浜市中区 矢口台</span></code></pre>
+<span class="c"># 神奈川県 横浜市中区 本町</span></code></pre>
 
             <p>
               PyPI パッケージ名 <code>jpzip</code>。Python 3.10+、<code>httpx</code> 経由で sync / async 両対応、frozen
@@ -331,7 +331,7 @@ e = <span class="f">lookup</span>(<span class="s">"2310831"</span>)
     is_valid_zipcode,<span class="c"># (s: str) -&gt; bool</span>
 )
 
-e = <span class="f">lookup</span>(<span class="s">"2310831"</span>)
+e = <span class="f">lookup</span>(<span class="s">"2310017"</span>)
 dict_ = <span class="f">lookup_group</span>(<span class="s">"23"</span>)         <span class="c"># 2 桁は 10 並列 fetch</span>
 <span class="f">preload</span>(<span class="s">"all"</span>)                     <span class="c"># 全件 L1 を温める</span></code></pre>
 
@@ -353,7 +353,7 @@ dict_ = <span class="f">lookup_group</span>(<span class="s">"23"</span>)        
 
 <span class="c"># async 版</span>
 <span class="k">async with</span> <span class="f">AsyncJpzipClient</span>() <span class="k">as</span> client:
-    e = <span class="k">await</span> client.<span class="f">lookup</span>(<span class="s">"2310831"</span>)</code></pre>
+    e = <span class="k">await</span> client.<span class="f">lookup</span>(<span class="s">"2310017"</span>)</code></pre>
 
             <h3 id="sdk-cache">永続キャッシュ (L2)</h3>
             <pre><code is:raw><span class="k">from</span> jpzip <span class="k">import</span> Cache <span class="c"># Protocol (sync) — runtime_checkable</span>
@@ -384,7 +384,7 @@ dict_ = <span class="f">lookup_group</span>(<span class="s">"23"</span>)        
             <pre><code is:raw><span class="k">use</span> jpzip::JpzipClient;
 
 <span class="k">let</span> client = JpzipClient::<span class="f">builder</span>().<span class="f">build</span>();
-<span class="k">let</span> e = client.<span class="f">lookup</span>(<span class="s">"2310831"</span>).<span class="f">await</span>?;
+<span class="k">let</span> e = client.<span class="f">lookup</span>(<span class="s">"2310017"</span>).<span class="f">await</span>?;
 <span class="c">// → Some(ZipcodeEntry &#123; prefecture: "神奈川県", city: "横浜市中区", .. &#125;)</span></code></pre>
 
             <p>
@@ -395,12 +395,12 @@ dict_ = <span class="f">lookup_group</span>(<span class="s">"23"</span>)        
             <h3 id="sdk-functional">関数 API (シングルトン)</h3>
             <pre><code is:raw><span class="k">use</span> jpzip::&#123;lookup, lookup_group, lookup_all, preload, get_meta, is_valid_zipcode&#125;;
 
-<span class="k">let</span> e   = jpzip::<span class="f">lookup</span>(<span class="s">"2310831"</span>).<span class="f">await</span>?;
+<span class="k">let</span> e   = jpzip::<span class="f">lookup</span>(<span class="s">"2310017"</span>).<span class="f">await</span>?;
 <span class="k">let</span> dict = jpzip::<span class="f">lookup_group</span>(<span class="s">"23"</span>).<span class="f">await</span>?;     <span class="c">// 1-3 桁</span>
 <span class="k">let</span> all  = jpzip::<span class="f">lookup_all</span>().<span class="f">await</span>?;          <span class="c">// /g/0..9 並列</span>
 jpzip::<span class="f">preload</span>(<span class="s">"all"</span>).<span class="f">await</span>?;
 
-<span class="k">let</span> ok = jpzip::<span class="f">is_valid_zipcode</span>(<span class="s">"2310831"</span>);    <span class="c">// 形式チェック</span></code></pre>
+<span class="k">let</span> ok = jpzip::<span class="f">is_valid_zipcode</span>(<span class="s">"2310017"</span>);    <span class="c">// 形式チェック</span></code></pre>
 
             <h3 id="sdk-client">JpzipClient + Builder</h3>
             <pre><code is:raw><span class="k">use</span> jpzip::JpzipClient;
@@ -438,10 +438,10 @@ client.<span class="f">refresh</span>().<span class="f">await</span>?;</code></p
           <Fragment slot="ruby">
             <pre><code is:raw><span class="k">require</span> <span class="s">"jpzip"</span>
 
-e = Jpzip.<span class="f">lookup</span>(<span class="s">"2310831"</span>)
+e = Jpzip.<span class="f">lookup</span>(<span class="s">"2310017"</span>)
 <span class="k">if</span> e
   <span class="f">puts</span> <span class="s">"#&#123;e.prefecture&#125; #&#123;e.city&#125; #&#123;e.towns[0].town&#125;"</span>
-  <span class="c"># 神奈川県 横浜市中区 矢口台</span>
+  <span class="c"># 神奈川県 横浜市中区 本町</span>
 <span class="k">end</span></code></pre>
 
             <p>
@@ -453,13 +453,13 @@ e = Jpzip.<span class="f">lookup</span>(<span class="s">"2310831"</span>)
             <h3 id="sdk-functional">モジュール関数 (シングルトン)</h3>
             <pre><code is:raw><span class="k">require</span> <span class="s">"jpzip"</span>
 
-e    = Jpzip.<span class="f">lookup</span>(<span class="s">"2310831"</span>)              <span class="c"># ZipcodeEntry | nil</span>
+e    = Jpzip.<span class="f">lookup</span>(<span class="s">"2310017"</span>)              <span class="c"># ZipcodeEntry | nil</span>
 dict = Jpzip.<span class="f">lookup_group</span>(<span class="s">"23"</span>)             <span class="c"># 1-3 桁</span>
 all_ = Jpzip.<span class="f">lookup_all</span>                        <span class="c"># /g/0..9 並列</span>
 Jpzip.<span class="f">preload</span>(<span class="s">"all"</span>)
 meta = Jpzip.<span class="f">meta</span>                              <span class="c"># /meta.json</span>
 
-ok = Jpzip.<span class="f">valid_zipcode?</span>(<span class="s">"2310831"</span>)</code></pre>
+ok = Jpzip.<span class="f">valid_zipcode?</span>(<span class="s">"2310017"</span>)</code></pre>
 
             <h3 id="sdk-client">Jpzip::Client (明示的なインスタンス)</h3>
             <pre><code is:raw><span class="k">require</span> <span class="s">"jpzip"</span>
@@ -494,7 +494,7 @@ client.<span class="f">refresh</span>  <span class="c"># L1/L2 を破棄</span><
           <Fragment slot="java">
             <pre><code is:raw><span class="k">import</span> dev.nadai.jpzip.Jpzip;
 
-<span class="v">var</span> e = Jpzip.<span class="f">lookup</span>(<span class="s">"2310831"</span>);
+<span class="v">var</span> e = Jpzip.<span class="f">lookup</span>(<span class="s">"2310017"</span>);
 e.<span class="f">ifPresent</span>(x -&gt; System.out.<span class="f">println</span>(x.prefecture() + <span class="s">" "</span> + x.city()));
 <span class="c">// 神奈川県 横浜市中区</span></code></pre>
 
@@ -506,13 +506,13 @@ e.<span class="f">ifPresent</span>(x -&gt; System.out.<span class="f">println</s
             <h3 id="sdk-functional">static ヘルパ (シングルトン)</h3>
             <pre><code is:raw><span class="k">import</span> dev.nadai.jpzip.Jpzip;
 
-<span class="v">var</span> e    = Jpzip.<span class="f">lookup</span>(<span class="s">"2310831"</span>);             <span class="c">// Optional&lt;ZipcodeEntry&gt;</span>
+<span class="v">var</span> e    = Jpzip.<span class="f">lookup</span>(<span class="s">"2310017"</span>);             <span class="c">// Optional&lt;ZipcodeEntry&gt;</span>
 <span class="v">var</span> dict = Jpzip.<span class="f">lookupGroup</span>(<span class="s">"23"</span>);            <span class="c">// 1-3 桁</span>
 <span class="v">var</span> all  = Jpzip.<span class="f">lookupAll</span>();
 Jpzip.<span class="f">preload</span>(<span class="s">"all"</span>);
 <span class="v">var</span> meta = Jpzip.<span class="f">getMeta</span>();
 
-<span class="k">boolean</span> ok = Jpzip.<span class="f">isValidZipcode</span>(<span class="s">"2310831"</span>);</code></pre>
+<span class="k">boolean</span> ok = Jpzip.<span class="f">isValidZipcode</span>(<span class="s">"2310017"</span>);</code></pre>
 
             <h3 id="sdk-client">JpzipClient + Options</h3>
             <pre><code is:raw><span class="k">import</span> dev.nadai.jpzip.JpzipClient;
@@ -546,7 +546,7 @@ client.<span class="f">refresh</span>();</code></pre>
           <Fragment slot="php">
             <pre><code is:raw><span class="k">use</span> <span class="k">function</span> Jpzip\lookup;
 
-<span class="v">$e</span> = <span class="f">lookup</span>(<span class="s">"2310831"</span>);
+<span class="v">$e</span> = <span class="f">lookup</span>(<span class="s">"2310017"</span>);
 <span class="k">if</span> (<span class="v">$e</span>) <span class="k">echo</span> <span class="s">"&#123;<span class="v">$e</span>-&gt;prefecture&#125; &#123;<span class="v">$e</span>-&gt;city&#125;"</span>;
 <span class="c">// 神奈川県 横浜市中区</span></code></pre>
 
@@ -558,12 +558,12 @@ client.<span class="f">refresh</span>();</code></pre>
             <h3 id="sdk-functional">名前空間関数 (シングルトン)</h3>
             <pre><code is:raw><span class="k">use</span> <span class="k">function</span> Jpzip\&#123;lookup, lookupGroup, lookupAll, preload, getMeta, isValidZipcode&#125;;
 
-<span class="v">$e</span>    = <span class="f">lookup</span>(<span class="s">"2310831"</span>);          <span class="c">// ?ZipcodeEntry</span>
+<span class="v">$e</span>    = <span class="f">lookup</span>(<span class="s">"2310017"</span>);          <span class="c">// ?ZipcodeEntry</span>
 <span class="v">$dict</span> = <span class="f">lookupGroup</span>(<span class="s">"23"</span>);          <span class="c">// 1-3 桁、2 桁は 10 並列</span>
 <span class="v">$all</span>  = <span class="f">lookupAll</span>();
 <span class="f">preload</span>(<span class="s">"all"</span>);
 
-<span class="v">$ok</span> = <span class="f">isValidZipcode</span>(<span class="s">"2310831"</span>);</code></pre>
+<span class="v">$ok</span> = <span class="f">isValidZipcode</span>(<span class="s">"2310017"</span>);</code></pre>
 
             <h3 id="sdk-client">Jpzip\Client (明示的なインスタンス)</h3>
             <pre><code is:raw><span class="k">use</span> Jpzip\Client;
@@ -599,9 +599,9 @@ client.<span class="f">refresh</span>();</code></pre>
           <Fragment slot="swift">
             <pre><code is:raw><span class="k">import</span> Jpzip
 
-<span class="k">if let</span> e = <span class="k">try await</span> <span class="f">lookup</span>(<span class="s">"2310831"</span>) &#123;
+<span class="k">if let</span> e = <span class="k">try await</span> <span class="f">lookup</span>(<span class="s">"2310017"</span>) &#123;
     <span class="f">print</span>(e.prefecture, e.city, e.towns[<span class="n">0</span>].town)
-    <span class="c">// 神奈川県 横浜市中区 矢口台</span>
+    <span class="c">// 神奈川県 横浜市中区 本町</span>
 &#125;</code></pre>
 
             <p>
@@ -612,13 +612,13 @@ client.<span class="f">refresh</span>();</code></pre>
             <h3 id="sdk-functional">トップレベル関数 (シングルトン)</h3>
             <pre><code is:raw><span class="k">import</span> Jpzip
 
-<span class="k">let</span> e    = <span class="k">try await</span> <span class="f">lookup</span>(<span class="s">"2310831"</span>)        <span class="c">// ZipcodeEntry?</span>
+<span class="k">let</span> e    = <span class="k">try await</span> <span class="f">lookup</span>(<span class="s">"2310017"</span>)        <span class="c">// ZipcodeEntry?</span>
 <span class="k">let</span> dict = <span class="k">try await</span> <span class="f">lookupGroup</span>(<span class="s">"23"</span>)       <span class="c">// 1-3 桁</span>
 <span class="k">let</span> all  = <span class="k">try await</span> <span class="f">lookupAll</span>()
 <span class="k">try await</span> <span class="f">preload</span>(<span class="s">"all"</span>)
 <span class="k">let</span> meta = <span class="k">try await</span> <span class="f">getMeta</span>()
 
-<span class="k">let</span> ok = <span class="f">isValidZipcode</span>(<span class="s">"2310831"</span>)</code></pre>
+<span class="k">let</span> ok = <span class="f">isValidZipcode</span>(<span class="s">"2310017"</span>)</code></pre>
 
             <h3 id="sdk-client">JpzipClient (actor)</h3>
             <pre><code is:raw><span class="k">import</span> Jpzip
@@ -763,7 +763,7 @@ client.<span class="f">refresh</span>();</code></pre>
           (SDK の <code>lookupAll</code> / <code>preload</code> はこれを自動で実行します)。
         </p>
         <pre><code is:raw>curl https://jpzip.nadai.dev/p/231.json \
-  | jq <span class="s">'."2310831"'</span></code></pre>
+  | jq <span class="s">'."2310017"'</span></code></pre>
 
         <h3 id="schema">スキーマ</h3>
         <p>
@@ -779,7 +779,7 @@ client.<span class="f">refresh</span>();</code></pre>
   <span class="s">"city_roma"</span>:       <span class="s">"Yokohama Shi Naka Ku"</span>,
   <span class="s">"city_code"</span>:       <span class="s">"14104"</span>,         <span class="c">// 総務省コード (5桁)</span>
   <span class="s">"towns"</span>: [
-    &#123; <span class="s">"town"</span>: <span class="s">"矢口台"</span>, <span class="s">"kana"</span>: <span class="s">"ヤグチダイ"</span>, <span class="s">"roma"</span>: <span class="s">"Yaguchidai"</span> &#125;
+    &#123; <span class="s">"town"</span>: <span class="s">"本町"</span>, <span class="s">"kana"</span>: <span class="s">"ホンチョウ"</span>, <span class="s">"roma"</span>: <span class="s">"Honcho"</span> &#125;
   ]
 &#125;</code></pre>
         <p>

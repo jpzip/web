@@ -38,7 +38,7 @@ export type LookupResult =
   | { ok: false; zip: string; error: 'format' | 'not_found' | 'offline' };
 
 const FALLBACK: Record<string, ZipcodeEntry> = {
-  '2310831': {
+  '2310017': {
     prefecture: '神奈川県',
     prefecture_kana: 'カナガワケン',
     prefecture_roma: 'Kanagawa',
@@ -47,7 +47,7 @@ const FALLBACK: Record<string, ZipcodeEntry> = {
     city_kana: 'ヨコハマシナカク',
     city_roma: 'Yokohama Shi Naka Ku',
     city_code: '14104',
-    towns: [{ town: '矢口台', kana: 'ヤグチダイ', roma: 'Yaguchidai' }],
+    towns: [{ town: '本町', kana: 'ホンチョウ', roma: 'Honcho' }],
   },
   '1000001': {
     prefecture: '東京都',
@@ -159,7 +159,7 @@ export async function getMeta(): Promise<Meta | null> {
 }
 
 export const examples: { zip: string; label: string }[] = [
-  { zip: '2310831', label: '横浜・矢口台' },
+  { zip: '2310017', label: '横浜・本町' },
   { zip: '1500001', label: '渋谷・神宮前' },
   { zip: '6038113', label: '京都・紫竹' },
   { zip: '5300001', label: '大阪・梅田' },

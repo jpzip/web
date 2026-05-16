@@ -49,7 +49,7 @@ function onKeydown(e: KeyboardEvent) {
 }
 
 onMounted(() => {
-  setTimeout(() => query('2310831'), 200);
+  setTimeout(() => query('2310017'), 200);
 });
 </script>
 
@@ -64,7 +64,7 @@ onMounted(() => {
             class="pg-input"
             inputmode="numeric"
             maxlength="7"
-            placeholder="2310831"
+            placeholder="2310017"
             autocomplete="off"
             :value="zip"
             @input="onInput"
