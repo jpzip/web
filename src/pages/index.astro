@@ -143,7 +143,7 @@ const mcpServerLd = {
   name: '@jpzip/mcp-server-jpzip',
   alternateName: 'jpzip MCP server',
   description:
-    'Claude / 任意の Model Context Protocol クライアントから日本の郵便番号を引ける stdio サーバー。lookup_zipcode / search_by_address / list_cities_in_prefecture / get_metadata の 4 tool を提供。',
+    'Claude / 任意の Model Context Protocol クライアントから日本の郵便番号を検索できる stdio サーバー。lookup_zipcode / search_by_address / list_cities_in_prefecture / get_metadata の 4 tool を提供。',
   applicationCategory: 'DeveloperApplication',
   applicationSubCategory: 'MCP server',
   operatingSystem: 'Cross-platform (Node.js 18+)',
@@ -255,7 +255,7 @@ const features = [
     <div class="wrap">
       <div class="section-eyebrow"><span class="dot"></span>Playground</div>
       <h2 class="section-title">
-        7 桁、入れてみる。<br />本物の CDN が、<span class="grad">返事を返す。</span>
+        7 桁を入力すると、<br />本物の CDN から<span class="grad">レスポンスが返ります。</span>
       </h2>
       <p class="section-desc">
         下のフォームはブラウザから直接 jpzip.nadai.dev を叩いています。CORS が通れば本物のデータ、通らなければデモ用フォールバックが返ります。
@@ -269,7 +269,7 @@ const features = [
     <div class="wrap">
       <div class="section-eyebrow"><span class="dot"></span>SDK</div>
       <h2 class="section-title">
-        3 行で読める SDK。<br />同じシグネチャ、<span class="grad">どの言語でも。</span>
+        3 行で書ける SDK。<br /><span class="grad">どの言語でも同じシグネチャ。</span>
       </h2>
       <p class="section-desc">
         プロトコル仕様を固定してあるから、SDK の中身は数十行。各言語で同じシグネチャを揃えています。
@@ -283,7 +283,7 @@ const features = [
     <div class="wrap">
       <div class="section-eyebrow"><span class="dot"></span>Why jpzip</div>
       <h2 class="section-title">
-        構造的に、無料。<br /><span class="grad">壊れにくい設計。</span>
+        仕組みとして無料。<br /><span class="grad">壊れにくい設計。</span>
       </h2>
       <p class="section-desc">Worker・R2・KV を一切使わない設計。アクセスが何億あっても課金軸が存在しません。</p>
 
@@ -311,7 +311,7 @@ const features = [
   <section class="section" style="padding-top: 0;">
     <div class="wrap">
       <div class="cta-box">
-        <h2>3 行で、<span class="grad">郵便番号が引ける。</span></h2>
+        <h2>3 行で、<span class="grad">郵便番号を検索できる。</span></h2>
         <p>
           登録不要、API キー不要、課金リスクなし。今すぐ npm でインストールして、ブラウザでもサーバでも動かしてみてください。
         </p>

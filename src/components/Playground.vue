@@ -71,7 +71,7 @@ onMounted(() => {
             @keydown="onKeydown"
           />
         </div>
-        <button class="pg-go" @click="query()">引く →</button>
+        <button class="pg-go" @click="query()">検索 →</button>
       </div>
 
       <div class="pg-label">EXAMPLES</div>
@@ -111,7 +111,7 @@ onMounted(() => {
           <div class="pg-empty">
             <div>
               <div class="icon">〠</div>
-              <div>左に郵便番号を入れて<br />「引く」を押してみよう</div>
+              <div>左に郵便番号を入れて<br />「検索」を押してみよう</div>
             </div>
           </div>
         </template>
