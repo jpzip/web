@@ -153,11 +153,11 @@ entry = lookup("2310017")
 本記事は **シリーズの 1 本目（ハブ記事）** です。残り 3 本でそれぞれの中身を掘ります。
 
 1. **本記事**: Cloudflare Pages 無料枠だけで micro-SaaS データセットを作った話
-2. [KEN_ALL.csv を Cloudflare Pages から 120,677 件配信する設計](https://jpzip.nadai.dev/blog/cloudflare-pages-static-zipcode-delivery/)
+2. [KEN_ALL.csv を Cloudflare Pages から 120,677 件配信する設計](https://jpzip.nadai.dev/blog/0002-cloudflare-pages-static-zipcode-delivery/)
    - 静的ファイルの分割戦略、ファイル数を 1,010 に抑えた理由、ETL の作り
-3. [MCP サーバーを書いて Claude が郵便番号を扱えるようにした](https://jpzip.nadai.dev/blog/mcp-server-japanese-postcode/)
+3. [MCP サーバーを書いて Claude が郵便番号を扱えるようにした](https://jpzip.nadai.dev/blog/0003-mcp-server-japanese-postcode/)
    - `lookup_zipcode` / `search_by_address` の設計、Claude Desktop への導入
-4. [Claude Code 1 人開発で 6 時間で 8 言語 SDK を実装した話](https://jpzip.nadai.dev/blog/claude-code-8-sdks-6-hours/)
+4. [Claude Code 1 人開発で 6 時間で 8 言語 SDK を実装した話](https://jpzip.nadai.dev/blog/0004-claude-code-8-sdks-6-hours/)
    - プロトコル先行の設計、Claude への投げ方、各言語固有のハマりどころ
 
 ## 使ってみてください

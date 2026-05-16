@@ -149,9 +149,9 @@ The moment I started doing that, SDKs stopped being something I *wrote* and beca
 This post is **part 1 of 4 — the hub.** Each of the next three drills into one slice:
 
 1. **This post** — building a micro-SaaS dataset on Cloudflare Pages' free tier
-2. [Serving 120,677 records from Cloudflare Pages](https://jpzip.nadai.dev/en/blog/cloudflare-pages-static-zipcode-delivery/) — file-splitting strategy, why 1,010 files, and the ETL design
-3. [Writing an MCP server so Claude can look up Japanese postcodes](https://jpzip.nadai.dev/en/blog/mcp-server-japanese-postcode/) — `lookup_zipcode` / `search_by_address` design
-4. [How Claude Code shipped 8 SDKs in 6 hours](https://jpzip.nadai.dev/en/blog/claude-code-8-sdks-6-hours/) — spec-first design, prompt structure, and language-specific gotchas
+2. [Serving 120,677 records from Cloudflare Pages](https://jpzip.nadai.dev/en/blog/0002-cloudflare-pages-static-zipcode-delivery/) — file-splitting strategy, why 1,010 files, and the ETL design
+3. [Writing an MCP server so Claude can look up Japanese postcodes](https://jpzip.nadai.dev/en/blog/0003-mcp-server-japanese-postcode/) — `lookup_zipcode` / `search_by_address` design
+4. [How Claude Code shipped 8 SDKs in 6 hours](https://jpzip.nadai.dev/en/blog/0004-claude-code-8-sdks-6-hours/) — spec-first design, prompt structure, and language-specific gotchas
 
 ## Try it
 

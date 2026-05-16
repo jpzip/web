@@ -12,7 +12,7 @@ series:
 status: published
 ---
 
-> The data-delivery side of [jpzip](https://jpzip.nadai.dev/), my $0-lifetime hobby project. This is part 2 of a 4-part series. Part 1 covers the overall architecture: [I built a postcode-data micro-SaaS on Cloudflare Pages' free tier](https://jpzip.nadai.dev/en/blog/cloudflare-pages-micro-saas/).
+> The data-delivery side of [jpzip](https://jpzip.nadai.dev/), my $0-lifetime hobby project. This is part 2 of a 4-part series. Part 1 covers the overall architecture: [I built a postcode-data micro-SaaS on Cloudflare Pages' free tier](https://jpzip.nadai.dev/en/blog/0001-cloudflare-pages-micro-saas/).
 
 - Site: <https://jpzip.nadai.dev>
 - ETL: <https://github.com/jpzip/data>
@@ -244,10 +244,10 @@ Pinning the protocol layer in prose (the spec doc) is also what made the next po
 
 ## The 4-part series
 
-1. [I built a postcode-data micro-SaaS on Cloudflare Pages' free tier](https://jpzip.nadai.dev/en/blog/cloudflare-pages-micro-saas/) (series hub)
+1. [I built a postcode-data micro-SaaS on Cloudflare Pages' free tier](https://jpzip.nadai.dev/en/blog/0001-cloudflare-pages-micro-saas/) (series hub)
 2. **This post** — Serving 120,677 records from Cloudflare Pages
-3. [Writing an MCP server so Claude can look up postcodes](https://jpzip.nadai.dev/en/blog/mcp-server-japanese-postcode/)
-4. [Building 8 SDKs in 6 hours with Claude Code](https://jpzip.nadai.dev/en/blog/claude-code-8-sdks-6-hours/)
+3. [Writing an MCP server so Claude can look up postcodes](https://jpzip.nadai.dev/en/blog/0003-mcp-server-japanese-postcode/)
+4. [Building 8 SDKs in 6 hours with Claude Code](https://jpzip.nadai.dev/en/blog/0004-claude-code-8-sdks-6-hours/)
 
 ## Try it
 

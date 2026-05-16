@@ -12,7 +12,7 @@ series:
 status: published
 ---
 
-> 個人プロジェクト [jpzip](https://jpzip.nadai.dev/) のデータ配信側の話です。シリーズ 2 本目。1 本目は [Cloudflare Pages の無料枠だけで micro-SaaS データセットを作った話](https://jpzip.nadai.dev/blog/cloudflare-pages-micro-saas/) をどうぞ。
+> 個人プロジェクト [jpzip](https://jpzip.nadai.dev/) のデータ配信側の話です。シリーズ 2 本目。1 本目は [Cloudflare Pages の無料枠だけで micro-SaaS データセットを作った話](https://jpzip.nadai.dev/blog/0001-cloudflare-pages-micro-saas/) をどうぞ。
 
 - 配信元: <https://jpzip.nadai.dev>
 - ETL リポジトリ: <https://github.com/jpzip/data>
@@ -245,10 +245,10 @@ R2 を使う案だと、「悪意のあるユーザーに egress を消費され
 
 ## このシリーズで書く 4 本
 
-1. [Cloudflare Pages の無料枠だけで micro-SaaS データセットを作った話](https://jpzip.nadai.dev/blog/cloudflare-pages-micro-saas/) （シリーズ全体のハブ）
+1. [Cloudflare Pages の無料枠だけで micro-SaaS データセットを作った話](https://jpzip.nadai.dev/blog/0001-cloudflare-pages-micro-saas/) （シリーズ全体のハブ）
 2. **本記事**: KEN_ALL.csv を Cloudflare Pages から 120,677 件配信する設計
-3. [MCP サーバーを書いて Claude が郵便番号を扱えるようにした](https://jpzip.nadai.dev/blog/mcp-server-japanese-postcode/)
-4. [Claude Code 1 人開発で 6 時間で 8 言語 SDK を実装した話](https://jpzip.nadai.dev/blog/claude-code-8-sdks-6-hours/)
+3. [MCP サーバーを書いて Claude が郵便番号を扱えるようにした](https://jpzip.nadai.dev/blog/0003-mcp-server-japanese-postcode/)
+4. [Claude Code 1 人開発で 6 時間で 8 言語 SDK を実装した話](https://jpzip.nadai.dev/blog/0004-claude-code-8-sdks-6-hours/)
 
 ## 使ってみてください
 

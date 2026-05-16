@@ -34,7 +34,7 @@ howTo:
       url: https://github.com/jpzip/mcp
 ---
 
-> Part 3 of the [jpzip](https://jpzip.nadai.dev/) series. After this, Claude (or any MCP client) can answer "what's at 2310017?" and "what's the postcode for Yokohama-shi Naka-ku Honcho?" without leaving the chat. Part 1: [the Cloudflare Pages free-tier story](https://jpzip.nadai.dev/en/blog/cloudflare-pages-micro-saas/). Part 2: [serving 120,677 records](https://jpzip.nadai.dev/en/blog/cloudflare-pages-static-zipcode-delivery/).
+> Part 3 of the [jpzip](https://jpzip.nadai.dev/) series. After this, Claude (or any MCP client) can answer "what's at 2310017?" and "what's the postcode for Yokohama-shi Naka-ku Honcho?" without leaving the chat. Part 1: [the Cloudflare Pages free-tier story](https://jpzip.nadai.dev/en/blog/0001-cloudflare-pages-micro-saas/). Part 2: [serving 120,677 records](https://jpzip.nadai.dev/en/blog/0002-cloudflare-pages-static-zipcode-delivery/).
 
 - npm: `@jpzip/mcp-server-jpzip`
 - GitHub: <https://github.com/jpzip/mcp>
@@ -245,10 +245,10 @@ The separation paid off — the MCP server ended up being the **thinnest adapter
 
 ## The 4-part series
 
-1. [I built a postcode-data micro-SaaS on Cloudflare Pages' free tier](https://jpzip.nadai.dev/en/blog/cloudflare-pages-micro-saas/)
-2. [Serving 120,677 records from Cloudflare Pages](https://jpzip.nadai.dev/en/blog/cloudflare-pages-static-zipcode-delivery/)
+1. [I built a postcode-data micro-SaaS on Cloudflare Pages' free tier](https://jpzip.nadai.dev/en/blog/0001-cloudflare-pages-micro-saas/)
+2. [Serving 120,677 records from Cloudflare Pages](https://jpzip.nadai.dev/en/blog/0002-cloudflare-pages-static-zipcode-delivery/)
 3. **This post** — Writing an MCP server so Claude can look up postcodes
-4. [How Claude Code shipped 8 SDKs in 6 hours](https://jpzip.nadai.dev/en/blog/claude-code-8-sdks-6-hours/)
+4. [How Claude Code shipped 8 SDKs in 6 hours](https://jpzip.nadai.dev/en/blog/0004-claude-code-8-sdks-6-hours/)
 
 ## Try it
 

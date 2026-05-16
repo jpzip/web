@@ -34,7 +34,7 @@ howTo:
       url: https://github.com/jpzip/mcp
 ---
 
-> シリーズ 3 本目。Claude / 任意の MCP クライアントから「2310017 ってどこ？」「横浜市中区本町の郵便番号は？」と直接聞けるようにした話です。1 本目: [Cloudflare Pages 無料枠だけで micro-SaaS](https://jpzip.nadai.dev/blog/cloudflare-pages-micro-saas/)、2 本目: [120,677 件配信の設計](https://jpzip.nadai.dev/blog/cloudflare-pages-static-zipcode-delivery/)。
+> シリーズ 3 本目。Claude / 任意の MCP クライアントから「2310017 ってどこ？」「横浜市中区本町の郵便番号は？」と直接聞けるようにした話です。1 本目: [Cloudflare Pages 無料枠だけで micro-SaaS](https://jpzip.nadai.dev/blog/0001-cloudflare-pages-micro-saas/)、2 本目: [120,677 件配信の設計](https://jpzip.nadai.dev/blog/0002-cloudflare-pages-static-zipcode-delivery/)。
 
 - npm: `@jpzip/mcp-server-jpzip`
 - GitHub: <https://github.com/jpzip/mcp>
@@ -253,10 +253,10 @@ Claude が tool を **どう選ぶか / どう呼ぶか / どう要約するか*
 
 ## このシリーズで書く 4 本
 
-1. [Cloudflare Pages 無料枠だけで micro-SaaS データセットを作った話](https://jpzip.nadai.dev/blog/cloudflare-pages-micro-saas/)
-2. [KEN_ALL.csv を Cloudflare Pages から 120,677 件配信する設計](https://jpzip.nadai.dev/blog/cloudflare-pages-static-zipcode-delivery/)
+1. [Cloudflare Pages 無料枠だけで micro-SaaS データセットを作った話](https://jpzip.nadai.dev/blog/0001-cloudflare-pages-micro-saas/)
+2. [KEN_ALL.csv を Cloudflare Pages から 120,677 件配信する設計](https://jpzip.nadai.dev/blog/0002-cloudflare-pages-static-zipcode-delivery/)
 3. **本記事**: MCP サーバーを書いて Claude が郵便番号を扱えるようにした
-4. [Claude Code 1 人開発で 6 時間で 8 言語 SDK を実装した話](https://jpzip.nadai.dev/blog/claude-code-8-sdks-6-hours/)
+4. [Claude Code 1 人開発で 6 時間で 8 言語 SDK を実装した話](https://jpzip.nadai.dev/blog/0004-claude-code-8-sdks-6-hours/)
 
 ## 使ってみてください
 

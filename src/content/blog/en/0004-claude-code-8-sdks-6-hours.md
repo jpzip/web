@@ -12,7 +12,7 @@ series:
 status: published
 ---
 
-> Final post in the [jpzip](https://jpzip.nadai.dev/) series. I built SDKs in **Go, TypeScript, Python, Rust, Ruby, Dart, PHP, and Swift** in 6 hours of focused work with Claude Code. Read [part 1](https://jpzip.nadai.dev/en/blog/cloudflare-pages-micro-saas/), [part 2](https://jpzip.nadai.dev/en/blog/cloudflare-pages-static-zipcode-delivery/), and [part 3](https://jpzip.nadai.dev/en/blog/mcp-server-japanese-postcode/) first if you want the surrounding context.
+> Final post in the [jpzip](https://jpzip.nadai.dev/) series. I built SDKs in **Go, TypeScript, Python, Rust, Ruby, Dart, PHP, and Swift** in 6 hours of focused work with Claude Code. Read [part 1](https://jpzip.nadai.dev/en/blog/0001-cloudflare-pages-micro-saas/), [part 2](https://jpzip.nadai.dev/en/blog/0002-cloudflare-pages-static-zipcode-delivery/), and [part 3](https://jpzip.nadai.dev/en/blog/0003-mcp-server-japanese-postcode/) first if you want the surrounding context.
 
 ## TL;DR
 
@@ -26,7 +26,7 @@ status: published
 
 To be honest about the headline: the 6 hours covers **from the moment I started writing the Go SDK to the initial publish of all 8 SDKs**. A lot was already in place before that timer started:
 
-- The dataset (120,677 records of JSON) was already on the CDN ([part 2](https://jpzip.nadai.dev/en/blog/cloudflare-pages-static-zipcode-delivery/)).
+- The dataset (120,677 records of JSON) was already on the CDN ([part 2](https://jpzip.nadai.dev/en/blog/0002-cloudflare-pages-static-zipcode-delivery/)).
 - The protocol spec (`spec/v1/protocol.md`) was already pinned, with JSON Schema.
 
 So the honest framing is: **with the spec and the CDN in place, I wrote the Go SDK as the reference, then rolled out the remaining 7 languages — all within 6 hours, end to end.** That's not "AI made it possible." That's "I lined up everything AI-driven dev needs *before* starting, and the 6 hours was the payoff."
@@ -180,9 +180,9 @@ A few shifts in how I think about projects now:
 
 ## The series
 
-1. [I built a postcode-data micro-SaaS on Cloudflare Pages' free tier](https://jpzip.nadai.dev/en/blog/cloudflare-pages-micro-saas/)
-2. [Serving 120,677 records from Cloudflare Pages](https://jpzip.nadai.dev/en/blog/cloudflare-pages-static-zipcode-delivery/)
-3. [Writing an MCP server so Claude can look up postcodes](https://jpzip.nadai.dev/en/blog/mcp-server-japanese-postcode/)
+1. [I built a postcode-data micro-SaaS on Cloudflare Pages' free tier](https://jpzip.nadai.dev/en/blog/0001-cloudflare-pages-micro-saas/)
+2. [Serving 120,677 records from Cloudflare Pages](https://jpzip.nadai.dev/en/blog/0002-cloudflare-pages-static-zipcode-delivery/)
+3. [Writing an MCP server so Claude can look up postcodes](https://jpzip.nadai.dev/en/blog/0003-mcp-server-japanese-postcode/)
 4. **This post** — How Claude Code shipped 8 SDKs in 6 hours
 
 The throughline across all four: a single-developer scope has gotten meaningfully bigger when paired with an AI assistant — *if* the underlying architecture (layered data / protocol / client separation) plays well with that workflow. Designing for AI-driven development is its own design constraint, and worth taking seriously.
