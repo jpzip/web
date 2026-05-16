@@ -1006,11 +1006,37 @@ footer.site {
 }
 
 /* ============ docs ============ */
+.hero.docs-hero {
+  padding: 80px 0 64px;
+}
+.hero.docs-hero h1.hero-title {
+  font-size: 72px;
+  letter-spacing: -2px;
+  max-width: 820px;
+}
+.hero-sub .hero-code {
+  font: 600 15px/1 'JetBrains Mono', monospace;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: 4px 9px;
+  border-radius: 6px;
+  color: var(--violet);
+  white-space: nowrap;
+  margin: 0 2px;
+}
+.docs-section {
+  position: relative;
+  padding: 0 0 24px;
+}
+.docs-cta-section {
+  padding-top: 0;
+  padding-bottom: 100px;
+}
 .docs-layout {
   display: grid;
   grid-template-columns: 220px minmax(0, 1fr);
   gap: 56px;
-  padding: 56px 0 96px;
+  padding: 24px 0 56px;
   align-items: start;
 }
 .docs-toc {
@@ -1257,9 +1283,13 @@ footer.site {
   .docs-layout {
     grid-template-columns: 1fr;
   }
-  h1.hero-title {
+  h1.hero-title,
+  .hero.docs-hero h1.hero-title {
     font-size: 60px;
     letter-spacing: -1.5px;
+  }
+  .hero.docs-hero {
+    padding: 56px 0 40px;
   }
   .section-title {
     font-size: 38px;

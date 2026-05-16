@@ -80,43 +80,62 @@ const breadcrumbLd = {
     <script type="application/ld+json" set:html={JSON.stringify(techArticleLd)} />
     <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
   </Fragment>
-  <div class="wrap">
-    <div class="docs-layout">
-      <aside class="docs-toc">
-        <h5>Contents</h5>
-        <ul>
-          {
-            sections.map((s) => (
-              <li>
-                <a href={`#${s.id}`}>{s.label}</a>
-                {s.sub && (
-                  <ul>
-                    {s.sub.map((sub) => (
-                      <li>
-                        <a href={`#${sub.id}`}>{sub.label}</a>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
-            ))
-          }
-        </ul>
-      </aside>
 
-      <article class="docs-body">
-        <header style="margin-bottom: 32px;">
-          <div class="section-eyebrow"><span class="dot"></span>Docs · spec v1.0</div>
-          <h1 class="section-title" style="font-size: 56px; margin: 0 0 14px;">
-            SDK で郵便番号を引く
-          </h1>
-          <p style="font-size: 17px; color: var(--ink-soft); margin: 0; line-height: 1.8;">
-            登録不要、API キー不要。<code>npm i jpzip</code> または <code>go get</code>
-            して、3 行で郵便番号データが取り出せます。
-          </p>
-        </header>
+  <!-- HERO -->
+  <section class="hero docs-hero">
+    <div class="hero-bg">
+      <div class="blob b1"></div>
+      <div class="blob b2"></div>
+      <div class="blob b3"></div>
+      <div class="blob b4"></div>
+    </div>
+    <div class="wrap">
+      <div class="hero-inner">
+        <div class="eyebrow"><span class="pulse"></span>Docs · spec v1.0 · 15+ 言語対応</div>
+        <h1 class="hero-title">
+          SDK で郵便番号を、<br />
+          <span class="grad">3 行で引く。</span>
+        </h1>
+        <p class="hero-sub">
+          登録不要、API キー不要。<code class="hero-code">npm i jpzip</code> または <code class="hero-code">go get</code
+          > して、関数 1 つで郵便番号データが取り出せます。
+        </p>
+        <div class="hero-cta-row">
+          <a class="btn-primary" href="#quickstart">クイックスタート →</a>
+          <a class="btn-ghost" href="https://github.com/jpzip/spec" target="_blank" rel="noopener">↗ Spec on GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <div class="docs-callout">
+  <!-- DOCS -->
+  <section class="docs-section">
+    <div class="wrap">
+      <div class="docs-layout">
+        <aside class="docs-toc">
+          <h5>Contents</h5>
+          <ul>
+            {
+              sections.map((s) => (
+                <li>
+                  <a href={`#${s.id}`}>{s.label}</a>
+                  {s.sub && (
+                    <ul>
+                      {s.sub.map((sub) => (
+                        <li>
+                          <a href={`#${sub.id}`}>{sub.label}</a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))
+            }
+          </ul>
+        </aside>
+
+        <article class="docs-body">
+          <div class="docs-callout">
           <strong>サポート言語 ·</strong> 全 15 言語で SDK を提供しています。深いドキュメントは TypeScript / Go / Python /
           Rust / Ruby / Java / PHP / Swift の 8 言語、残り 7 言語 (Kotlin / C# / Dart / Elixir / Scala / C / C++ / Perl /
           R) は <a href="#other-sdks">「その他の SDK」</a> セクションを参照。全 SDK の API シグネチャは <a
@@ -858,4 +877,21 @@ client.<span class="f">refresh</span>();</code></pre>
       </article>
     </div>
   </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section docs-cta-section">
+    <div class="wrap">
+      <div class="cta-box">
+        <h2>仕様は固定、<span class="grad">中身は薄い。</span></h2>
+        <p>
+          spec v1.0 はもう固定済み。プロトコルが薄いから、SDK の中身は数十行。各言語で同じシグネチャ、同じキャッシュ戦略を揃えています。
+        </p>
+        <div class="cta-actions">
+          <a class="btn-primary" href="/#playground">Playground を試す →</a>
+          <a class="btn-ghost" href="https://github.com/jpzip" target="_blank" rel="noopener">GitHub で見る ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
 </Base>
