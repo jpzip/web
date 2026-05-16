@@ -278,6 +278,61 @@ Swift 5.9+、iOS 15+ / macOS 12+。`actor` ベースで Sendable 安全、依存
 | Perl | `jpzip/perl` | `cpanm Jpzip` (HTTP::Tiny + Moo) |
 | R | `jpzip/r` | `remotes::install_github("jpzip/r")` (httr2 + R6) |
 
+## MCP server (Model Context Protocol)
+
+Claude / 任意の MCP クライアントから日本の郵便番号を引ける stdio サーバー `@jpzip/mcp-server-jpzip` を提供しています。背後は同じ `jpzip.nadai.dev` の静的データなので、SDK と完全に同じデータが得られます。
+
+- npm: [`@jpzip/mcp-server-jpzip`](https://www.npmjs.com/package/@jpzip/mcp-server-jpzip)
+- repo: <https://github.com/jpzip/mcp>
+- ライセンス: MIT
+- ランタイム: Node.js 18+
+- トランスポート: stdio (stateless)
+
+### インストール
+
+Claude Code:
+
+```sh
+claude mcp add jpzip -- npx -y @jpzip/mcp-server-jpzip
+```
+
+Claude Desktop など `mcp.json` を直接編集する場合:
+
+```json
+{
+  "mcpServers": {
+    "jpzip": {
+      "command": "npx",
+      "args": ["-y", "@jpzip/mcp-server-jpzip"]
+    }
+  }
+}
+```
+
+### 提供 tool
+
+| Tool | 引数 | 用途 |
+|---|---|---|
+| `lookup_zipcode` | `zipcode: string` (7 桁、ハイフン許容) | 郵便番号 → 住所 (漢字 / カナ / ローマ字 + JIS / 総務省コード) |
+| `search_by_address` | `query: string`, `limit?: int` (default 20, max 200) | 住所文字列 → 郵便番号候補 (漢字 / カナ / ローマ字横断、空白無視の部分一致) |
+| `list_cities_in_prefecture` | `prefecture: string` (漢字 / カナ / ローマ字いずれも可) | 都道府県 → 市区町村一覧 (総務省コード付き) |
+| `get_metadata` | — | データ version・件数・生成時刻 (`/meta.json` の内容) |
+
+全 tool は JSON 文字列 (`content[0].text`) を返します。`lookup_zipcode` で該当なし、または `list_cities_in_prefecture` で該当都道府県なしの場合は `{ "error": "..." }` を返します (`isError: true` ではなく通常応答内の error フィールドとして表現)。
+
+### 動作モデル
+
+- `lookup_zipcode` は対応する 3 桁 prefix (~10 KB) のみを CDN から取得し、SDK の L1 LRU にキャッシュ。
+- `search_by_address` / `list_cities_in_prefecture` は初回呼び出し時に全件 (~25 MB、`/g/0..9.json` 並列 fetch) を取得しメモリ保持。同一 MCP プロセス内の以降の呼び出しは即時。
+- 永続キャッシュ (L2) は持たない。Claude プロセスの再起動でメモリは破棄され、次回必要になった時点で再取得。
+- 内部実装は同梱の `@jpzip/jpzip` SDK を直接利用しているため、5xx 指数バックオフリトライ・spec_version mismatch 検知などは SDK と同等。
+
+### 既知の制約
+
+- 駅・路線・事業所個別番号は jpzip データセットに含まれない (郵便番号 ⇄ 住所の対応のみ)。
+- `search_by_address` の検索は 1 言語 (漢字 / カナ / ローマ字) 内での連続部分一致のみ。例えば `Yokohama Honcho` のように中区を飛ばした混在クエリにはマッチしない。
+- stdio 専用 (HTTP / SSE トランスポートは未提供)。
+
 ## Edge / Serverless 環境での注意
 
 - Cloudflare Workers / Vercel Edge: ファイル L2 は使えない。`caches.default` や Workers KV をラップした `PersistentCache` を渡す。
@@ -305,5 +360,7 @@ Swift 5.9+、iOS 15+ / macOS 12+。`actor` ベースで Sendable 安全、依存
 - Docs (人向け): <https://jpzip.nadai.dev/docs>
 - GitHub Org: <https://github.com/jpzip>
 - Spec repo: <https://github.com/jpzip/spec>
+- MCP server repo: <https://github.com/jpzip/mcp>
+- MCP server (npm): <https://www.npmjs.com/package/@jpzip/mcp-server-jpzip>
 - 日本郵便 (元データ): <https://www.post.japanpost.jp/service/search/zipcode/download/>
 - RSS (データリリース): <https://jpzip.nadai.dev/feed.xml>

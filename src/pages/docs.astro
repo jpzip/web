@@ -26,6 +26,15 @@ const sections = [
   },
   { id: 'caching', label: 'キャッシュ戦略' },
   {
+    id: 'mcp',
+    label: 'MCP server',
+    sub: [
+      { id: 'mcp-install', label: 'インストール' },
+      { id: 'mcp-tools', label: '提供 Tool' },
+      { id: 'mcp-model', label: '動作モデル' },
+    ],
+  },
+  {
     id: 'protocol',
     label: 'プロトコル仕様',
     sub: [
@@ -45,7 +54,7 @@ const techArticleLd = {
   '@type': 'TechArticle',
   headline: 'jpzip SDK の使い方とプロトコル仕様 v1.0',
   description:
-    'jpzip データセットの SDK (TypeScript / Go / Python / Rust / Ruby / Dart / PHP / Swift) の使い方と HTTP プロトコル仕様 v1.0。',
+    'jpzip データセットの SDK (TypeScript / Go / Python / Rust / Ruby / Dart / PHP / Swift) と MCP server (@jpzip/mcp-server-jpzip) の使い方、HTTP プロトコル仕様 v1.0。',
   inLanguage: 'ja',
   url: `${siteUrl}/docs`,
   proficiencyLevel: 'Beginner',
@@ -70,8 +79,8 @@ const breadcrumbLd = {
 ---
 
 <Base
-  title="jpzip Docs — SDK の使い方とプロトコル仕様 v1.0"
-  description="jpzip データセットの SDK 使用例 (TypeScript / Go / Python / Rust / Ruby / Dart / PHP / Swift) と HTTP プロトコル仕様 v1.0。"
+  title="jpzip Docs — SDK / MCP server とプロトコル仕様 v1.0"
+  description="jpzip データセットの SDK 使用例 (TypeScript / Go / Python / Rust / Ruby / Dart / PHP / Swift)、MCP server (@jpzip/mcp-server-jpzip)、HTTP プロトコル仕様 v1.0。"
   ogType="article"
   active="docs"
 >
@@ -726,6 +735,80 @@ client.<span class="f">close</span>();                       <span class="c">// 
         <p>
           月次のデータ更新は <code>/meta.json</code> の <code>version</code> 変化で検知し、SDK は L1 と L2 を自動で
           invalidate します。明示的に再取得したい場合は <code>refresh()</code> を呼んでください。
+        </p>
+
+        <h2 id="mcp">MCP server</h2>
+        <p>
+          Claude / 任意の Model Context Protocol クライアントから日本の郵便番号を引ける stdio サーバー <code
+            >@jpzip/mcp-server-jpzip</code
+          > を別パッケージとして提供しています。背後は同じ <code>jpzip.nadai.dev</code> の静的データなので、SDK と同一の結果が返ります。
+          stateless で、Claude プロセスのメモリにのみキャッシュを持ちます (永続キャッシュなし)。
+        </p>
+
+        <h3 id="mcp-install">インストール</h3>
+        <p>Claude Code:</p>
+        <pre><code is:raw>claude mcp add jpzip -- npx -y @jpzip/mcp-server-jpzip</code></pre>
+        <p>Claude Desktop など <code>mcp.json</code> を直接編集する場合:</p>
+        <pre><code is:raw>&#123;
+  <span class="s">"mcpServers"</span>: &#123;
+    <span class="s">"jpzip"</span>: &#123;
+      <span class="s">"command"</span>: <span class="s">"npx"</span>,
+      <span class="s">"args"</span>: [<span class="s">"-y"</span>, <span class="s">"@jpzip/mcp-server-jpzip"</span>]
+    &#125;
+  &#125;
+&#125;</code></pre>
+
+        <h3 id="mcp-tools">提供 Tool</h3>
+        <table>
+          <thead>
+            <tr><th>Tool</th><th>引数</th><th>用途</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>lookup_zipcode</code></td>
+              <td><code>zipcode: string</code> (7 桁、ハイフン許容)</td>
+              <td>郵便番号 → 住所 (漢字 / カナ / ローマ字 + JIS / 総務省コード)</td>
+            </tr>
+            <tr>
+              <td><code>search_by_address</code></td>
+              <td><code>query: string</code>, <code>limit?: int</code> (1–200、既定 20)</td>
+              <td>住所文字列 → 郵便番号候補 (漢字 / カナ / ローマ字横断、空白無視の部分一致)</td>
+            </tr>
+            <tr>
+              <td><code>list_cities_in_prefecture</code></td>
+              <td><code>prefecture: string</code></td>
+              <td>都道府県 → 市区町村一覧 (総務省コード付き)</td>
+            </tr>
+            <tr>
+              <td><code>get_metadata</code></td>
+              <td>—</td>
+              <td>データ version・件数・生成時刻</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 id="mcp-model">動作モデル</h3>
+        <ul>
+          <li>
+            <code>lookup_zipcode</code> は対応する 3 桁 prefix (~10 KB) のみを CDN から取得し、SDK の L1 LRU にキャッシュします。
+          </li>
+          <li>
+            <code>search_by_address</code> / <code>list_cities_in_prefecture</code> は初回呼び出し時に全件 (~25 MB) を CDN から取得しメモリ保持。
+            同一 MCP プロセス内の以降の呼び出しは即時です。
+          </li>
+          <li>
+            永続キャッシュは持ちません (stateless)。Claude の再起動でメモリは破棄され、次回必要になった時点で再取得します。
+          </li>
+          <li>
+            駅・路線・事業所情報は jpzip データセットに含まれません (郵便番号 ⇄ 住所のみ)。
+            検索は 1 言語 (漢字 / カナ / ローマ字) 内の連続部分一致のみ対応します。
+          </li>
+        </ul>
+        <p>
+          ソース: <a href="https://github.com/jpzip/mcp" target="_blank" rel="noopener">github.com/jpzip/mcp</a> /
+          npm: <a href="https://www.npmjs.com/package/@jpzip/mcp-server-jpzip" target="_blank" rel="noopener"
+            >@jpzip/mcp-server-jpzip</a
+          >。
         </p>
 
         <h2 id="protocol">プロトコル仕様</h2>

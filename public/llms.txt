@@ -48,11 +48,31 @@ HTTP は GET のみ、`Content-Type: application/json; charset=utf-8`、gzip / b
 - [Swift](https://github.com/jpzip/swift): SwiftPM (5.9+)
 - 他 9 言語 (Kotlin / C# / Dart / Elixir / Scala / C / C++ / Perl / R)
 
+## MCP server (Claude / 任意の MCP クライアント向け)
+
+Claude Code や Claude Desktop など任意の Model Context Protocol クライアントから日本の郵便番号を引ける stdio サーバー [`@jpzip/mcp-server-jpzip`](https://github.com/jpzip/mcp) を提供している。背後は同じ `jpzip.nadai.dev` の静的データ。stateless で永続キャッシュは持たない (Claude プロセスのメモリにのみ常駐)。
+
+インストール (Claude Code):
+
+```sh
+claude mcp add jpzip -- npx -y @jpzip/mcp-server-jpzip
+```
+
+提供 tool は 4 つ:
+
+- `lookup_zipcode(zipcode)`: 7 桁郵便番号 → 住所 (漢字 / カナ / ローマ字 + JIS / 総務省コード)。ハイフン許容。対応 3 桁 prefix だけ CDN から取得。
+- `search_by_address(query, limit?)`: 住所文字列 → 郵便番号候補。漢字 / カナ / ローマ字を横断、空白無視の部分一致。初回のみ全件 (~25MB) を CDN から取得しメモリ保持。
+- `list_cities_in_prefecture(prefecture)`: 都道府県名 → 市区町村一覧 (総務省コード付き)。
+- `get_metadata()`: データバージョン・件数・生成時刻。
+
+既知の制約: 駅・路線・事業所情報は含まれない (郵便番号⇄住所のみ)。検索は 1 言語内 (漢字 / カナ / ローマ字) の連続部分一致のみ — 例: `Yokohama Honcho` のような中区飛ばしのローマ字混在クエリにはマッチしない。
+
 ## Docs
 
 - [Docs](https://jpzip.nadai.dev/docs): SDK の使い方とプロトコル仕様
 - [llms-full.txt](https://jpzip.nadai.dev/llms-full.txt): ドキュメント全文 (LLM 向け Markdown)
 - [Spec repo](https://github.com/jpzip/spec): プロトコル仕様 v1.0 の正本
+- [MCP server repo](https://github.com/jpzip/mcp): `@jpzip/mcp-server-jpzip` のソース
 
 ## License
 

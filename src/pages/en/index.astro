@@ -134,6 +134,27 @@ const softwareLd = {
   author: { '@type': 'Person', name: 'nadai' },
 };
 
+// schema.org SoftwareApplication — MCP server for Claude / any MCP client
+const mcpServerLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: '@jpzip/mcp-server-jpzip',
+  alternateName: 'jpzip MCP server',
+  description:
+    'A stdio Model Context Protocol server that lets Claude (or any MCP client) look up Japanese postal codes. Exposes four tools: lookup_zipcode, search_by_address, list_cities_in_prefecture, get_metadata.',
+  applicationCategory: 'DeveloperApplication',
+  applicationSubCategory: 'MCP server',
+  operatingSystem: 'Cross-platform (Node.js 18+)',
+  url: 'https://github.com/jpzip/mcp',
+  downloadUrl: 'https://www.npmjs.com/package/@jpzip/mcp-server-jpzip',
+  softwareRequirements: 'Node.js >= 18',
+  license: 'https://opensource.org/licenses/MIT',
+  isAccessibleForFree: true,
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  author: { '@type': 'Person', name: 'nadai' },
+  isBasedOn: { '@type': 'Dataset', name: 'jpzip', url: siteUrl },
+};
+
 const features = [
   {
     icon: '¥',
@@ -179,6 +200,7 @@ const features = [
     <script type="application/ld+json" set:html={JSON.stringify(websiteLd)} />
     <script type="application/ld+json" set:html={JSON.stringify(datasetLd)} />
     <script type="application/ld+json" set:html={JSON.stringify(softwareLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(mcpServerLd)} />
   </Fragment>
   <!-- HERO -->
   <section class="hero">

@@ -24,6 +24,15 @@ const sections = [
   },
   { id: 'caching', label: 'Cache strategy' },
   {
+    id: 'mcp',
+    label: 'MCP server',
+    sub: [
+      { id: 'mcp-install', label: 'Install' },
+      { id: 'mcp-tools', label: 'Tools' },
+      { id: 'mcp-model', label: 'Runtime model' },
+    ],
+  },
+  {
     id: 'protocol',
     label: 'Protocol spec',
     sub: [
@@ -41,9 +50,9 @@ const siteUrl = 'https://jpzip.nadai.dev';
 const techArticleLd = {
   '@context': 'https://schema.org',
   '@type': 'TechArticle',
-  headline: 'jpzip SDK usage and protocol spec v1.0',
+  headline: 'jpzip SDK / MCP server usage and protocol spec v1.0',
   description:
-    'How to use the jpzip dataset SDKs (TypeScript / Go / Python / Rust / Ruby / Dart / PHP / Swift) and the HTTP protocol spec v1.0.',
+    'How to use the jpzip dataset SDKs (TypeScript / Go / Python / Rust / Ruby / Dart / PHP / Swift), the MCP server (@jpzip/mcp-server-jpzip), and the HTTP protocol spec v1.0.',
   inLanguage: 'en',
   url: `${siteUrl}/en/docs`,
   proficiencyLevel: 'Beginner',
@@ -68,8 +77,8 @@ const breadcrumbLd = {
 ---
 
 <Base
-  title="jpzip Docs — SDK usage and protocol spec v1.0"
-  description="Usage examples for the jpzip dataset SDKs (TypeScript / Go / Python / Rust / Ruby / Dart / PHP / Swift) and the HTTP protocol spec v1.0."
+  title="jpzip Docs — SDK, MCP server, and protocol spec v1.0"
+  description="Usage examples for the jpzip dataset SDKs (TypeScript / Go / Python / Rust / Ruby / Dart / PHP / Swift), the MCP server (@jpzip/mcp-server-jpzip), and the HTTP protocol spec v1.0."
   ogType="article"
   active="docs"
   lang="en"
@@ -723,6 +732,81 @@ client.<span class="f">close</span>();                       <span class="c">// 
         <p>
           Monthly data updates are detected from the <code>version</code> field in <code>/meta.json</code>; the SDK
           automatically invalidates L1 and L2. To re-fetch explicitly, call <code>refresh()</code>.
+        </p>
+
+        <h2 id="mcp">MCP server</h2>
+        <p>
+          A separate stdio server, <code>@jpzip/mcp-server-jpzip</code>, lets Claude and any other Model Context Protocol
+          client look up Japanese postal codes. It is backed by the same <code>jpzip.nadai.dev</code> static data, so the
+          results match the SDKs exactly. The process is stateless and keeps cached data only in memory — no on-disk cache.
+        </p>
+
+        <h3 id="mcp-install">Install</h3>
+        <p>Claude Code:</p>
+        <pre><code is:raw>claude mcp add jpzip -- npx -y @jpzip/mcp-server-jpzip</code></pre>
+        <p>Claude Desktop, or any client where you edit <code>mcp.json</code> directly:</p>
+        <pre><code is:raw>&#123;
+  <span class="s">"mcpServers"</span>: &#123;
+    <span class="s">"jpzip"</span>: &#123;
+      <span class="s">"command"</span>: <span class="s">"npx"</span>,
+      <span class="s">"args"</span>: [<span class="s">"-y"</span>, <span class="s">"@jpzip/mcp-server-jpzip"</span>]
+    &#125;
+  &#125;
+&#125;</code></pre>
+
+        <h3 id="mcp-tools">Tools</h3>
+        <table>
+          <thead>
+            <tr><th>Tool</th><th>Arguments</th><th>Purpose</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>lookup_zipcode</code></td>
+              <td><code>zipcode: string</code> (7 digits, hyphens allowed)</td>
+              <td>Zipcode → address (kanji / kana / romaji + JIS / MIC codes)</td>
+            </tr>
+            <tr>
+              <td><code>search_by_address</code></td>
+              <td><code>query: string</code>, <code>limit?: int</code> (1–200, default 20)</td>
+              <td>Free-text address → candidate zipcodes (matches across kanji / kana / romaji, whitespace ignored)</td>
+            </tr>
+            <tr>
+              <td><code>list_cities_in_prefecture</code></td>
+              <td><code>prefecture: string</code></td>
+              <td>Prefecture → list of municipalities with their MIC city codes</td>
+            </tr>
+            <tr>
+              <td><code>get_metadata</code></td>
+              <td>—</td>
+              <td>Data version, entry count, build timestamp</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 id="mcp-model">Runtime model</h3>
+        <ul>
+          <li>
+            <code>lookup_zipcode</code> only fetches the matching 3-digit prefix file (~10 KB) and stores it in the
+            SDK’s L1 LRU.
+          </li>
+          <li>
+            <code>search_by_address</code> / <code>list_cities_in_prefecture</code> fetch the full dataset (~25 MB) on
+            first call and keep it in memory; subsequent calls within the same MCP process are instant.
+          </li>
+          <li>
+            No on-disk cache. When Claude restarts, the in-memory data is dropped and re-fetched on demand.
+          </li>
+          <li>
+            jpzip data does not include stations, train lines, or per-business zipcodes (zipcode ⇄ address only). The
+            address search is single-language substring only — e.g. a mixed query like <code>Yokohama Honcho</code> that
+            skips the ward name will not match.
+          </li>
+        </ul>
+        <p>
+          Source: <a href="https://github.com/jpzip/mcp" target="_blank" rel="noopener">github.com/jpzip/mcp</a> /
+          npm: <a href="https://www.npmjs.com/package/@jpzip/mcp-server-jpzip" target="_blank" rel="noopener"
+            >@jpzip/mcp-server-jpzip</a
+          >.
         </p>
 
         <h2 id="protocol">Protocol spec</h2>
