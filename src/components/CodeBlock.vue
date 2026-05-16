@@ -18,6 +18,7 @@ const tabs: { id: Lang; label: string }[] = [
 <template>
   <div class="code-block">
     <div class="code-tabs">
+      <div class="lights"><span></span><span></span><span></span></div>
       <button
         v-for="t in tabs"
         :key="t.id"
@@ -27,6 +28,8 @@ const tabs: { id: Lang; label: string }[] = [
       >
         {{ t.label }}
       </button>
+      <div class="code-tab-spacer"></div>
+      <span class="code-tab-meta">~30 LoC</span>
     </div>
 
     <pre v-show="tab === 'ts'" class="code"><span class="k">import</span> { lookup, preload } <span class="k">from</span> <span class="s">"jpzip"</span>
