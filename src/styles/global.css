@@ -1167,6 +1167,68 @@ footer.site {
   font-family: 'Noto Serif JP', serif;
 }
 
+/* SDK tabs (docs) */
+.sdk-tabs {
+  margin: 0 0 32px;
+}
+.sdk-tab-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  border-bottom: 2px solid var(--ink);
+  margin-bottom: 28px;
+}
+.sdk-tab {
+  background: transparent;
+  border: 0;
+  padding: 12px 18px 14px;
+  margin-bottom: -2px;
+  font: 700 13px/1 'JetBrains Mono', monospace;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: var(--muted);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.sdk-tab:hover:not(:disabled) {
+  color: var(--ink);
+}
+.sdk-tab.active {
+  color: var(--ink);
+  border-bottom: 2px solid var(--red);
+}
+.sdk-tab.soon {
+  color: var(--muted);
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+.sdk-tab-pill {
+  font: 600 9px/1 'JetBrains Mono', monospace;
+  letter-spacing: 0.5px;
+  background: var(--rule-soft);
+  color: var(--ink-soft);
+  border: 1px solid var(--rule);
+  padding: 3px 5px;
+  border-radius: 999px;
+  text-transform: lowercase;
+}
+.sdk-tab-pane {
+  animation: sdk-fade 0.2s ease;
+}
+@keyframes sdk-fade {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* utility */
 .hidden {
   display: none !important;
