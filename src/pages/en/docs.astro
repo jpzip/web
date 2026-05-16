@@ -22,7 +22,6 @@ const sections = [
       { id: 'sdk-edge', label: 'Edge / Serverless' },
     ],
   },
-  { id: 'other-sdks', label: 'Other SDKs' },
   { id: 'caching', label: 'Cache strategy' },
   {
     id: 'protocol',
@@ -44,7 +43,7 @@ const techArticleLd = {
   '@type': 'TechArticle',
   headline: 'jpzip SDK usage and protocol spec v1.0',
   description:
-    'How to use the jpzip dataset SDKs (TypeScript / Go / Python / Rust / Ruby / Java / PHP / Swift / Kotlin / C# / Dart / Elixir / Scala / C / C++ / Perl / R) and the HTTP protocol spec v1.0.',
+    'How to use the jpzip dataset SDKs (TypeScript / Go / Python / Rust / Ruby / Dart / PHP / Swift) and the HTTP protocol spec v1.0.',
   inLanguage: 'en',
   url: `${siteUrl}/en/docs`,
   proficiencyLevel: 'Beginner',
@@ -70,7 +69,7 @@ const breadcrumbLd = {
 
 <Base
   title="jpzip Docs — SDK usage and protocol spec v1.0"
-  description="Usage examples for the jpzip dataset SDKs (TypeScript / Go / Python / Rust / Ruby / Java / PHP / Swift and 15+ languages) and the HTTP protocol spec v1.0."
+  description="Usage examples for the jpzip dataset SDKs (TypeScript / Go / Python / Rust / Ruby / Dart / PHP / Swift) and the HTTP protocol spec v1.0."
   ogType="article"
   active="docs"
   lang="en"
@@ -90,7 +89,7 @@ const breadcrumbLd = {
     </div>
     <div class="wrap">
       <div class="hero-inner">
-        <div class="eyebrow"><span class="pulse"></span>Docs · spec v1.0 · 15+ languages</div>
+        <div class="eyebrow"><span class="pulse"></span>Docs · spec v1.0 · 8 languages</div>
         <h1 class="hero-title">
           Look up a zipcode in <br />
           <span class="grad">3 lines.</span>
@@ -135,9 +134,8 @@ const breadcrumbLd = {
 
         <article class="docs-body">
           <div class="docs-callout">
-          <strong>Supported languages ·</strong> SDKs are available in all 15+ languages. In-depth docs cover 8 languages —
-          TypeScript / Go / Python / Rust / Ruby / Java / PHP / Swift. The remaining 9 (Kotlin / C# / Dart / Elixir / Scala /
-          C / C++ / Perl / R) are listed in the <a href="#other-sdks">Other SDKs</a> section. All SDK signatures follow
+          <strong>Supported languages ·</strong> SDKs are available in 8 languages —
+          TypeScript / Go / Python / Rust / Ruby / Dart / PHP / Swift. All SDK signatures follow
           <a href="https://github.com/jpzip/spec" target="_blank" rel="noopener">spec v1.0</a>.
         </div>
 
@@ -149,7 +147,7 @@ const breadcrumbLd = {
 
         <h3 id="install">Install</h3>
         <pre><code is:raw><span class="c"># JavaScript / TypeScript (Node / browser / Bun / Deno)</span>
-npm i jpzip
+npm i @jpzip/jpzip
 
 <span class="c"># Go (1.21+)</span>
 go get github.com/jpzip/go
@@ -163,18 +161,14 @@ cargo add jpzip
 <span class="c"># Ruby (3.2+)</span>
 gem install jpzip
 
-<span class="c"># Java (17+) — Gradle</span>
-implementation <span class="s">"dev.nadai:jpzip:0.1.0"</span>
+<span class="c"># Dart (3.0+) / Flutter</span>
+dart pub add jpzip
 
 <span class="c"># PHP (8.2+)</span>
 composer require jpzip/jpzip
 
 <span class="c"># Swift (5.9+) — SwiftPM Package.swift</span>
 .package(url: <span class="s">"https://github.com/jpzip/swift"</span>, from: <span class="s">"0.1.0"</span>)</code></pre>
-        <p>
-          Install steps for the remaining languages (Kotlin / C# / Dart / Elixir / Scala / C / C++ / Perl / R) live in the
-          <a href="#other-sdks">Other SDKs</a> section.
-        </p>
 
         <h3 id="quickstart">60-second quickstart</h3>
         <p>Minimal example — the singleton initialises itself, so you can call it directly. Switch languages in the SDK section below.</p>
@@ -185,14 +179,14 @@ composer require jpzip/jpzip
         <SdkTabs client:load>
           <!-- ============= TypeScript ============= -->
           <Fragment slot="ts">
-            <pre><code is:raw><span class="k">import</span> &#123; lookup &#125; <span class="k">from</span> <span class="s">"jpzip"</span>;
+            <pre><code is:raw><span class="k">import</span> &#123; lookup &#125; <span class="k">from</span> <span class="s">"@jpzip/jpzip"</span>;
 
 <span class="k">const</span> e = <span class="k">await</span> <span class="f">lookup</span>(<span class="s">"2310017"</span>);
 <span class="k">if</span> (e) console.log(e.prefecture, e.city, e.towns[<span class="n">0</span>].town);
 <span class="c">// 神奈川県 横浜市中区 本町 (Kanagawa, Yokohama Naka-ku, Honcho)</span></code></pre>
 
             <p>
-              npm package <code>jpzip</code>. ESM / CJS dual, fully typed, runs on Node 18+, major browsers, Bun, Deno
+              npm package <code>@jpzip/jpzip</code>. ESM / CJS dual, fully typed, runs on Node 18+, major browsers, Bun, Deno
               and Cloudflare Workers.
             </p>
 
@@ -206,7 +200,7 @@ composer require jpzip/jpzip
   getMeta,       <span class="c">// () =&gt; Promise&lt;Meta | null&gt;</span>
   isValidZipcode,<span class="c">// (zip: string) =&gt; boolean ← format check, no fetch</span>
   configure,     <span class="c">// re-apply options to the singleton</span>
-&#125; <span class="k">from</span> <span class="s">"jpzip"</span>;
+&#125; <span class="k">from</span> <span class="s">"@jpzip/jpzip"</span>;
 
 <span class="c">// Single lookup — fetch /p/231.json once, then L1 hits</span>
 <span class="k">const</span> e = <span class="k">await</span> <span class="f">lookup</span>(<span class="s">"2310017"</span>);
@@ -220,7 +214,7 @@ composer require jpzip/jpzip
 
             <h3 id="sdk-client">JpzipClient (explicit instance)</h3>
             <p>For tests, multi-environment setups, or independent persistent caches, instantiate <code>new JpzipClient()</code> yourself.</p>
-            <pre><code is:raw><span class="k">import</span> &#123; JpzipClient &#125; <span class="k">from</span> <span class="s">"jpzip"</span>;
+            <pre><code is:raw><span class="k">import</span> &#123; JpzipClient &#125; <span class="k">from</span> <span class="s">"@jpzip/jpzip"</span>;
 
 <span class="k">const</span> client = <span class="k">new</span> <span class="f">JpzipClient</span>(&#123;
   <span class="c">// every option is optional</span>
@@ -251,7 +245,7 @@ composer require jpzip/jpzip
             <pre><code is:raw><span class="c">// Example: a simple Node.js file cache</span>
 <span class="k">import</span> &#123; readFile, writeFile, unlink, rm &#125; <span class="k">from</span> <span class="s">"node:fs/promises"</span>;
 <span class="k">import</span> &#123; createHash &#125; <span class="k">from</span> <span class="s">"node:crypto"</span>;
-<span class="k">import</span> &#123; JpzipClient, PersistentCache &#125; <span class="k">from</span> <span class="s">"jpzip"</span>;
+<span class="k">import</span> &#123; JpzipClient, PersistentCache &#125; <span class="k">from</span> <span class="s">"@jpzip/jpzip"</span>;
 
 <span class="k">const</span> dir = <span class="s">"./.jpzip-cache"</span>;
 <span class="k">const</span> path = (k: <span class="n">string</span>) =&gt;
@@ -543,55 +537,59 @@ client.<span class="f">refresh</span>  <span class="c"># drop L1/L2</span></code
             </ul>
           </Fragment>
 
-          <!-- ============= Java ============= -->
-          <Fragment slot="java">
-            <pre><code is:raw><span class="k">import</span> dev.nadai.jpzip.Jpzip;
+          <!-- ============= Dart ============= -->
+          <Fragment slot="dart">
+            <pre><code is:raw><span class="k">import</span> <span class="s">'package:jpzip/jpzip.dart'</span>;
 
-<span class="v">var</span> e = Jpzip.<span class="f">lookup</span>(<span class="s">"2310017"</span>);
-e.<span class="f">ifPresent</span>(x -&gt; System.out.<span class="f">println</span>(x.prefecture() + <span class="s">" "</span> + x.city()));
-<span class="c">// 神奈川県 横浜市中区</span></code></pre>
+<span class="k">final</span> e = <span class="k">await</span> <span class="f">lookup</span>(<span class="s">'2310017'</span>);
+<span class="f">print</span>(<span class="s">'$&#123;e?.prefecture&#125; $&#123;e?.city&#125;'</span>);
+<span class="c">// 神奈川県 横浜市中区 (Kanagawa, Yokohama Naka-ku)</span></code></pre>
 
             <p>
-              Maven coordinates <code>dev.nadai:jpzip:0.1.0</code>. Java 17+, only <code>java.net.http.HttpClient</code> + Jackson.
-              Parallelism via <code>CompletableFuture</code>.
+              pub.dev package <code>jpzip</code>. Dart 3.0+, runs on Flutter / CLI / Server / Web. Built on
+              <code>package:http</code>; per-prefix parallel fetch. Close <code>JpzipClient</code> explicitly when done.
             </p>
 
-            <h3 id="sdk-functional">Static helpers (singleton)</h3>
-            <pre><code is:raw><span class="k">import</span> dev.nadai.jpzip.Jpzip;
+            <h3 id="sdk-functional">Top-level functions (default client)</h3>
+            <pre><code is:raw><span class="k">import</span> <span class="s">'package:jpzip/jpzip.dart'</span>;
 
-<span class="v">var</span> e    = Jpzip.<span class="f">lookup</span>(<span class="s">"2310017"</span>);             <span class="c">// Optional&lt;ZipcodeEntry&gt;</span>
-<span class="v">var</span> dict = Jpzip.<span class="f">lookupGroup</span>(<span class="s">"23"</span>);            <span class="c">// 1-3 digits</span>
-<span class="v">var</span> all  = Jpzip.<span class="f">lookupAll</span>();
-Jpzip.<span class="f">preload</span>(<span class="s">"all"</span>);
-<span class="v">var</span> meta = Jpzip.<span class="f">getMeta</span>();
+<span class="k">final</span> e    = <span class="k">await</span> <span class="f">lookup</span>(<span class="s">'2310017'</span>);            <span class="c">// ZipcodeEntry?</span>
+<span class="k">final</span> dict = <span class="k">await</span> <span class="f">lookupGroup</span>(<span class="s">'23'</span>);           <span class="c">// 1-3 digits</span>
+<span class="k">final</span> all  = <span class="k">await</span> <span class="f">lookupAll</span>();
+<span class="k">await</span> <span class="f">preload</span>(<span class="s">'all'</span>);
+<span class="k">final</span> meta = <span class="k">await</span> <span class="f">getMeta</span>();
 
-<span class="k">boolean</span> ok = Jpzip.<span class="f">isValidZipcode</span>(<span class="s">"2310017"</span>);</code></pre>
+<span class="k">final</span> ok = <span class="f">isValidZipcode</span>(<span class="s">'2310017'</span>);</code></pre>
 
             <h3 id="sdk-client">JpzipClient + Options</h3>
-            <pre><code is:raw><span class="k">import</span> dev.nadai.jpzip.JpzipClient;
+            <pre><code is:raw><span class="k">import</span> <span class="s">'package:jpzip/jpzip.dart'</span>;
 
-<span class="v">var</span> client = JpzipClient.<span class="f">builder</span>()
-    .<span class="f">baseUrl</span>(<span class="s">"https://jpzip.nadai.dev"</span>)
-    .<span class="f">memoryCacheSize</span>(<span class="n">100</span>)
-    .<span class="f">cache</span>(myCache)                    <span class="c">// L2 (optional)</span>
-    .<span class="f">onSpecMismatch</span>((exp, recv) -&gt; System.err.<span class="f">println</span>(<span class="s">"spec: "</span> + recv))
-    .<span class="f">build</span>();
+<span class="k">final</span> client = <span class="f">JpzipClient</span>(
+  baseURL: <span class="s">'https://jpzip.nadai.dev'</span>,
+  memoryCacheSize: <span class="n">200</span>,
+  cache: myCache,                  <span class="c">// L2 (optional)</span>
+  onSpecMismatch: (exp, recv) =&gt; <span class="f">print</span>(<span class="s">'spec mismatch: $exp vs $recv'</span>),
+);
 
-<span class="v">var</span> e = client.<span class="f">lookup</span>(<span class="s">"1500001"</span>);
-client.<span class="f">refresh</span>();</code></pre>
+<span class="k">final</span> e = <span class="k">await</span> client.<span class="f">lookup</span>(<span class="s">'1500001'</span>);
+<span class="k">await</span> client.<span class="f">preload</span>(<span class="s">'all'</span>);
+client.<span class="f">close</span>();                       <span class="c">// closes the internal http.Client</span></code></pre>
 
-            <h3 id="sdk-cache">Cache interface</h3>
-            <pre><code is:raw><span class="k">public interface</span> Cache &#123;
-    <span class="n">Optional</span>&lt;<span class="n">byte</span>[]&gt; <span class="f">get</span>(<span class="n">String</span> key);
-    <span class="k">void</span> <span class="f">set</span>(<span class="n">String</span> key, <span class="n">byte</span>[] value);
-    <span class="k">void</span> <span class="f">delete</span>(<span class="n">String</span> key);
-    <span class="k">void</span> <span class="f">clear</span>();
+            <h3 id="sdk-cache">Cache abstract class</h3>
+            <pre><code is:raw><span class="k">abstract class</span> <span class="n">Cache</span> &#123;
+  <span class="n">Future</span>&lt;<span class="n">List</span>&lt;<span class="n">int</span>&gt;?&gt; <span class="f">get</span>(<span class="n">String</span> key);
+  <span class="n">Future</span>&lt;<span class="k">void</span>&gt; <span class="f">set</span>(<span class="n">String</span> key, <span class="n">List</span>&lt;<span class="n">int</span>&gt; value);
+  <span class="n">Future</span>&lt;<span class="k">void</span>&gt; <span class="f">delete</span>(<span class="n">String</span> key);
+  <span class="n">Future</span>&lt;<span class="k">void</span>&gt; <span class="f">clear</span>();
 &#125;</code></pre>
+            <p>
+              Plug in any storage — file system / SharedPreferences / Hive / sqflite / IndexedDB.
+            </p>
 
-            <h3 id="sdk-edge">Edge / Serverless notes</h3>
+            <h3 id="sdk-edge">Flutter / Edge notes</h3>
             <ul>
-              <li>On AWS Lambda / SnapStart, hold <code>JpzipClient</code> in a static field and run <code>preload</code> once at init.</li>
-              <li><code>HttpClient</code> uses virtual threads for I/O parallelism — especially fast on Project Loom.</li>
+              <li>In Flutter apps, create one <code>JpzipClient</code> in <code>main()</code> and share via a provider. Run <code>preload</code> in the background on first launch to be offline-ready instantly.</li>
+              <li>On Web (dart2js / dart2wasm), <code>BrowserClient</code> is selected automatically. CORS is enabled on the CDN.</li>
             </ul>
           </Fragment>
 
@@ -704,72 +702,6 @@ client.<span class="f">refresh</span>();</code></pre>
           </Fragment>
         </SdkTabs>
 
-        <h2 id="other-sdks">Other SDKs</h2>
-        <p>
-          Beyond the 8 languages above, jpzip ships SDKs in 7 more languages. All SDK signatures are aligned, and per-language
-          README files in each repo cover the details.
-        </p>
-        <table>
-          <thead>
-            <tr><th>Language</th><th>Repository</th><th>Install</th><th>Notes</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Kotlin</td>
-              <td><a href="https://github.com/jpzip/kotlin" target="_blank" rel="noopener">jpzip/kotlin</a></td>
-              <td><code>implementation "dev.nadai:jpzip:0.1.0"</code></td>
-              <td>Ktor + coroutines, Android / JVM</td>
-            </tr>
-            <tr>
-              <td>C# / .NET</td>
-              <td><a href="https://github.com/jpzip/dotnet" target="_blank" rel="noopener">jpzip/dotnet</a></td>
-              <td><code>dotnet add package Jpzip</code></td>
-              <td>net8.0, HttpClient + System.Text.Json</td>
-            </tr>
-            <tr>
-              <td>Dart</td>
-              <td><a href="https://github.com/jpzip/dart" target="_blank" rel="noopener">jpzip/dart</a></td>
-              <td><code>dart pub add jpzip</code></td>
-              <td>Shared across Flutter / CLI / Web</td>
-            </tr>
-            <tr>
-              <td>Elixir</td>
-              <td><a href="https://github.com/jpzip/elixir" target="_blank" rel="noopener">jpzip/elixir</a></td>
-              <td><code>{`{:jpzip, "~> 0.1"}`}</code></td>
-              <td>Req + Jason, GenServer + ETS</td>
-            </tr>
-            <tr>
-              <td>Scala</td>
-              <td><a href="https://github.com/jpzip/scala" target="_blank" rel="noopener">jpzip/scala</a></td>
-              <td><code>"dev.nadai" %% "jpzip" % "0.1.0"</code></td>
-              <td>Scala 3, sttp client + upickle</td>
-            </tr>
-            <tr>
-              <td>C</td>
-              <td><a href="https://github.com/jpzip/c" target="_blank" rel="noopener">jpzip/c</a></td>
-              <td><code>cmake -S . -B build</code></td>
-              <td>C99, libcurl + cJSON, FFI-friendly</td>
-            </tr>
-            <tr>
-              <td>C++</td>
-              <td><a href="https://github.com/jpzip/cpp" target="_blank" rel="noopener">jpzip/cpp</a></td>
-              <td><code>FetchContent_Declare(jpzip ...)</code></td>
-              <td>C++17, libcurl + nlohmann/json</td>
-            </tr>
-            <tr>
-              <td>Perl</td>
-              <td><a href="https://github.com/jpzip/perl" target="_blank" rel="noopener">jpzip/perl</a></td>
-              <td><code>cpanm Jpzip</code></td>
-              <td>Perl 5.20+, HTTP::Tiny + Moo</td>
-            </tr>
-            <tr>
-              <td>R</td>
-              <td><a href="https://github.com/jpzip/r" target="_blank" rel="noopener">jpzip/r</a></td>
-              <td><code>{`remotes::install_github("jpzip/r")`}</code></td>
-              <td>httr2 + R6, includes <code>jpzip_to_dataframe</code></td>
-            </tr>
-          </tbody>
-        </table>
         <p>
           The shared surface (<code>lookup</code> / <code>lookupGroup</code> / <code>lookupAll</code> / <code>preload</code> /
           <code>getMeta</code> / <code>refresh</code> / <code>isValidZipcode</code>), the L1 LRU, the optional L2 cache,

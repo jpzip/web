@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-type Lang = 'ts' | 'go' | 'py' | 'rs' | 'rb' | 'java' | 'php' | 'swift';
+type Lang = 'ts' | 'go' | 'py' | 'rs' | 'rb' | 'dart' | 'php' | 'swift';
 const tab = ref<Lang>('ts');
 const tabs: { id: Lang; label: string }[] = [
   { id: 'ts', label: 'TypeScript' },
@@ -9,7 +9,7 @@ const tabs: { id: Lang; label: string }[] = [
   { id: 'py', label: 'Python' },
   { id: 'rs', label: 'Rust' },
   { id: 'rb', label: 'Ruby' },
-  { id: 'java', label: 'Java' },
+  { id: 'dart', label: 'Dart' },
   { id: 'php', label: 'PHP' },
   { id: 'swift', label: 'Swift' },
 ];
@@ -32,7 +32,7 @@ const tabs: { id: Lang; label: string }[] = [
       <span class="code-tab-meta">~30 LoC</span>
     </div>
 
-    <pre v-show="tab === 'ts'" class="code"><span class="k">import</span> { lookup, preload } <span class="k">from</span> <span class="s">"jpzip"</span>
+    <pre v-show="tab === 'ts'" class="code"><span class="k">import</span> { lookup, preload } <span class="k">from</span> <span class="s">"@jpzip/jpzip"</span>
 
 <span class="c">// 単発検索 — /p/231.json を fetch して結果を抽出</span>
 <span class="k">const</span> <span class="v">entry</span> = <span class="k">await</span> <span class="f">lookup</span>(<span class="s">"2310017"</span>)
@@ -84,13 +84,12 @@ client.<span class="f">preload</span>(<span class="s">"all"</span>).<span class=
 <span class="c"># preload して以降オフライン</span>
 Jpzip.<span class="f">preload</span>(<span class="s">"all"</span>)</pre>
 
-    <pre v-show="tab === 'java'" class="code"><span class="k">import</span> dev.nadai.jpzip.Jpzip;
+    <pre v-show="tab === 'dart'" class="code"><span class="k">import</span> <span class="s">'package:jpzip/jpzip.dart'</span>;
 
-<span class="v">var</span> entry = Jpzip.<span class="f">lookup</span>(<span class="s">"2310017"</span>);
-entry.<span class="f">ifPresent</span>(e -&gt; System.out.<span class="f">println</span>(e.prefecture() + <span class="s">" "</span> + e.city()));
-<span class="c">// → 神奈川県 横浜市中区</span>
+<span class="k">final</span> <span class="v">entry</span> = <span class="k">await</span> <span class="f">lookup</span>(<span class="s">'2310017'</span>);
+<span class="c">// → ZipcodeEntry(prefecture: '神奈川県', city: '横浜市中区', ...)</span>
 
-Jpzip.<span class="f">preload</span>(<span class="s">"all"</span>);</pre>
+<span class="k">await</span> <span class="f">preload</span>(<span class="s">'all'</span>);  <span class="c">// L1 を全件で温める</span></pre>
 
     <pre v-show="tab === 'php'" class="code"><span class="k">use</span> <span class="k">function</span> Jpzip\lookup;
 <span class="k">use</span> <span class="k">function</span> Jpzip\preload;

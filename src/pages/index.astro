@@ -120,7 +120,7 @@ const softwareLd = {
   '@type': 'SoftwareSourceCode',
   name: 'jpzip SDK',
   description:
-    'jpzip データセットの公式 SDK 群。TypeScript / Go / Python / Rust / Ruby / Java / PHP / Swift / Kotlin / C# / Dart / Elixir / Scala / C / C++ / Perl / R の 15+ 言語で同一シグネチャを提供。',
+    'jpzip データセットの公式 SDK 群。TypeScript / Go / Python / Rust / Ruby / Dart / PHP / Swift の 8 言語で同一シグネチャを提供。',
   codeRepository: 'https://github.com/jpzip',
   programmingLanguage: [
     'TypeScript',
@@ -128,18 +128,9 @@ const softwareLd = {
     'Python',
     'Rust',
     'Ruby',
-    'Java',
+    'Dart',
     'PHP',
     'Swift',
-    'Kotlin',
-    'C#',
-    'Dart',
-    'Elixir',
-    'Scala',
-    'C',
-    'C++',
-    'Perl',
-    'R',
   ],
   license: 'https://opensource.org/licenses/MIT',
   author: { '@type': 'Person', name: 'nadai' },
@@ -182,7 +173,7 @@ const features = [
 
 <Base
   title="jpzip — 登録不要・無料・無制限の郵便番号データセット"
-  description={`日本の全郵便番号 (${fmt(meta.total_zipcodes)} 件) を CDN から配信する無料データセット。漢字・カナ・ローマ字・総務省コードを含み、15+ 言語の SDK で 3 行から利用可能。MIT。`}
+  description={`日本の全郵便番号 (${fmt(meta.total_zipcodes)} 件) を CDN から配信する無料データセット。漢字・カナ・ローマ字・総務省コードを含み、8 言語の SDK で 3 行から利用可能。MIT。`}
   active="home"
 >
   <Fragment slot="head">
