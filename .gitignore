@@ -4,3 +4,6 @@ dist/
 .env
 .env.local
 .DS_Store
+
+# OGP cache の atomic write tmp ファイル (本物の og-cache/*.png は git 追跡)
+og-cache/*.tmp

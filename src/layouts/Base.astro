@@ -18,13 +18,17 @@ const {
   description,
   active,
   ogType = 'website',
-  ogImage = '/og.png',
+  ogImage,
   lang = 'ja',
 } = Astro.props;
 
+// デフォルト OGP は locale ごとに別エンドポイント (src/pages/og.png.ts と
+// src/pages/en/og.png.ts) で焼く。ページ側で ogImage を明示渡しすればそれを優先。
+const resolvedOgImage = ogImage ?? (lang === 'ja' ? '/og.png' : '/en/og.png');
+
 // og:image:type を拡張子から推定 (PNG / JPEG / SVG / WebP)
 const imageMime = (() => {
-  const ext = ogImage.split('?')[0].split('#')[0].toLowerCase();
+  const ext = resolvedOgImage.split('?')[0].split('#')[0].toLowerCase();
   if (ext.endsWith('.png')) return 'image/png';
   if (ext.endsWith('.jpg') || ext.endsWith('.jpeg')) return 'image/jpeg';
   if (ext.endsWith('.webp')) return 'image/webp';
@@ -115,7 +119,7 @@ const desc = description ?? t.defaultDesc;
 
 const site = Astro.site ?? new URL('https://jpzip.nadai.dev');
 const canonical = new URL(Astro.url.pathname, site).toString();
-const ogImageUrl = new URL(ogImage, site).toString();
+const ogImageUrl = new URL(resolvedOgImage, site).toString();
 
 // hreflang alternates — pathname を JA/EN で対応させる
 const path = Astro.url.pathname;

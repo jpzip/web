@@ -101,7 +101,7 @@ const syndicationLabel: Record<string, string> = {
   description={post.data.description}
   active="blog"
   ogType="article"
-  ogImage={post.data.ogImage}
+  ogImage={post.data.ogImage ?? `/og/en/${post.id}.png`}
   lang="en"
 >
   <Fragment slot="head">
