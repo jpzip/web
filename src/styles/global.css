@@ -15,7 +15,7 @@
   --blue: #2b6cdf;
   --cyan: #06b6d4;
   --green: #10b981;
-  --grad: linear-gradient(110deg, #ec1c2d 0%, #ff5c8a 28%, #ff8a3d 52%, #ffc83d 78%, #7c3aed 100%);
+  --grad: linear-gradient(110deg, #ee5e6b 0%, #ff8aa5 28%, #ffa370 52%, #ffd382 78%, #a892e8 100%);
   --grad-soft: linear-gradient(110deg, #fff0f0 0%, #fff4e6 50%, #f0e8ff 100%);
 }
 [data-theme='dark'] {
@@ -208,8 +208,8 @@ main {
 .blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.55;
+  filter: blur(90px);
+  opacity: 0.32;
   animation: float 18s ease-in-out infinite;
 }
 .blob.b1 {
@@ -234,7 +234,7 @@ main {
   height: 480px;
   background: var(--violet);
   animation-delay: -7s;
-  opacity: 0.35;
+  opacity: 0.2;
 }
 .blob.b4 {
   top: 40%;
@@ -243,14 +243,14 @@ main {
   height: 320px;
   background: var(--yellow);
   animation-delay: -11s;
-  opacity: 0.35;
+  opacity: 0.22;
 }
 [data-theme='dark'] .blob {
-  opacity: 0.35;
+  opacity: 0.22;
 }
 [data-theme='dark'] .blob.b3,
 [data-theme='dark'] .blob.b4 {
-  opacity: 0.22;
+  opacity: 0.14;
 }
 @keyframes float {
   0%,
