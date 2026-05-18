@@ -6,6 +6,7 @@ lang: en
 publishedAt: 2026-05-17
 author: nadai
 tags: [Claude Code, AI, SDK, multi-language, OSS]
+ogEyebrow: AI-driven dev
 series:
   name: jpzip
   part: 4

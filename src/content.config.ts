@@ -55,6 +55,9 @@ const blogBase = z.object({
     })
     .optional(),
   ogImage: z.string().optional(),
+  // OGP の eyebrow (タグ風ラベル) を明示指定したいときに使う。未指定なら tags[0]。
+  // 例えば「Claude Code」タグは付けたいが、OGP では「AI 駆動開発」と出したい場合に。
+  ogEyebrow: z.string().optional(),
   syndications: z.array(syndication).default([]),
   faq: z.array(faqItem).default([]),
   howTo: howTo.optional(),

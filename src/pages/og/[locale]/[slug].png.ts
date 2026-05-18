@@ -21,9 +21,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
     params: { locale, slug: post.id },
     props: {
       title: post.data.title,
-      // 最初の tag を eyebrow に使う。「BENCH-PRESS」より「BENCH PRESS」が
-      // 読みやすいので - は空白に正規化。tag が無ければ 'BLOG'。
-      eyebrow: (post.data.tags[0] ?? 'blog').replace(/-/g, ' '),
+      // eyebrow は ogEyebrow があればそれを優先 (記事ごとに OGP のラベルだけ
+      // 別表現にしたいケース)。無ければ tags[0] にフォールバック。
+      // 「BENCH-PRESS」より「BENCH PRESS」が読みやすいので - は空白に正規化。
+      eyebrow: (post.data.ogEyebrow ?? post.data.tags[0] ?? 'blog').replace(/-/g, ' '),
       locale,
     },
   }));

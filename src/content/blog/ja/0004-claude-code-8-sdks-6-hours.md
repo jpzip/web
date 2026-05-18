@@ -6,6 +6,7 @@ lang: ja
 publishedAt: 2026-05-17
 author: nadai
 tags: [Claude Code, AI, SDK, 多言語, OSS]
+ogEyebrow: AI 駆動開発
 series:
   name: jpzip
   part: 4
