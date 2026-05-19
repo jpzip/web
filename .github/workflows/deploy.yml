@@ -1,0 +1,62 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout web
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Build web site
+        run: |
+          npm ci
+          npm run build
+
+      - name: Checkout data
+        uses: actions/checkout@v4
+        with:
+          repository: jpzip/data
+          path: data
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+          cache-dependency-path: data/go.sum
+
+      - name: Build JSON dataset
+        working-directory: data
+        run: go run ./cmd/build -o ../data-dist/
+
+      # data writes g/, p/, meta.json, _headers. web's _headers must win
+      # (/_astro/* immutable caching lives only on the web one), so we copy
+      # only the data payload files into web's dist — not _headers.
+      - name: Merge data payload into web dist
+        run: |
+          cp -R data-dist/g dist/
+          cp -R data-dist/p dist/
+          cp data-dist/meta.json dist/
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=jpzip
