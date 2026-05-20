@@ -1,9 +1,9 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
-import { personLd, resolveImage } from '../../../lib/blog';
+import { isPublished, personLd, resolveImage } from '../../../lib/blog';
 
-const posts = (await getCollection('blog-en', ({ data }) => data.status === 'published')).sort(
+const posts = (await getCollection('blog-en', ({ data }) => isPublished(data))).sort(
   (a, b) => Number(b.data.id) - Number(a.data.id),
 );
 

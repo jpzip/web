@@ -61,6 +61,8 @@ const blogBase = z.object({
   syndications: z.array(syndication).default([]),
   faq: z.array(faqItem).default([]),
   howTo: howTo.optional(),
+  // 情報用メモのみ。公開ゲートは publishedAt ベース (lib/blog の isPublished) に
+  // 統一済みで、この値では出し分けない。merge=公開。
   status: z.enum(['draft', 'published']).default('published'),
 });
 

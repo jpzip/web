@@ -7,7 +7,7 @@ publishedAt: 2026-05-21
 author: nadai
 tags: [Framework Integration, Ruby, Rails, Hotwire, Forms]
 ogEyebrow: Framework Integration
-status: draft
+status: published
 faq:
   - q: Should I use Turbo Frame or a Stimulus fetch controller?
     a: 'Use Turbo Frame when you want progressive enhancement with almost no JavaScript: the server renders the address fields and a plain submit button still works with JS disabled. Use a Stimulus fetch controller when you want fine-grained client-side control — fetching JSON and writing input values in JavaScript makes it easier to add a town picker, an in-progress preview, or other richer UX.'

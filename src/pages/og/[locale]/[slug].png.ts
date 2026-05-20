@@ -5,11 +5,12 @@
 import type { APIRoute, GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 import { renderArticleOg, type Locale } from '../../../lib/og';
+import { isPublished } from '../../../lib/blog';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const [ja, en] = await Promise.all([
-    getCollection('blog-ja', ({ data }) => data.status === 'published'),
-    getCollection('blog-en', ({ data }) => data.status === 'published'),
+    getCollection('blog-ja', ({ data }) => isPublished(data)),
+    getCollection('blog-en', ({ data }) => isPublished(data)),
   ]);
 
   const entries = [

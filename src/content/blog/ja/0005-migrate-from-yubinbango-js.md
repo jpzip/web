@@ -6,7 +6,7 @@ publishedAt: 2026-05-19
 author: nadai
 tags: [Migration, JavaScript, TypeScript, Forms]
 ogEyebrow: 移行ガイド
-status: draft
+status: published
 faq:
   - q: Yubinbango から jpzip-js に移行するメリットは何ですか?
     a: 'TypeScript 型が同梱される、JSONP を使わずに fetch だけで動くので CSP を緩める必要がない、ESM/CJS の両方をサポート、Node や Cloudflare Workers でもそのまま動く、複数町域(同じ郵便番号で町名が分岐するケース)を `towns` 配列で素直に扱える、の 5 点です。'

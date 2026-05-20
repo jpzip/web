@@ -6,7 +6,7 @@ publishedAt: 2026-05-19
 author: nadai
 tags: [Framework Integration, React, TypeScript, Forms, Zod]
 ogEyebrow: フレームワーク統合
-status: draft
+status: published
 faq:
   - q: React Hook Form と Zod に jpzip を組み合わせるメリットは何ですか?
     a: 'バリデーション(7 桁数字の構文チェック)を Zod の同期スキーマに任せ、住所の自動入力(zipcode → 住所のルックアップ)を jpzip-js の非同期 lookup に任せる、という責務分離が綺麗に成立します。RHF 側は `register` と `setValue` だけ知っていれば良く、再レンダーは郵便番号フィールドのみに局所化できます。'

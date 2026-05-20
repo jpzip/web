@@ -7,7 +7,7 @@ publishedAt: 2026-05-19
 author: nadai
 tags: [Framework Integration, React, TypeScript, Forms, Zod]
 ogEyebrow: Framework integration
-status: draft
+status: published
 faq:
   - q: Why pair React Hook Form, Zod, and jpzip rather than rolling your own?
     a: 'Clean separation of concerns: Zod owns synchronous validation (the 7-digit syntax), jpzip-js owns the asynchronous postcode → address lookup, and React Hook Form owns form state. The form component only needs `register` and `setValue`, and rerenders stay scoped to the postcode field instead of cascading through the whole form.'

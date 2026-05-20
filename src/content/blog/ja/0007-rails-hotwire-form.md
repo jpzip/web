@@ -6,7 +6,7 @@ publishedAt: 2026-05-21
 author: nadai
 tags: [Framework Integration, Ruby, Rails, Hotwire, Forms]
 ogEyebrow: フレームワーク統合
-status: draft
+status: published
 faq:
   - q: Turbo Frame と Stimulus + fetch、どちらのパターンを選ぶべきですか?
     a: 'JS を極力書かずに段階的拡張(Progressive Enhancement)を効かせたいなら Turbo Frame、クライアント側で住所欄の埋め方を細かく制御したいなら Stimulus + fetch です。Turbo Frame は submit ボタンさえ置けば JS 無効でも動き、サーバー側で住所欄の HTML を組み立てます。Stimulus + fetch は JSON を引いて JS で input の value を書き込むので、複数町域の選択 UI や入力中プレビューなど凝った UX を足しやすいです。'

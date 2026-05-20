@@ -7,7 +7,7 @@ publishedAt: 2026-05-19
 author: nadai
 tags: [Migration, JavaScript, TypeScript, Forms]
 ogEyebrow: Migration guide
-status: draft
+status: published
 faq:
   - q: What do I actually gain by migrating from Yubinbango to jpzip-js?
     a: 'Five things: bundled TypeScript types, fetch-only data loading (no JSONP, no global callback pollution), proper ESM and CJS exports, support for Node / Cloudflare Workers / Vercel Edge in addition to browsers, and a `towns` array that surfaces multi-town entries that Yubinbango silently collapsed.'

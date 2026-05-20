@@ -6,6 +6,7 @@ import {
   articleSection,
   faqLd,
   howToLd,
+  isPublished,
   personLd,
   readingTime,
   resolveImage,
@@ -14,7 +15,7 @@ import {
 } from '../../lib/blog';
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const posts = await getCollection('blog-ja', ({ data }) => data.status === 'published');
+  const posts = await getCollection('blog-ja', ({ data }) => isPublished(data));
   return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },
@@ -35,7 +36,7 @@ const fmtDate = (d: Date) =>
 // シリーズ前後のリンクを組み立てる + 全体数を算出
 let seriesPosts: Array<{ id: string; data: typeof post.data }> = [];
 if (post.data.series) {
-  const all = await getCollection('blog-ja', ({ data }) => data.status === 'published');
+  const all = await getCollection('blog-ja', ({ data }) => isPublished(data));
   seriesPosts = all
     .filter((p) => p.data.series?.name === post.data.series!.name)
     .sort((a, b) => (a.data.series?.part ?? 0) - (b.data.series?.part ?? 0));

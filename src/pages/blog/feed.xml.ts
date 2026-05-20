@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
+import { isPublished } from '../../lib/blog';
 
 const SITE = 'https://jpzip.nadai.dev';
 const TITLE = 'jpzip blog (ja)';
@@ -14,7 +15,7 @@ function escape(s: string): string {
 }
 
 export const GET: APIRoute = async () => {
-  const posts = (await getCollection('blog-ja', ({ data }) => data.status === 'published')).sort(
+  const posts = (await getCollection('blog-ja', ({ data }) => isPublished(data))).sort(
     (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
   );
 

@@ -29,6 +29,23 @@ export interface PostLike {
   body?: string;
 }
 
+// 公開ゲート: merge=公開。記事は PR ブランチ上でのみ draft として存在し、
+// main に merge された時点で「publishedAt の暦日が来たら公開」とみなす。
+// frontmatter の status は情報用に残すが、公開判定には使わない。
+// publishedAt は date-only ("YYYY-MM-DD" = UTC 0時) で書かれ、著者・読者とも
+// JST 基準なので JST の暦日で比較する。これにより当日付の記事は UTC との時差に
+// 邪魔されずその日のうちに公開され、未来日付はその JST 当日の build まで非公開のまま。
+const TOKYO_DAY = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Asia/Tokyo',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
+
+export function isPublished(data: { publishedAt: Date }): boolean {
+  return TOKYO_DAY.format(data.publishedAt) <= TOKYO_DAY.format(new Date());
+}
+
 // 日本語/英語混在の文字数を雑に分けて読了時間を算出する。
 // CJK は 1 分 600 文字、欧文は 1 分 230 単語 (日本語ブログ + 英訳両対応)。
 export function readingTime(body: string, lang: 'ja' | 'en'): number {
