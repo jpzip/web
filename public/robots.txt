@@ -65,4 +65,4 @@ Allow: /
 User-agent: MistralAI-User
 Allow: /
 
-Sitemap: https://jpzip.nadai.dev/sitemap.xml
+Sitemap: https://jpzip.nadai.dev/sitemap-index.xml
